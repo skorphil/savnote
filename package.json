@@ -1,0 +1,44 @@
+{
+  "name": "savnote",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "packageManager": "pnpm@10.6.1",
+  "description": "Private savings journal",
+  "scripts": {
+    "dev": "vite",
+    "dev:android": "tauri android dev",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "build:android-debug": "tauri android build --debug"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.3.0",
+    "@tauri-apps/plugin-dialog": "~2",
+    "@tauri-apps/plugin-fs": "~2.2.0",
+    "@tauri-apps/plugin-opener": "^2.2.6",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-router": "^7.3.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@tauri-apps/cli": "^2.3.1",
+    "@types/node": "^22.13.10",
+    "@types/react": "^18.0.9",
+    "@types/react-dom": "^18.0.4",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.22.0",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^16.0.0",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.26.1",
+    "vite": "^6.2.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}
