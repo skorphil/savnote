@@ -5,6 +5,9 @@
   "type": "module",
   "packageManager": "pnpm@10.6.1",
   "description": "Private savings journal",
+  "//": [
+    "'konsta' requires tailwind v3. Not working with v4"
+  ],
   "scripts": {
     "dev": "vite",
     "dev:android": "tauri android dev",
@@ -14,7 +17,6 @@
     "build:android-debug": "tauri android build --debug"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.0.14",
     "@tauri-apps/api": "^2.3.0",
     "@tauri-apps/plugin-dialog": "~2",
     "@tauri-apps/plugin-fs": "~2.2.0",
@@ -23,7 +25,7 @@
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router": "^7.3.0",
-    "tailwindcss": "^3.1.8"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
@@ -32,9 +34,10 @@
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.4",
     "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.21",
     "eslint": "^9.22.0",
-    "eslint-plugin-react": "^7.37.4",
-    "globals": "^16.0.0",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.1",
     "vite": "^6.2.1"

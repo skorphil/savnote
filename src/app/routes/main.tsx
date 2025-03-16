@@ -6,7 +6,7 @@ import { App, KonstaProvider } from "konsta/react";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <KonstaProvider theme="material">
+    <KonstaProvider theme="material" dark={true}>
       <App theme="material" className="k-material">
         <RouterProvider router={router} />
       </App>

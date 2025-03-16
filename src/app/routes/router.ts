@@ -1,9 +1,9 @@
-import { Home } from "@/pages/home";
+import { Welcome } from "@/pages/welcome";
 import { createBrowserRouter } from "react-router";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    Component: Home,
+    Component: Welcome,
   },
 ]);
