@@ -5,6 +5,6 @@ export async function askFileLocation() {
     multiple: false,
     directory: false,
   });
-  if (!file) throw Error("Can't open a file.");
+  // if (!file) throw Error("Can't open a file.");
   return file;
 }

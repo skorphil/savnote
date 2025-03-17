@@ -2,6 +2,8 @@ import { useState } from "react";
 import { handleJournalOpen } from "./handleJournalOpen";
 import styles from "./Welcome.module.css";
 import { Block, List, ListItem, Page } from "konsta/react";
+import PouchDB from "pouchdb-browser";
+import { Journal } from "../model/journal/Journal";
 
 const itemClass = "h-14 flex flex-col justify-center";
 
@@ -48,6 +50,25 @@ function Welcome() {
             innerClassName={itemClass}
             strongTitle={true}
             title="Open existing"
+          />
+          <ListItem
+            link
+            onClick={() => {
+              const db = new PouchDB("appState");
+              const handler = async () => {
+                const doc = await db.get("appDataDir");
+                const savedDir = doc?.journalDir as string; // Property 'journalDir' does not exist on type 'IdMeta & GetMeta'. How to type?
+
+                const journal = await Journal.open(savedDir);
+                setDbDir(JSON.stringify(journal.get()));
+              };
+              handler().catch((e) => {
+                if (e instanceof Error) setDbDir(e.message);
+              });
+            }}
+            innerClassName={itemClass}
+            strongTitle={true}
+            title="Open attached (debug)"
           />
         </List>
       </Block>
