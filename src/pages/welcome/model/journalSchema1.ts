@@ -26,11 +26,11 @@ const quoteSchema1 = z.object({
 });
 
 const assetSchema1 = z.object({
-  name: z.union([z.string(), z.null()]),
+  name: z.string().optional(),
   amount: z.number(),
   currency: z.string(),
   isEarning: z.boolean(),
-  description: z.string(),
+  description: z.string().optional(),
 });
 
 const instiutionSchema1 = z.object({
@@ -40,11 +40,11 @@ const instiutionSchema1 = z.object({
     (assets) => {
       const names = assets
         .map((asset) => asset.name)
-        .filter((name) => name !== null);
+        .filter((name) => name !== undefined);
       return new Set(names).size === names.length;
     },
     {
-      message: "Asset names must be unique within the bank",
+      message: "Asset names must be unique within the institution",
     }
   ),
 });
@@ -53,7 +53,17 @@ const recordSchema1 = z.object({
   uuid: z.string(),
   date: z.number(),
   qutes: z.array(quoteSchema1),
-  institutions: z.array(instiutionSchema1),
+  institutions: z.array(instiutionSchema1).refine(
+    (institutions) => {
+      const names = institutions
+        .map((institution) => institution.name)
+        .filter((name) => name !== undefined);
+      return new Set(names).size === names.length;
+    },
+    {
+      message: "Institution names must be unique within the record",
+    }
+  ),
 });
 
 const journalSchema1 = z
@@ -85,6 +95,8 @@ const journalSchema1 = z
   });
 
 type JournalSchema1 = z.infer<typeof journalSchema1>;
+type RecordSchema1 = z.infer<typeof recordSchema1>;
+type MetaSchema1 = z.infer<typeof metaSchema1>;
 
-export type { JournalSchema1 };
+export type { JournalSchema1, RecordSchema1, MetaSchema1 };
 export { journalSchema1 };

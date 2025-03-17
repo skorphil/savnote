@@ -1,0 +1,15 @@
+{
+    "meta": {
+        "appName": "savnote",
+        "encryption": {
+          "algorithm": "AES-GCM",
+          "iterations": 1000,
+          "salt": "random-salt-value",
+          "iv": "initialization-vector-value"
+        },
+        "version": 1,
+        "name": "example-note",
+        "dataFormat": "base64"
+      },
+    "data": "encryptedData" 
+}

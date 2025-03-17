@@ -1,15 +1,17 @@
 import { askFileLocation } from "../lib/askFileLocation";
+import { throwError } from "../lib/throwError";
+import { Journal } from "../model/journal/Journal";
 
 // Open a dialog
 export async function handleJournalOpen() {
   try {
     const dir = await askFileLocation();
-    // TODO check file
+    console.debug("dir:", dir);
+    const journal = await Journal.open(dir);
+    return journal?.get();
     // TODO setLocation to pouchDb
     // Redirect to `open` Page
   } catch (e) {
-    if (typeof e === "string") throw Error(e);
-    if (e instanceof Error) throw e;
-    throw Error("Unknown error. Please submit bug in our GitHub");
+    throwError(e);
   }
 }

@@ -1,5 +1,8 @@
 .linksBlock {
-    margin: auto 0 0 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 100px;
+    background-color: rgba(255,255,255,0.08)
 }
 
 .page {
@@ -11,6 +14,6 @@
     display: flex;
     flex-direction: column;
     @apply my-auto py-4 h-full;
-    background-color: #2C3A33;
-
+    background-color: #142119;
+    /* #2C3A33; */
 }
