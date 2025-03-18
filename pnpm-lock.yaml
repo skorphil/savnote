@@ -38,6 +38,9 @@ importers:
       react-router:
         specifier: ^7.3.0
         version: 7.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      tauri-plugin-androidpermissionprompt-api:
+        specifier: ^0.1.1
+        version: 0.1.1
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -1464,6 +1467,9 @@ packages:
     resolution: {integrity: sha512-w33E2aCvSDP0tW9RZuNXadXlkHXqFzSkQew/aIa2i/Sj8fThxwovwlXHSPXTbAHwEIhBFXAedUhP2tueAKP8Og==}
     engines: {node: '>=14.0.0'}
     hasBin: true
+
+  tauri-plugin-androidpermissionprompt-api@0.1.1:
+    resolution: {integrity: sha512-Cw236gKdanY8BY/KduXt1JIeXaQK1ZeVM9VcPx4e5rcLPoim5k0mQwe2x676cb+7coo0nl7q5eAVXTfq4Q5OFg==}
 
   thenify-all@1.6.0:
     resolution: {integrity: sha512-RNxQH/qI8/t3thXJDwcstUO4zeqo64+Uy/+sNVRBx4Xn2OX+OZ9oP+iJnNFqplFra2ZUVeKCSa2oVWi3T4uVmA==}
@@ -2917,6 +2923,10 @@ snapshots:
       sucrase: 3.35.0
     transitivePeerDependencies:
       - ts-node
+
+  tauri-plugin-androidpermissionprompt-api@0.1.1:
+    dependencies:
+      '@tauri-apps/api': 2.3.0
 
   thenify-all@1.6.0:
     dependencies:

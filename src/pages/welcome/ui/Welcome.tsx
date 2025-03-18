@@ -4,6 +4,7 @@ import styles from "./Welcome.module.css";
 import { Block, List, ListItem, Page } from "konsta/react";
 import PouchDB from "pouchdb-browser";
 import { Journal } from "../model/journal/Journal";
+import { invoke } from "@tauri-apps/api/core";
 
 const itemClass = "h-14 flex flex-col justify-center";
 
@@ -55,15 +56,16 @@ function Welcome() {
             link
             onClick={() => {
               const db = new PouchDB("appState");
+              let savedDir: string;
               const handler = async () => {
                 const doc = await db.get("appDataDir");
-                const savedDir = doc?.journalDir as string; // Property 'journalDir' does not exist on type 'IdMeta & GetMeta'. How to type?
+                savedDir = doc?.journalDir as string; // Property 'journalDir' does not exist on type 'IdMeta & GetMeta'. How to type?
 
-                const journal = await Journal.open(savedDir);
+                const journal = await Journal.open("savedDir");
                 setDbDir(JSON.stringify(journal.get()));
               };
               handler().catch((e) => {
-                if (e instanceof Error) setDbDir(e.message);
+                if (e instanceof Error) setDbDir(`${e.message} ${savedDir}`);
               });
             }}
             innerClassName={itemClass}
@@ -77,3 +79,16 @@ function Welcome() {
 }
 
 export default Welcome;
+
+export async function requestStoragePermission() {
+  try {
+    const granted = await invoke<boolean>("request_read_audio_permission");
+    if (granted) {
+      console.log("Storage permission granted");
+    } else {
+      console.log("Storage permission denied");
+    }
+  } catch (error) {
+    console.error("Error requesting storage permission:", error);
+  }
+}
