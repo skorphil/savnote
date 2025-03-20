@@ -1,15 +1,15 @@
 import { z } from "zod";
 
+const encryptionSchema1 = z.object({
+  algorithm: z.literal("AES-GCM"),
+  iterations: z.number(),
+  salt: z.string(),
+  iv: z.string(),
+});
+
 const metaSchema1 = z.object({
   appName: z.literal("savnote"),
-  encryption: z
-    .object({
-      algorithm: z.literal("AES-GCM"),
-      iterations: z.number(),
-      salt: z.string(),
-      iv: z.string(),
-    })
-    .optional(),
+  encryption: z.tuple([encryptionSchema1, z.null()]),
   version: z.literal(1),
   name: z.string().optional(),
   dataFormat: z.literal("base64"),
@@ -72,7 +72,7 @@ const journalSchema1 = z
     data: z.union([
       z.object({
         decrypted: z.boolean(),
-        records: z.array(recordSchema1),
+        records: z.union([z.array(recordSchema1), z.null()]),
       }),
       z.string(),
     ]),
@@ -97,6 +97,7 @@ const journalSchema1 = z
 type JournalSchema1 = z.infer<typeof journalSchema1>;
 type RecordSchema1 = z.infer<typeof recordSchema1>;
 type MetaSchema1 = z.infer<typeof metaSchema1>;
+type EncryptionSchema1 = z.infer<typeof encryptionSchema1>;
 
-export type { JournalSchema1, RecordSchema1, MetaSchema1 };
+export type { JournalSchema1, RecordSchema1, MetaSchema1, EncryptionSchema1 };
 export { journalSchema1 };

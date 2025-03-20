@@ -1,36 +1,26 @@
-import { invoke } from "@tauri-apps/api/core";
 import { throwError } from "../lib/throwError";
-// import { Journal } from "../model/journal/Journal";
-import PouchDB from "pouchdb-browser";
-
-const db = new PouchDB("appState"); // TypeError: The superclass is not a constructor.
+import { Journal } from "../model/journal/Journal";
+import { showSaveFileDialog } from "../lib/showSaveFileDialog";
+import { showOpenFileDialog } from "../lib/showOpenFileDialog";
 
 export async function handleJournalOpen() {
   try {
-    const dir = await showSaveDialog("journal.json", null);
-    console.debug("dir:", dir);
-    // const journal = await Journal.open(dir);
+    const sourceDir = await showOpenFileDialog();
 
-    await db.put({
-      _id: "appDataDir",
-      journalDir: dir,
+    // TODO open file dialog with read write permissions https://github.com/aiueo13/tauri-plugin-android-fs/issues/2#issuecomment-2733913797
+    const targetDir = await showSaveFileDialog(
+      "Savings Journal.sjrn",
+      "application/json"
+    );
+    const journal = await Journal.open({
+      sourceDirectory: sourceDir,
+      targetDirectory: targetDir || undefined,
     });
+    journal.saveToDevice();
+    return journal.get();
 
-    // TODO setLocation to pouchDb
     // Redirect to `open` Page
   } catch (e) {
     throwError(e);
   }
-}
-
-async function showSaveDialog(
-  defaultName: string,
-  mimeType: string | null /* use null instead undefined */
-): Promise<string | null> {
-  // "plugin:android-fs|" is not need
-  return await invoke("show_persistent_save_dialog", {
-    // "app" is not need here, this is auto set by Tauri
-    defaultName,
-    mimeType,
-  });
 }

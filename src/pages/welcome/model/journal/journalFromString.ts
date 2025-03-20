@@ -1,6 +1,5 @@
-import { ZodError } from "zod";
-import { journalSchema1, type JournalSchema1 } from "../journalSchema1";
-import { throwError } from "../../lib/throwError";
+import type { JournalSchema1 } from "../journalSchema1";
+import { validateJournal } from "../validateJournal";
 
 /**
  * Validate provided text against journalSchema
@@ -10,17 +9,10 @@ import { throwError } from "../../lib/throwError";
 export function journalFromString(journalData: string): JournalSchema1 {
   if (typeof journalData !== "string")
     throw Error("Can't read a journal. Is it in SavNote format?");
-  try {
-    return journalSchema1.parse(JSON.parse(journalData));
-  } catch (e) {
-    if (e instanceof ZodError) {
-      throw Error(
-        `Can't read a journal. Is it in SavNote format? ${JSON.stringify(
-          e.errors
-        )}`
-      );
-    } else {
-      throwError(e);
-    }
-  }
+  if (
+    typeof JSON.parse(journalData) !== "object" ||
+    JSON.parse(journalData) === null
+  )
+    throw Error("Can't read a journal. Is it in SavNote format?");
+  return validateJournal(JSON.parse(journalData) as object);
 }

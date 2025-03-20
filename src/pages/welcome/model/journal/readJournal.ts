@@ -3,12 +3,12 @@ import { throwError } from "../../lib/throwError";
 
 /**
  * Reads text file which expected to be journal.
- * @param path file absolute directory or uri
+ * @param directory file absolute directory or uri
  * @returns unvalidated string
  */
-export async function readJournal(path: string): Promise<string> {
+export async function readJournal(directory: string): Promise<string> {
   try {
-    const content = await readTextFile(path);
+    const content = await readTextFile(directory);
     if (!content) throw Error("Can't open a journal. Is it in SavNote format?");
     return content;
   } catch (e) {

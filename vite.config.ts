@@ -1,12 +1,20 @@
 import { defineConfig } from "vite";
 import path from "node:path";
 import react from "@vitejs/plugin-react";
+import basicSsl from "@vitejs/plugin-basic-ssl";
 
 const host = process.env.TAURI_DEV_HOST;
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
-  plugins: [react()],
+  plugins: [
+    react(),
+    // basicSsl({
+    //   name: "test",
+    //   domains: ["*.custom.com"],
+    //   certDir: "/Users/.../.devServer/cert",
+    // }),
+  ],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //

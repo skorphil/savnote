@@ -23,6 +23,7 @@ export default tseslint.config(
       "@typescript-eslint/no-unsafe-member-access": "warn",
       "@typescript-eslint/consistent-type-imports": "warn",
       "@typescript-eslint/no-floating-promises": "error",
+      "@typescript-eslint/consistent-type-definitions": ["error", "type"],
     },
   }
 );

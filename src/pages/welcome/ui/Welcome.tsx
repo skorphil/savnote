@@ -4,7 +4,6 @@ import styles from "./Welcome.module.css";
 import { Block, List, ListItem, Page } from "konsta/react";
 import PouchDB from "pouchdb-browser";
 import { Journal } from "../model/journal/Journal";
-import { invoke } from "@tauri-apps/api/core";
 
 const itemClass = "h-14 flex flex-col justify-center";
 
@@ -28,6 +27,9 @@ function Welcome() {
           <ListItem
             innerClassName={itemClass}
             link
+            onClick={() => {
+              console.log(crypto.randomUUID());
+            }}
             strongTitle={true}
             title="Create new"
             className="hairline-b relative"
@@ -61,8 +63,9 @@ function Welcome() {
                 const doc = await db.get("appDataDir");
                 savedDir = doc?.journalDir as string; // Property 'journalDir' does not exist on type 'IdMeta & GetMeta'. How to type?
 
-                const journal = await Journal.open("savedDir");
-                setDbDir(JSON.stringify(journal.get()));
+                const journal = await Journal.open({
+                  sourceDirectory: savedDir,
+                });
               };
               handler().catch((e) => {
                 if (e instanceof Error) setDbDir(`${e.message} ${savedDir}`);
@@ -79,16 +82,3 @@ function Welcome() {
 }
 
 export default Welcome;
-
-export async function requestStoragePermission() {
-  try {
-    const granted = await invoke<boolean>("request_read_audio_permission");
-    if (granted) {
-      console.log("Storage permission granted");
-    } else {
-      console.log("Storage permission denied");
-    }
-  } catch (error) {
-    console.error("Error requesting storage permission:", error);
-  }
-}

@@ -11,6 +11,7 @@
     "opener:default",
     "fs:default",
     "fs:allow-copy-file",
+    "fs:allow-home-write-recursive",
     {
       "identifier": "fs:allow-write",
       "allow": [
@@ -31,7 +32,7 @@
       "identifier": "fs:allow-write",
       "allow": [
         {
-          "path": "$HOME/Documents/*"
+          "path": "/**/*"
         }
       ]
     },
@@ -39,7 +40,7 @@
       "identifier": "fs:allow-create",
       "allow": [
         {
-          "path": "$HOME/Documents/*"
+          "path": "$HOME/**/*"
         }
       ]
     },
@@ -58,6 +59,7 @@
           "path": "$HOME/Documents/*"
         }
       ]
-    }
+    },
+    "dialog:default"
   ]
 }
