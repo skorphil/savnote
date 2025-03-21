@@ -2,13 +2,20 @@
     "meta": {
         "appName": "savnote",
         "encryption": {
-          "algorithm": "AES-GCM",
-          "iterations": 1000,
-          "salt": "random-salt-value",
-          "iv": "initialization-vector-value"
+          "derivedKeyAlgorithm": {
+            "name": "AES-GCM",
+            "length": 256
+          },
+          "derivationAlgorithm": {
+            "name": "PBKDF2",
+            "hash": "SHA-256"
+          },
+          "iterations": 100000,
+          "salt": "randomSaltValue123",
+          "iv": "randomIVValue456"
         },
         "version": 1,
-        "name": "example-note",
+        "name": "My Journal",
         "dataFormat": "base64"
       },
     "data": "encryptedData" 

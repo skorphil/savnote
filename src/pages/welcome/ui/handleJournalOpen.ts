@@ -7,20 +7,27 @@ export async function handleJournalOpen() {
   try {
     const sourceDir = await showOpenFileDialog();
 
-    // TODO open file dialog with read write permissions https://github.com/aiueo13/tauri-plugin-android-fs/issues/2#issuecomment-2733913797
+    /* ---------- Workaround ---------- */
+    // TODO open file dialog with read write permissions
+    // https://github.com/aiueo13/tauri-plugin-android-fs/issues/2#issuecomment-2733913797
     const targetDir = await showSaveFileDialog(
-      "Savings Journal.sjrn",
+      "SavNote Journal",
       "application/json"
     );
-    const journal = await Journal.open({
-      sourceDirectory: sourceDir,
-      targetDirectory: targetDir || undefined,
+    if (!targetDir) throwError(Error("Target directory not choosen."));
+    /* -------------------------------- */
+    await Journal.open({
+      targetDirectory: targetDir,
+      directory: sourceDir,
     });
-    journal.saveToDevice();
-    return journal.get();
-
     // Redirect to `open` Page
   } catch (e) {
     throwError(e);
   }
 }
+
+/* ---------- References ---------- 
+- tauri-fs currently can't write to google drive. tauri-androight-fs might support this soon:
+https://github.com/aiueo13/tauri-plugin-android-fs/issues/3
+
+*/

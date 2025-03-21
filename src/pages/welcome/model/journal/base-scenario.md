@@ -11,8 +11,10 @@ Journal instance saved to file
 
 2. User opens encrypted journal
 App prompts to select file
+```
 App reads file structure
 App verifying selected file (at this moment we can understand if its encrypted)
+```
 *Workaround*: app asks for location to save the file.
 ```
 // deriveEncryptionPassword(password, iv, salt, iterations)

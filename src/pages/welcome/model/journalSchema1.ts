@@ -1,7 +1,14 @@
 import { z } from "zod";
 
 const encryptionSchema1 = z.object({
-  algorithm: z.literal("AES-GCM"),
+  derivedKeyAlgorithm: z.object({
+    name: z.literal("AES-GCM"),
+    length: z.literal(256),
+  }),
+  derivationAlgorithm: z.object({
+    name: z.literal("PBKDF2"),
+    hash: z.literal("SHA-256"),
+  }),
   iterations: z.number(),
   salt: z.string(),
   iv: z.string(),
@@ -9,7 +16,7 @@ const encryptionSchema1 = z.object({
 
 const metaSchema1 = z.object({
   appName: z.literal("savnote"),
-  encryption: z.tuple([encryptionSchema1, z.null()]),
+  encryption: z.union([encryptionSchema1, z.null()]),
   version: z.literal(1),
   name: z.string().optional(),
   dataFormat: z.literal("base64"),

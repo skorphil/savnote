@@ -2,13 +2,13 @@ import { useState } from "react";
 import { handleJournalOpen } from "./handleJournalOpen";
 import styles from "./Welcome.module.css";
 import { Block, List, ListItem, Page } from "konsta/react";
-import PouchDB from "pouchdb-browser";
-import { Journal } from "../model/journal/Journal";
+import { AppConfig } from "../model/app-config/AppConfig";
 
 const itemClass = "h-14 flex flex-col justify-center";
+const appConfig = new AppConfig();
 
 function Welcome() {
-  const [dbDir, setDbDir] = useState<null | string>(null);
+  const [status, setStatus] = useState<null | string>(null);
 
   return (
     <Page className={styles.page}>
@@ -21,7 +21,7 @@ function Welcome() {
             SavNote, as long as you have the password. Regular manual backups
             are recommended to prevent accidental data loss.
           </p>
-          state:{dbDir}
+          <p>{`Status: ${status}`}</p>
         </div>
         <List outline inset className={styles.linksBlock}>
           <ListItem
@@ -43,11 +43,12 @@ function Welcome() {
           <ListItem
             link
             onClick={() => {
+              setStatus("Opening DB");
               const handler = async () => {
-                setDbDir(JSON.stringify(await handleJournalOpen()));
+                setStatus(JSON.stringify(await handleJournalOpen()));
               };
               handler().catch((e) => {
-                if (e instanceof Error) setDbDir(e.message);
+                if (e instanceof Error) setStatus(e.message);
               });
             }}
             innerClassName={itemClass}
@@ -57,23 +58,18 @@ function Welcome() {
           <ListItem
             link
             onClick={() => {
-              const db = new PouchDB("appState");
-              let savedDir: string;
               const handler = async () => {
-                const doc = await db.get("appDataDir");
-                savedDir = doc?.journalDir as string; // Property 'journalDir' does not exist on type 'IdMeta & GetMeta'. How to type?
-
-                const journal = await Journal.open({
-                  sourceDirectory: savedDir,
-                });
+                const directory = (await appConfig.getConfig())
+                  .currentJournalDirectory;
+                setStatus(directory || "");
               };
               handler().catch((e) => {
-                if (e instanceof Error) setDbDir(`${e.message} ${savedDir}`);
+                if (e instanceof Error) setStatus(`${e.message}`);
               });
             }}
             innerClassName={itemClass}
             strongTitle={true}
-            title="Open attached (debug)"
+            title="Check attached (debug)"
           />
         </List>
       </Block>
