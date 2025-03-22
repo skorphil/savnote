@@ -1,7 +1,7 @@
 {
   "name": "savnote",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.0.1",
   "type": "module",
   "packageManager": "pnpm@10.6.1",
   "description": "Private savings journal",
@@ -9,9 +9,7 @@
     "'konsta' requires tailwind v3. Not working with v4"
   ],
   "scripts": {
-"license": "license-report --config license-report-config.json --output=markdown > LICENSES.md && echo 'For all dependencies under the **Apache 2.0 License**, refer to the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).\n\nFor all dependencies under the **MIT License**, refer to the [MIT License](https://opensource.org/license/MIT).' >> LICENSES.md",
-
-
+    "license": "license-report --config license-report-config.json --output=markdown > LICENSES.md && echo 'For all dependencies under the **Apache 2.0 License**, refer to the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).\n\nFor all dependencies under the **MIT License**, refer to the [MIT License](https://opensource.org/license/MIT).' >> LICENSES.md",
     "test": "vitest",
     "dev": "vite",
     "dev:android": "tauri android dev",
@@ -27,22 +25,20 @@
     "@tauri-apps/plugin-opener": "^2.2.6",
     "events": "^3.3.0",
     "konsta": "^4.0.1",
+    "license-downloader": "^1.3.0",
     "license-report": "^6.7.2",
-    "pouchdb": "^9.0.0",
-    "pouchdb-adapter-memory": "^9.0.0",
     "pouchdb-browser": "^9.0.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router": "^7.3.0",
     "tauri-plugin-androidpermissionprompt-api": "^0.1.1",
+    "tinybase": "^5.4.9",
     "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
     "@tauri-apps/cli": "^2.3.1",
     "@types/node": "^22.13.10",
-    "@types/pouchdb": "^6.4.2",
-    "@types/pouchdb-adapter-memory": "^6.1.6",
     "@types/pouchdb-browser": "^6.1.5",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.4",
