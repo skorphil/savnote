@@ -1,7 +1,7 @@
 import { readTextFile } from "@tauri-apps/plugin-fs";
-import { throwError } from "../../lib/throwError";
+import { throwError } from "@/shared/lib/error-handling";
 import { journalFromString } from "./journalFromString";
-import type { JournalSchema1 } from "../journalSchema1";
+import type { JournalSchema1 } from "../model/journalSchema1";
 
 /**
  * Reads text file which expected to be journal.

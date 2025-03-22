@@ -1,13 +1,9 @@
-import {
-  type JournalSchema1,
-  type MetaSchema1,
-  type RecordSchema1,
-} from "../journalSchema1";
 import { readJournal } from "./readJournal";
-import { throwError } from "../../lib/throwError";
-import { createEncryptionKey } from "../../lib/encryptionUtils";
-import PouchDB from "pouchdb-browser";
-import { AppConfig } from "../app-config/AppConfig";
+import { throwError } from "../../../shared/lib/error-handling/throwError";
+import { createEncryptionKey } from "./encryptionUtils";
+import { AppConfig } from "../../../pages/welcome/model/app-config/AppConfig";
+import { recordsStore } from "../model/recordsStore";
+import type { JournalSchema1, MetaSchema1 } from "../model/journalSchema1";
 
 const defaultNewJournalData: JournalSchema1 = {
   meta: {
@@ -23,12 +19,6 @@ const defaultNewJournalData: JournalSchema1 = {
   },
 };
 
-const records: PouchDB.Database<RecordSchema1> = new PouchDB("records");
-
-window.addEventListener("beforeunload", () => {
-  records.destroy().catch((e) => throwError(e));
-});
-
 /**
  * Represents a journal instance. Provides various methods to work with a journal.
  * Initialised with .open() or .create() static methods
@@ -43,7 +33,7 @@ export class Journal {
   private directory!: string;
   private meta!: MetaSchema1;
   private encryptionKey: CryptoKey | null = null;
-  private records = records;
+  private records = recordsStore;
 
   constructor(props: JournalConctructorProps) {
     const { directory, journalData } = props;
@@ -61,7 +51,7 @@ export class Journal {
     ) {
       journalData.data.records?.forEach((record) => {
         const doc = { ...record };
-        this.records.put(doc).catch((e) => throwError(e));
+        // this.records.put(doc).catch((e) => throwError(e));
       });
     }
   }

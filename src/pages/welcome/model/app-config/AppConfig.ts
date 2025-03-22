@@ -1,6 +1,6 @@
 import PouchDb from "pouchdb-browser";
 import type { AppConfigSchema1 } from "./appConfigSchema";
-import { throwError } from "../../lib/throwError";
+import { throwError } from "../../../../shared/lib/error-handling/throwError";
 
 /**
  * Singleton app config instance

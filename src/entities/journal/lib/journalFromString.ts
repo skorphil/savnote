@@ -1,5 +1,5 @@
-import type { JournalSchema1 } from "../journalSchema1";
-import { validateJournal } from "../validateJournal";
+import type { JournalSchema1 } from "../model/journalSchema1";
+import { validateJournal } from "../model/validateJournal";
 
 /**
  * Validate provided text against journalSchema

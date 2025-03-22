@@ -1,6 +1,6 @@
 import { ZodError } from "zod";
 import { type JournalSchema1, journalSchema1 } from "./journalSchema1";
-import { throwError } from "../lib/throwError";
+import { throwError } from "@/shared/lib/error-handling";
 
 export function validateJournal(data: object): JournalSchema1 {
   try {

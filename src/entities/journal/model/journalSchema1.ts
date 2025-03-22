@@ -59,7 +59,7 @@ const instiutionSchema1 = z.object({
 const recordSchema1 = z.object({
   uuid: z.string(),
   date: z.number(),
-  qutes: z.array(quoteSchema1),
+  quotes: z.array(quoteSchema1),
   institutions: z.array(instiutionSchema1).refine(
     (institutions) => {
       const names = institutions
