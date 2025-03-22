@@ -26,9 +26,9 @@ Features:
 * **Android-first**: Android-centric design, focusing on delivering a seamless and intuitive mobile experience.
 * **Extensibility**: SavNote is fully open-source, empowering you to extend, customize, and modify it to fit your needs. With a cross-platform foundation, you're also free to fork and adapt it for other platforms.
 
+
 ## Project Vision  
 Read more about vision of SavNote in [VISION.md](VISION.md).
-
 
 
 ---
