@@ -16,6 +16,7 @@ export async function handleJournalOpen() {
     );
     if (!targetDir) throwError(Error("Target directory not choosen."));
     /* -------------------------------- */
+
     await Journal.open({
       targetDirectory: targetDir,
       directory: sourceDir,

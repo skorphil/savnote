@@ -9,6 +9,9 @@
     "'konsta' requires tailwind v3. Not working with v4"
   ],
   "scripts": {
+"license": "license-report --config license-report-config.json --output=markdown > LICENSES.md && echo 'For all dependencies under the **Apache 2.0 License**, refer to the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).\n\nFor all dependencies under the **MIT License**, refer to the [MIT License](https://opensource.org/license/MIT).' >> LICENSES.md",
+
+
     "test": "vitest",
     "dev": "vite",
     "dev:android": "tauri android dev",
@@ -24,6 +27,7 @@
     "@tauri-apps/plugin-opener": "^2.2.6",
     "events": "^3.3.0",
     "konsta": "^4.0.1",
+    "license-report": "^6.7.2",
     "pouchdb": "^9.0.0",
     "pouchdb-adapter-memory": "^9.0.0",
     "pouchdb-browser": "^9.0.0",

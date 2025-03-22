@@ -181,6 +181,21 @@ type JournalConctructorProps = {
   journalData: JournalSchema1;
 };
 
+/* ---------- References ----------
+- Used singletone patter because app is managing single journal only.
+
+- Choosed singletone over `object` or `static class`
+to make it more extendable in the future
+Object.assign(MyClass.prototype, utils);
+Object.assign(MyClass, utils);
+
+- I planned to store unencrypted records in PouchDB in memory, but
+Pouch-DB memory-adapter not designed to work in browser
+https://www.reddit.com/r/CouchDB/comments/1jgigdp/pouchdbadaptermemory_uncaught_referenceerror/
+Storing records in indexedDB is not suitable because they are unencrypted.
+There is no reliable way to clean indexedDB on app close.
+*/
+
 // async function encryptJSON(password, jsonData) {
 //   const encoder = new TextEncoder();
 //   const salt = window.crypto.getRandomValues(new Uint8Array(16));
@@ -234,13 +249,3 @@ type JournalConctructorProps = {
 //   const decryptedJson = await decryptJSON(password, encryptedJson);
 //   console.log("Decrypted JSON:", decryptedJson);
 // })();
-
-/* ---------- References ----------
-- Used singletone patter because app is managing single journal only.
-
-- Choosed singletone over `object` or `static class`
-to make it more extendable in the future
-
-Object.assign(MyClass.prototype, utils);
-Object.assign(MyClass, utils);
-*/
