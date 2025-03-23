@@ -3,20 +3,23 @@ import { throwError } from "../../../shared/lib/error-handling/throwError";
 import { createEncryptionKey } from "./encryptionUtils";
 import { AppConfig } from "../../../pages/welcome/model/app-config/AppConfig";
 import { recordsStore } from "../model/recordsStore";
-import type { JournalSchema1, MetaSchema1 } from "../model/journalSchema1";
+import type {
+  EncryptionSchema2,
+  JournalSchema2,
+  MetaSchema2,
+} from "../model/journalSchema2";
+import { saveTextFileToExtStorage } from "./saveTextFileToExtStorage";
+import { validateJournal } from "../model/validateJournal";
 
-const defaultNewJournalData: JournalSchema1 = {
+const defaultNewJournalData: JournalSchema2 = {
   meta: {
     appName: "savnote",
     dataFormat: "base64",
-    encryption: null,
     version: 1,
     name: "My SavNote Journal",
   },
-  data: {
-    decrypted: true,
-    records: null,
-  },
+  encryption: 0,
+  records: 0,
 };
 
 /**
@@ -29,30 +32,28 @@ const defaultNewJournalData: JournalSchema1 = {
  */
 export class Journal {
   static instance: Journal;
-  private cipher: string | null = null;
+  private cipher: string | 0 = null;
   private directory!: string;
-  private meta!: MetaSchema1;
+  private meta!: MetaSchema2;
+  private encryption: EncryptionSchema2 | 0 = 0;
   private encryptionKey: CryptoKey | null = null;
   private records = recordsStore;
 
   constructor(props: JournalConctructorProps) {
     const { directory, journalData } = props;
     if (Journal.instance) return Journal.instance;
-
     Journal.instance = this;
 
     this.directory = directory;
     this.meta = journalData.meta;
+    this.encryption = journalData.encryption;
     this.saveDirectoryToPersitentStorage();
 
-    if (
-      typeof journalData.data !== "string" &&
-      journalData.data.decrypted === true
-    ) {
-      journalData.data.records?.forEach((record) => {
-        const doc = { ...record };
-        // this.records.put(doc).catch((e) => throwError(e));
-      });
+    if (journalData.records && typeof journalData.records !== "string") {
+      this.records.setTables(journalData.records);
+    }
+    if (journalData.records && typeof journalData.records === "string") {
+      this.cipher = journalData.records;
     }
   }
 
@@ -68,36 +69,39 @@ export class Journal {
   static async open(props: JournalOpenProps) {
     const { directory, targetDirectory } = props;
     const journalData = await readJournal(directory);
-    return new Journal({
+    const journal = new Journal({
       directory: targetDirectory,
       journalData,
     });
+
+    journal.saveToDevice();
+    return journal;
   }
 
   /**
    * Creates journal instance from scratch.
    * @returns Journal singletone instance
    */
-  static async create(props: JournalCreateProps) {
-    const { directory, name, password } = props;
+  // static async create(props: JournalCreateProps) {
+  //   const { directory, name, password } = props;
 
-    const journalData: JournalSchema1 = {
-      ...defaultNewJournalData,
-      meta: {
-        ...defaultNewJournalData.meta,
-        name: name,
-      },
-    };
+  //   const journalData: JournalSchema2 = {
+  //     ...defaultNewJournalData,
+  //     meta: {
+  //       ...defaultNewJournalData.meta,
+  //       name: name,
+  //     },
+  //   };
 
-    const journal = new Journal({
-      directory: directory,
-      journalData: journalData,
-    });
+  //   const journal = new Journal({
+  //     directory: directory,
+  //     journalData: journalData,
+  //   });
 
-    if (password) await journal.createEncryption(password);
+  //   if (password) await journal.createEncryption(password);
 
-    return journal;
-  }
+  //   return journal;
+  // }
 
   /* ---------- CODE BLOCK: Public methods need to be moved to separate file ---------- */
 
@@ -107,32 +111,29 @@ export class Journal {
   //   // Write plainText to PouchDb
   // }
 
-  // saveToDevice() {
-  //   const data = {
-  //     decrypted: true,
-  //     records: this.records, // get from pouchDb
-  //   };
-  //   let cipher: string | null = null;
-  //   if (this.encryptionPassword && this.meta.encryption) {
-  //     cipher = this.encrypt({ plainText = JSON.stringify(data) });
-  //   }
+  saveToDevice() {
+    // let cipher: string | null = null;
+    // if (this.encryptionPassword && this.meta.encryption) {
+    //   cipher = this.encrypt({ plainText = JSON.stringify(data) });
+    // }
 
-  //   const journal: object = {
-  //     meta: { ...this.meta, encryption: undefined },
-  //     data: cipher || data,
-  //   };
-  //   const stringifiedJournalData = JSON.stringify(validateJournal(journal));
+    const journal: object = {
+      meta: this.meta,
+      encryption: this.encryption,
+      records: this.records.getTables() || 0, // TODO type output
+    };
+    const stringifiedJournalData = JSON.stringify(validateJournal(journal));
 
-  //   saveTextFileToExtStorage({
-  //     data: stringifiedJournalData,
-  //     targetDirectory: this.directory,
-  //   }).catch((e) => throwError(e));
-  // }
+    saveTextFileToExtStorage({
+      data: stringifiedJournalData,
+      targetDirectory: this.directory,
+    }).catch((e) => throwError(e));
+  }
 
   getEncryptionState() {
     return {
-      encryption: null,
-      decrypted: true,
+      encryption: this.encryption !== null,
+      decrypted: this.records.hasTable("institutions"),
     };
   }
 
@@ -151,15 +152,15 @@ export class Journal {
     const encryptionParameters = await createEncryptionKey(baseKey);
 
     this.encryptionKey = encryptionParameters.encryptionKey;
-    this.meta.encryption = encryptionParameters.encryptionMeta; // The left-hand side of an assignment expression may not be an optional property access.
+    // this.meta.encryption = encryptionParameters.encryptionMeta; // The left-hand side of an assignment expression may not be an optional property access.
   }
 }
 
-type JournalCreateProps = {
-  password?: string;
-  directory: string;
-  name?: string;
-};
+// type JournalCreateProps = {
+//   password?: string;
+//   directory: string;
+//   name?: string;
+// };
 
 type JournalOpenProps = {
   directory: string;
@@ -168,10 +169,10 @@ type JournalOpenProps = {
 
 type JournalConctructorProps = {
   directory: string;
-  journalData: JournalSchema1;
+  journalData: JournalSchema2;
 };
 
-/* ---------- References ----------
+/* ---------- Comments ----------
 - Used singletone patter because app is managing single journal only.
 
 - Choosed singletone over `object` or `static class`

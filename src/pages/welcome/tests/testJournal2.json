@@ -1,0 +1,37 @@
+{
+    "meta": {
+      "appName": "savnote",
+      "version": 1,
+      "name": "My Journal",
+      "dataFormat": "base64"
+    },
+    "encryption": null,
+    "records": {
+      "institutions": {
+        "1672531200.BankA": {
+          "date": "1672531200",
+          "name": "BankA",
+          "country": "USA"
+        }
+      },
+      "assets": {
+        "1672531200.BankA.SavingsAccount": {
+          "date": "1672531200",
+          "institution": "BankA",
+          "name": "SavingsAccount",
+          "amount": 1000,
+          "currency": "USD",
+          "isEarning": true,
+          "description": "Monthly savings"
+        }
+      },
+      "qoutes": {
+        "1672531200.USD": {
+          "date": "1672531200",
+          "baseCurrency": "USD",
+          "USD": 1,
+          "RUB": 90
+        }
+      }
+    }
+  }

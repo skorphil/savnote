@@ -1,4 +1,4 @@
-import type { JournalSchema1 } from "../model/journalSchema1";
+import type { JournalSchema2 } from "../model/journalSchema2";
 import { validateJournal } from "../model/validateJournal";
 
 /**
@@ -6,7 +6,7 @@ import { validateJournal } from "../model/validateJournal";
  * @param journalData string expected to be journal data
  * @returns validated journal object
  */
-export function journalFromString(journalData: string): JournalSchema1 {
+export function journalFromString(journalData: string): JournalSchema2 {
   if (typeof journalData !== "string")
     throw Error("Can't read a journal. Is it in SavNote format?");
   if (

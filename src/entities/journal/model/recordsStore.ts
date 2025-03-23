@@ -6,7 +6,7 @@ import { createStore } from "tinybase";
  */
 export const recordsStore = createStore();
 
-/* ---------- References ----------
+/* ---------- Comments ----------
 store created here(not in app) to be accessible for imports to use non-reactive 
 methods like .getTable()
 

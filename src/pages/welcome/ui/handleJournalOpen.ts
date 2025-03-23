@@ -10,10 +10,7 @@ export async function handleJournalOpen() {
     /* ---------- Workaround ---------- */
     // TODO open file dialog with read write permissions
     // https://github.com/aiueo13/tauri-plugin-android-fs/issues/2#issuecomment-2733913797
-    const targetDir = await showSaveFileDialog(
-      "SavNote Journal",
-      "application/json"
-    );
+    const targetDir = await showSaveFileDialog("Journal", "application/json");
     if (!targetDir) throwError(Error("Target directory not choosen."));
     /* -------------------------------- */
 
