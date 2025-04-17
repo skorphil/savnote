@@ -1,9 +1,16 @@
 export { journalSchema2 } from "./model/journalSchema2";
 export { validateJournal } from "./model/validateJournal";
-export { recordsStore } from "./model/recordsStore";
+export {
+  JournalStore,
+  journalStore,
+  journalStoreIndexes,
+  journalStoreQueries,
+} from "./model/JournalStore";
 export { Journal } from "./lib/Journal";
 export { showOpenFileDialog } from "./ui/showOpenFileDialog";
 export { showSaveFileDialog } from "./ui/showSaveFileDialog";
+
+export { useJournalValue, useJournalSlices } from "./model/JournalStore";
 
 export type {
   JournalSchema2,

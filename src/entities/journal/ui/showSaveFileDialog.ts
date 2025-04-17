@@ -8,10 +8,12 @@ import { invoke } from "@tauri-apps/api/core";
  * read/write permissions
  */
 export async function showSaveFileDialog(
+  // initial_location: string | null,
   defaultName: string,
   mimeType: string | null
 ): Promise<string | null> {
   return await invoke("show_persistent_save_dialog", {
+    // initial_location,
     defaultName,
     mimeType,
   });

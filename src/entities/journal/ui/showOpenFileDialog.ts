@@ -1,14 +1,15 @@
-import { open } from "@tauri-apps/plugin-dialog";
+import { invoke } from "@tauri-apps/api/core";
 
 /**
- * Shows native dialog to choose file to open.
- * @returns File uri with read permissions
+ * Shows native dialog to choose location to save file.
+ * @param mimeType Mime type of file to open
+ * @returns Selected file uri with persistent(between app reloads, device restarts)
+ * read/write permissions
  */
-export async function showOpenFileDialog() {
-  const file = await open({
-    multiple: false,
-    directory: false,
+export async function showOpenFileDialog(
+  mimeTypes: string[] | null
+): Promise<string | null> {
+  return await invoke("show_persistent_open_dialog", {
+    mimeTypes,
   });
-  if (!file) throw Error("Can't open a file.");
-  return file;
 }

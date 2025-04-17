@@ -1,0 +1,1 @@
+export { zObjectToTinyTable } from "./zObjectToTinyTable";

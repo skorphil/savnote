@@ -1,26 +1,14 @@
 import { readJournal } from "./readJournal";
-import { throwError } from "../../../shared/lib/error-handling/throwError";
 import { createEncryptionKey } from "./encryptionUtils";
-import { AppConfig } from "../../../pages/welcome/model/app-config/AppConfig";
-import { recordsStore } from "../model/recordsStore";
+import { validateJournal } from "../model/validateJournal";
 import type {
   EncryptionSchema2,
   JournalSchema2,
   MetaSchema2,
 } from "../model/journalSchema2";
-import { saveTextFileToExtStorage } from "./saveTextFileToExtStorage";
-import { validateJournal } from "../model/validateJournal";
-
-const defaultNewJournalData: JournalSchema2 = {
-  meta: {
-    appName: "savnote",
-    dataFormat: "base64",
-    version: 1,
-    name: "My SavNote Journal",
-  },
-  encryption: 0,
-  records: 0,
-};
+import { journalStore } from "../model/JournalStore";
+import { Preferences } from "@/entities/preferences";
+import { writeStringToFile } from "./writeStringToFile";
 
 /**
  * Represents a journal instance. Provides various methods to work with a journal.
@@ -31,18 +19,22 @@ const defaultNewJournalData: JournalSchema2 = {
  * const userJournal = Journal.create(...)
  */
 export class Journal {
-  static instance: Journal;
-  private cipher: string | 0 = null;
+  static instance: Journal | undefined;
+  private cipher: string | 0 = 0;
   private directory!: string;
   private meta!: MetaSchema2;
-  private encryption: EncryptionSchema2 | 0 = 0;
+  private encryption: EncryptionSchema2 | undefined = undefined;
   private encryptionKey: CryptoKey | null = null;
-  private records = recordsStore;
+  records = journalStore;
 
   constructor(props: JournalConctructorProps) {
-    const { directory, journalData } = props;
     if (Journal.instance) return Journal.instance;
     Journal.instance = this;
+    const { directory, journalData } = props;
+    if (!directory || !journalData)
+      throw Error(
+        "provide `directory` and `journalData` to create new Journal instance."
+      );
 
     this.directory = directory;
     this.meta = journalData.meta;
@@ -67,15 +59,20 @@ export class Journal {
    * @returns Journal singletone instance
    */
   static async open(props: JournalOpenProps) {
-    const { directory, targetDirectory } = props;
+    if (Journal.instance) return Journal.instance;
+    const { directory } = props;
     const journalData = await readJournal(directory);
     const journal = new Journal({
-      directory: targetDirectory,
+      directory,
       journalData,
     });
 
-    journal.saveToDevice();
     return journal;
+  }
+
+  static delete() {
+    this.instance?.records.delTables();
+    this.instance = undefined;
   }
 
   /**
@@ -116,18 +113,17 @@ export class Journal {
     // if (this.encryptionPassword && this.meta.encryption) {
     //   cipher = this.encrypt({ plainText = JSON.stringify(data) });
     // }
-
     const journal: object = {
       meta: this.meta,
       encryption: this.encryption,
-      records: this.records.getTables() || 0, // TODO type output
+      records: this.records.getTables() || undefined, // TODO add encryption
     };
     const stringifiedJournalData = JSON.stringify(validateJournal(journal));
+    writeStringToFile(this.directory, stringifiedJournalData);
+  }
 
-    saveTextFileToExtStorage({
-      data: stringifiedJournalData,
-      targetDirectory: this.directory,
-    }).catch((e) => throwError(e));
+  saveTest(string: string) {
+    writeStringToFile(this.directory, string);
   }
 
   getEncryptionState() {
@@ -137,11 +133,24 @@ export class Journal {
     };
   }
 
+  getJournalName() {
+    return this.meta.name;
+  }
+
+  getJournalDirectory() {
+    return this.directory;
+  }
+
+  getEncryptionParameters() {
+    return this.encryption?.derivedKeyAlgorithmName || null;
+  }
+
   /* ---------- CODE BLOCK: private methods ---------- */
   private saveDirectoryToPersitentStorage() {
-    new AppConfig()
-      .updateConfig({ currentJournalDirectory: this.directory })
-      .catch((e) => throwError(e));
+    if (!this.directory) throw Error("No directory specified for journal file");
+    new Preferences().updatePreferences({
+      currentJournalDirectory: this.directory,
+    });
   }
 
   async createEncryption(baseKey: string) {
@@ -164,7 +173,6 @@ export class Journal {
 
 type JournalOpenProps = {
   directory: string;
-  targetDirectory: string;
 };
 
 type JournalConctructorProps = {

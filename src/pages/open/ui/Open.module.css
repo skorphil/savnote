@@ -1,0 +1,3 @@
+.page {
+    @apply flex flex-col;
+}

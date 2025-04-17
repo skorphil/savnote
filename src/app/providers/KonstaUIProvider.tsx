@@ -7,7 +7,11 @@ type KonstaUIProviderProps = {
 export function KonstaUIProvider(props: KonstaUIProviderProps) {
   return (
     <KonstaProvider theme="material" dark={true}>
-      <KonstaApp theme="material" className="k-material">
+      <KonstaApp
+        touchRipple={false}
+        theme="material"
+        className="k-material overflow-hidden" // overflow-hidden prevents shaking effect when scroll reached an end
+      >
         {props.children}
       </KonstaApp>
     </KonstaProvider>
