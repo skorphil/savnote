@@ -66,7 +66,7 @@ function Open() {
           text={journalEncryption || "Password not set"}
         />
         <div className="mt-4">
-          {journalEncryption && (
+          {
             <ListInput
               required
               outline
@@ -74,7 +74,7 @@ function Open() {
               type="password"
               autoFocus={true} // works only on manual navigation to page. not working if page is opened after rerendering
             />
-          )}
+          }
           <NavLink to="/app">
             <Button className="w-[calc(100%-32px)] m-4" large rounded>
               Open
