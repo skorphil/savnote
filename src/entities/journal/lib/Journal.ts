@@ -6,7 +6,12 @@ import type {
   JournalSchema2,
   MetaSchema2,
 } from "../model/journalSchema2";
-import { journalStore } from "../model/JournalStore";
+import {
+  journalStore,
+  useJournalQuiries,
+  useJournalResultTable,
+  useJournalSliceIds,
+} from "../model/JournalStore";
 import { Preferences } from "@/entities/preferences";
 import { writeStringToFile } from "./writeStringToFile";
 
@@ -16,7 +21,7 @@ import { writeStringToFile } from "./writeStringToFile";
  * @returns Singletone Journal instance
  * @example
  * const userJournal = Journal.open(...)
- * const userJournal = Journal.create(...)
+ * const data = Journal.instance?.useJournalSlices
  */
 export class Journal {
   static instance: Journal | undefined;
@@ -75,31 +80,6 @@ export class Journal {
     this.instance = undefined;
   }
 
-  /**
-   * Creates journal instance from scratch.
-   * @returns Journal singletone instance
-   */
-  // static async create(props: JournalCreateProps) {
-  //   const { directory, name, password } = props;
-
-  //   const journalData: JournalSchema2 = {
-  //     ...defaultNewJournalData,
-  //     meta: {
-  //       ...defaultNewJournalData.meta,
-  //       name: name,
-  //     },
-  //   };
-
-  //   const journal = new Journal({
-  //     directory: directory,
-  //     journalData: journalData,
-  //   });
-
-  //   if (password) await journal.createEncryption(password);
-
-  //   return journal;
-  // }
-
   /* ---------- CODE BLOCK: Public methods need to be moved to separate file ---------- */
 
   // async decrypt(password: string) {
@@ -144,6 +124,10 @@ export class Journal {
   getEncryptionParameters() {
     return this.encryption?.derivedKeyAlgorithmName || null;
   }
+
+  useJournalSliceIds = useJournalSliceIds;
+  useJournalQuiries = useJournalQuiries;
+  useJournalResultTable = useJournalResultTable;
 
   /* ---------- CODE BLOCK: private methods ---------- */
   private saveDirectoryToPersitentStorage() {
@@ -194,6 +178,31 @@ https://www.reddit.com/r/CouchDB/comments/1jgigdp/pouchdbadaptermemory_uncaught_
 Storing records in indexedDB is not suitable because they are unencrypted.
 There is no reliable way to clean indexedDB on app close.
 */
+
+/**
+ * Creates journal instance from scratch.
+ * @returns Journal singletone instance
+ */
+// static async create(props: JournalCreateProps) {
+//   const { directory, name, password } = props;
+
+//   const journalData: JournalSchema2 = {
+//     ...defaultNewJournalData,
+//     meta: {
+//       ...defaultNewJournalData.meta,
+//       name: name,
+//     },
+//   };
+
+//   const journal = new Journal({
+//     directory: directory,
+//     journalData: journalData,
+//   });
+
+//   if (password) await journal.createEncryption(password);
+
+//   return journal;
+// }
 
 // async function encryptJSON(password, jsonData) {
 //   const encoder = new TextEncoder();

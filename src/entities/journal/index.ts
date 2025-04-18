@@ -10,7 +10,7 @@ export { Journal } from "./lib/Journal";
 export { showOpenFileDialog } from "./ui/showOpenFileDialog";
 export { showSaveFileDialog } from "./ui/showSaveFileDialog";
 
-export { useJournalValue, useJournalSlices } from "./model/JournalStore";
+export { useJournalValue } from "./model/JournalStore";
 
 export type {
   JournalSchema2,

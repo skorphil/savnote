@@ -1,4 +1,4 @@
-import { Journal, useJournalSlices } from "@/entities/journal";
+import { Journal } from "@/entities/journal";
 import { Preferences } from "@/entities/preferences";
 import {
   Navbar,
@@ -20,18 +20,20 @@ import {
   MdViewList,
 } from "react-icons/md";
 import { useNavigate } from "react-router";
+import OverviewTab from "./OverviewTab";
 
 /**
  * New component
  *
  */
 function App() {
-  const recordDates = useJournalSlices("InstitutionsByDate");
+  const recordDates =
+    Journal.instance?.useJournalSliceIds("InstitutionsByDate");
   const [activeTab, setActiveTab] = useState<string>("tab-1");
   const redirect = useNavigate();
   // const values = journalStore.getJson();
   return (
-    <Page className="no-scrollbar">
+    <Page className="no-scrollbar pb-24-safe">
       <Fab
         className="fixed right-4-safe bottom-24-safe z-20"
         icon={<MdAdd />}
@@ -39,6 +41,7 @@ function App() {
         textPosition="after"
         onClick={() => console.debug("fab pressed")}
       />
+      {activeTab === "tab-1" && <OverviewTab />}
       {activeTab === "tab-2" && (
         <>
           <Navbar
@@ -59,8 +62,8 @@ function App() {
             transparent={false}
           />
           <List inset className="space-y-4 mb-28 mt-0">
-            {recordDates.map((date) => (
-              <ListItem id={date}>
+            {recordDates?.map((date, id) => (
+              <ListItem key={id}>
                 <span>{unixTimeToHumanReadable(Number(date))}</span>
               </ListItem>
             ))}
