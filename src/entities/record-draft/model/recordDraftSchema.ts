@@ -11,6 +11,18 @@ const recordDraftInstitutionSchema = instiutionSchema.extend({
 });
 const recordDraftQuoteSchema = quoteSchema;
 
+type RecordDraftAssetSchema = z.infer<typeof recordDraftAssetSchema>;
+type RecordDraftInstitutionSchema = z.infer<
+  typeof recordDraftInstitutionSchema
+>;
+type RecordDraftQuoteSchema = z.infer<typeof recordDraftQuoteSchema>;
+
+export type {
+  RecordDraftAssetSchema,
+  RecordDraftInstitutionSchema,
+  RecordDraftQuoteSchema,
+};
+
 export {
   recordDraftAssetSchema,
   recordDraftInstitutionSchema,

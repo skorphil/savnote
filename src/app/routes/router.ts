@@ -7,20 +7,25 @@ import { New } from "@/pages/new";
 
 export const router = createBrowserRouter([
   {
-    path: "/new",
+    path: "new/:institutionId?",
     Component: New,
   },
+  // {
+  //   path: "new/:institutionId",
+  //   Component: InstitutionForm,
+  // },
+
   {
     path: "/",
     Component: Welcome,
     loader: welcomeLoader,
   },
   {
-    path: "/open",
+    path: "open",
     Component: Open,
   },
   {
-    path: "/app",
+    path: "app",
     Component: App,
   },
 ]);
