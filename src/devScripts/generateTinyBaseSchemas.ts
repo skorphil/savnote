@@ -1,8 +1,14 @@
 import {
-  assetSchema2,
-  instiutionSchema2,
-  quoteSchema2,
-} from "@/entities/journal/model/journalSchema2";
+  assetSchema,
+  instiutionSchema,
+  quoteSchema,
+} from "@/shared/journal-schema";
+
+import {
+  recordDraftAssetSchema,
+  recordDraftInstitutionSchema,
+  recordDraftQuoteSchema,
+} from "@/entities/record-draft/model/recordDraftSchema";
 import { preferencesSchema1 } from "@/entities/preferences";
 import { zObjectToTinyTable } from "@/shared/lib/zod-to-tiny-base";
 import type { TablesSchema } from "tinybase/with-schemas";
@@ -12,33 +18,48 @@ import type { ValuesSchema } from "tinybase/with-schemas";
 
 generatePersistentStateSchema();
 generateRecordsSchema();
+generateRecordDraftSchema();
 
 function generatePersistentStateSchema() {
   const preferences: ValuesSchema = zObjectToTinyTable(preferencesSchema1);
 
   // write appState to ts file
-  appentConstToFile(
+  appendConstToFile(
     "src/entities/preferences/model/tinyBasePreferencesSchema.ts",
     "tinyBasePreferencesSchema",
     preferences
   );
 }
 
-function generateRecordsSchema() {
+function generateRecordDraftSchema() {
   const records: TablesSchema = {
-    institutions: zObjectToTinyTable(instiutionSchema2),
-    assets: zObjectToTinyTable(assetSchema2),
-    quotes: zObjectToTinyTable(quoteSchema2),
+    institutions: zObjectToTinyTable(recordDraftInstitutionSchema),
+    assets: zObjectToTinyTable(recordDraftAssetSchema),
+    quotes: zObjectToTinyTable(recordDraftQuoteSchema),
   };
 
-  appentConstToFile(
+  appendConstToFile(
+    "src/entities/record-draft/model/tinyBaseRecordDraftSchema.ts",
+    "tinyBaseRecordDraftSchema",
+    records
+  );
+}
+
+function generateRecordsSchema() {
+  const records: TablesSchema = {
+    institutions: zObjectToTinyTable(instiutionSchema),
+    assets: zObjectToTinyTable(assetSchema),
+    quotes: zObjectToTinyTable(quoteSchema),
+  };
+
+  appendConstToFile(
     "src/entities/journal/model/tinyBaseJournalSchema.ts",
     "tinyBaseJournalSchema",
     records
   );
 }
 
-function appentConstToFile(
+function appendConstToFile(
   directory: string,
   constName: string,
   tablesObject: TablesSchema | ValuesSchema

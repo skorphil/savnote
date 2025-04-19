@@ -1,5 +1,5 @@
 import type { PreferencesSchema1 } from "./preferencesSchema1";
-import { preferencesStore } from "./PreferencesStore";
+import { preferencesStore, usePreferenceValue } from "./PreferencesStore";
 
 /**
  * Utility class to work with app preferences
@@ -34,6 +34,8 @@ export class Preferences {
     });
     return preferenceValues;
   }
+
+  usePreferenceValue = usePreferenceValue;
 }
 
 type PreferencesProps = Partial<PreferencesSchema1>;

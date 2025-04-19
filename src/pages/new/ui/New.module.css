@@ -1,0 +1,14 @@
+.institutionsGrid {
+    /* height: 100%; */
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));;
+    /* grid-template-rows: auto; */
+    gap: 12px;
+    padding: 16px;
+}
+
+.institutionCard {
+    aspect-ratio: 1;
+    margin: 0;
+}

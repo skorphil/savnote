@@ -2,10 +2,10 @@ import { readJournal } from "./readJournal";
 import { createEncryptionKey } from "./encryptionUtils";
 import { validateJournal } from "../model/validateJournal";
 import type {
-  EncryptionSchema2,
-  JournalSchema2,
-  MetaSchema2,
-} from "../model/journalSchema2";
+  EncryptionSchema,
+  JournalSchema,
+  MetaSchema,
+} from "@/shared/journal-schema";
 import {
   journalStore,
   useJournalQuiries,
@@ -27,8 +27,8 @@ export class Journal {
   static instance: Journal | undefined;
   private cipher: string | 0 = 0;
   private directory!: string;
-  private meta!: MetaSchema2;
-  private encryption: EncryptionSchema2 | undefined = undefined;
+  private meta!: MetaSchema;
+  private encryption: EncryptionSchema | undefined = undefined;
   private encryptionKey: CryptoKey | null = null;
   records = journalStore;
 
@@ -161,7 +161,7 @@ type JournalOpenProps = {
 
 type JournalConctructorProps = {
   directory: string;
-  journalData: JournalSchema2;
+  journalData: JournalSchema;
 };
 
 /* ---------- Comments ----------
@@ -186,7 +186,7 @@ There is no reliable way to clean indexedDB on app close.
 // static async create(props: JournalCreateProps) {
 //   const { directory, name, password } = props;
 
-//   const journalData: JournalSchema2 = {
+//   const journalData: JournalSchema = {
 //     ...defaultNewJournalData,
 //     meta: {
 //       ...defaultNewJournalData.meta,

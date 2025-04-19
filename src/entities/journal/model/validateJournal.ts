@@ -1,10 +1,10 @@
 import { ZodError } from "zod";
-import { journalSchema2, type JournalSchema2 } from "./journalSchema2";
+import { journalSchema, type JournalSchema } from "@/shared/journal-schema";
 import { throwError } from "@/shared/lib/error-handling";
 
-export function validateJournal(data: object): JournalSchema2 {
+export function validateJournal(data: object): JournalSchema {
   try {
-    return journalSchema2.parse(data);
+    return journalSchema.parse(data);
   } catch (e) {
     if (e instanceof ZodError) {
       throw Error(

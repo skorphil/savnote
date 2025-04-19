@@ -167,8 +167,8 @@ export {
 };
 
 /* ---------- Comment ---------- 
-
-Schema must respect tinyBase schema structure.
+Schema must respect tinyBase schema structure to be automatically converted
+to tinyBase Schema
 - string | boolean | number
 - no nested objects
 

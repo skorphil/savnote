@@ -1,9 +1,9 @@
-import type { EncryptionSchema2 } from "../../model/journalSchema2";
+import type { EncryptionSchema } from "@/shared/journal-schema";
 
 export async function createEncryptionKey(baseKey: string) {
   const salt = window.crypto.getRandomValues(new Uint8Array(16));
   const iv = window.crypto.getRandomValues(new Uint8Array(12));
-  const encryptionMeta: EncryptionSchema2 = {
+  const encryptionMeta: EncryptionSchema = {
     derivationAlgorithmName: { name: "PBKDF2", hash: "SHA-256" },
     derivedKeyAlgorithm: { name: "AES-GCM", length: 256 },
     iterations: Math.floor(Math.random() * (150000 - 100000 + 1)) + 100000,
@@ -17,7 +17,7 @@ export async function createEncryptionKey(baseKey: string) {
   };
 }
 
-type DeriveKeyProps = EncryptionSchema1 & {
+type DeriveKeyProps = EncryptionSchema & {
   baseKey: string;
 };
 export async function deriveKey(props: DeriveKeyProps) {
