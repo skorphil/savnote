@@ -1,15 +1,23 @@
 import { createIndexedDbPersister } from "tinybase/persisters/persister-indexed-db/with-schemas";
-
 import * as UiReact from "tinybase/ui-react/with-schemas";
-import { type NoValuesSchema, createStore } from "tinybase/with-schemas";
+import {
+  type GetCell,
+  type NoValuesSchema,
+  createRelationships,
+  createStore,
+} from "tinybase/with-schemas";
 import { tinyBaseRecordDraftSchema } from "./tinyBaseRecordDraftSchema";
 import {} from "tinybase/store";
 
 const STORE_ID = "record-draft";
-type Schemas = [typeof tinyBaseRecordDraftSchema, NoValuesSchema];
 
-const { useCreateStore, useProvideStore, useCreatePersister, useTable } =
-  UiReact as UiReact.WithSchemas<Schemas>;
+const {
+  useCreateStore,
+  useProvideStore,
+  useCreatePersister,
+  useTable,
+  useLocalRowIds,
+} = UiReact as UiReact.WithSchemas<Schemas>;
 
 export const recordDraftStore = createStore().setTablesSchema(
   tinyBaseRecordDraftSchema
@@ -20,13 +28,48 @@ export const recordDraftPersister = createIndexedDbPersister(
   STORE_ID
 );
 
-/**
- * @returns Table with record's institutions
- */
-export const useRecordDraftInstitutions = () => {
-  return useTable("institutions");
+/* ---------- CODE BLOCK: Relationships definition ---------- 
+Extra typings and iteration technique is used to properly type
+relationship hooks.
+TinyBase does not natively provide the list of relationship ids, so it needed
+to be created manually.
+*/
+const assetsInstitutionRelationship: RelationshipDefinitionArgs<"assets"> = [
+  "assetsInstitution",
+  "assets",
+  "institutions",
+  (getCell) => `${getCell("date")}.${getCell("institution")}`, //
+];
+
+const recordDraftRelationshipsSchema = {
+  assetsInstitution: assetsInstitutionRelationship,
+} as const;
+
+export const recordDraftRelationships = createRelationships(recordDraftStore);
+Object.values(recordDraftRelationshipsSchema).forEach((relationshipArgs) =>
+  recordDraftRelationships.setRelationshipDefinition(...relationshipArgs)
+);
+
+/* ---------- CODE BLOCK: Hooks definition ----------
+Abstract hooks defined here to avoid extra typings on imports in other 
+parts of a project (UiReact as UiReact.WithSchemas<Schemas>). 
+tinyBase typings specific.
+*/
+export const useRecordDraftLocalRowIds = (
+  relationshipId: RecordDraftRelationshipIds,
+  remoteRowId: string
+) => useLocalRowIds(relationshipId, remoteRowId, recordDraftRelationships);
+
+export const useRecordDraftTable = <TableId extends TableIds>(
+  tableId: TableId
+) => {
+  return useTable(tableId, recordDraftStore);
 };
 
+/* ---------- CODE BLOCK: <RecordDraftStore> definition  ---------- 
+Used to asign store to tinyBase Provider.
+Specific pattern of TinyBase: https://github.com/tinyplex/tinybase/issues/226
+*/
 export const RecordDraftStore = () => {
   const store = useCreateStore(() => recordDraftStore);
   useCreatePersister(
@@ -38,7 +81,33 @@ export const RecordDraftStore = () => {
       await persister.startAutoSave();
     }
   );
-
   useProvideStore(STORE_ID, store);
   return null;
 };
+
+type Schemas = [typeof tinyBaseRecordDraftSchema, NoValuesSchema];
+type TableIds = keyof typeof tinyBaseRecordDraftSchema;
+type ValueIds<TableId extends TableIds> =
+  keyof (typeof tinyBaseRecordDraftSchema)[TableId];
+type RelationshipDefinitionArgs<TableId extends TableIds> = [
+  relationshipId: string,
+  localTableId: TableId,
+  remoteTableId: TableIds,
+  getRemoteRowId:
+    | ValueIds<TableId>
+    | ((
+        getCell: GetCell<typeof tinyBaseRecordDraftSchema, TableId>,
+        localRowId: string
+      ) => string)
+];
+type RecordDraftRelationshipIds = keyof typeof recordDraftRelationshipsSchema;
+
+/* ---------- Comments ---------- 
+20 apr 2025
+I decided to export only abstract hooks from store 
+(because they need extra typings on imports)
+RecordDraftStore MUST be imported directly only into RecordDraft class.
+Interaction with RecordDraftStore allowed only via RecordDraft methods
+(Dependency inversion principle).
+
+*/

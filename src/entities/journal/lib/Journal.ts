@@ -8,7 +8,7 @@ import type {
 } from "@/shared/journal-schema";
 import {
   journalStore,
-  useJournalQuiries,
+  useJournalQueries,
   useJournalResultTable,
   useJournalSliceIds,
 } from "../model/JournalStore";
@@ -126,7 +126,7 @@ export class Journal {
   }
 
   useJournalSliceIds = useJournalSliceIds;
-  useJournalQuiries = useJournalQuiries;
+  useJournalQueries = useJournalQueries;
   useJournalResultTable = useJournalResultTable;
 
   /* ---------- CODE BLOCK: private methods ---------- */

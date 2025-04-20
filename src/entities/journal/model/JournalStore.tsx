@@ -46,7 +46,7 @@ export const useJournalSliceIds = (indexId: Id) => {
   return useSliceIds(indexId, journalStoreIndexes);
 };
 
-export const useJournalQuiries = () => {
+export const useJournalQueries = () => {
   return useQueries(STORE_ID);
 };
 

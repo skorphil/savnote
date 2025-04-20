@@ -2,8 +2,10 @@ import type {
   RecordDraftAssetSchema,
   RecordDraftInstitutionSchema,
 } from "../model/recordDraftSchema";
-import { recordDraftStore } from "../model/RecordDraftStore";
-import { useRecordDraftInstitutions } from "../model/RecordDraftStore";
+import {
+  recordDraftStore,
+  useRecordDraftLocalRowIds,
+} from "../model/RecordDraftStore";
 
 /**
  * Represents a record draft instance. Provides various methods to work with a record draft.
@@ -25,7 +27,13 @@ export class RecordDraft {
   /**
    * Hook to get institutionsTable
    */
-  useRecordDraftInstitutions = useRecordDraftInstitutions;
+  useInstitutionAssets(institutionId: string) {
+    return useRecordDraftLocalRowIds("assetsInstitution", institutionId);
+  }
+
+  getInstitutionData(institutionId: string) {
+    return this.store.getRow("institutions", institutionId);
+  }
 }
 
 type RecordDraftData = {

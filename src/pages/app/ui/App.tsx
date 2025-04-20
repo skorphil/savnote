@@ -5,18 +5,14 @@ import OverviewTab from "./OverviewTab";
 import { RecordsTab } from "./RecordsTab";
 import { useNavigate } from "react-router";
 import { createRecordDraft } from "@/features/create-record/lib/createRecordDraft";
-import { recordDraftPersister } from "@/features/create-record/model/RecordDraftStore";
-import { throwError } from "@/shared/lib/error-handling";
 
 /**
  * New component
- *
  */
 function App() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<string>("tab-1");
-  // const redirect = useNavigate();
-  // const values = journalStore.getJson();
+
   return (
     <Page className="no-scrollbar pb-24-safe">
       <Fab
@@ -25,12 +21,7 @@ function App() {
         text="Add record"
         textPosition="after"
         onClick={() => {
-          async function create() {
-            createRecordDraft();
-            await recordDraftPersister.save();
-            await recordDraftPersister.load();
-          }
-          create().catch((e) => throwError(e));
+          createRecordDraft();
           void navigate("/new");
         }}
       />
