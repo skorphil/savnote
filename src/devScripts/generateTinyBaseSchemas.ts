@@ -4,17 +4,17 @@ import {
   quoteSchema,
 } from "@/shared/journal-schema";
 
-import {
-  recordDraftAssetSchema,
-  recordDraftInstitutionSchema,
-  recordDraftQuoteSchema,
-} from "@/entities/record-draft/model/recordDraftSchema";
 import { preferencesSchema1 } from "@/entities/preferences";
 import { zObjectToTinyTable } from "@/shared/lib/zod-to-tiny-base";
 import type { TablesSchema } from "tinybase/with-schemas";
 import * as fs from "fs";
 import * as path from "path";
 import type { ValuesSchema } from "tinybase/with-schemas";
+import {
+  recordDraftAssetSchema,
+  recordDraftInstitutionSchema,
+  recordDraftQuoteSchema,
+} from "@/features/create-record/model/recordDraftSchema";
 
 generatePersistentStateSchema();
 generateRecordsSchema();
@@ -39,7 +39,7 @@ function generateRecordDraftSchema() {
   };
 
   appendConstToFile(
-    "src/entities/record-draft/model/tinyBaseRecordDraftSchema.ts",
+    "src/features/create-record/model/tinyBaseRecordDraftSchema.ts",
     "tinyBaseRecordDraftSchema",
     records
   );

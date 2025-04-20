@@ -1,4 +1,3 @@
-import { Journal, journalStoreQueries } from "@/entities/journal";
 import { Sheet } from "react-modal-sheet";
 import styles from "./New.module.css";
 import {
@@ -13,29 +12,26 @@ import {
 } from "konsta/react";
 import { MdAdd, MdArrowBack, MdInfoOutline } from "react-icons/md";
 import { useNavigate, useParams } from "react-router";
+// import { useRecordDraftInstitutions } from "@/features/create-record";
+import { recordDraftStore } from "@/features/create-record/model/RecordDraftStore";
+
+import * as UiReact from "tinybase/ui-react/with-schemas";
+
+import type { tinyBaseRecordDraftSchema } from "@/features/create-record/model/tinyBaseRecordDraftSchema";
+import type { NoValuesSchema } from "tinybase/with-schemas";
+type Schemas = [typeof tinyBaseRecordDraftSchema, NoValuesSchema];
+
+const { useTable } = UiReact as UiReact.WithSchemas<Schemas>;
 
 /**
  * Page displaying new record form
  */
 function New() {
   const { institutionId } = useParams();
-  const journal = Journal.instance;
-  const latestRecordDate = journal?.useJournalSliceIds("InstitutionsByDate")[0];
-  const navigate = useNavigate();
+  const institutions = useTable("institutions"); // Empty array
+  const inst = recordDraftStore.getTable("institutions"); // working
 
-  if (!latestRecordDate) return <p>No records</p>;
-  journalStoreQueries.setQueryDefinition(
-    latestRecordDate,
-    "institutions",
-    ({ select, where }) => {
-      select("name");
-      select("date");
-      select("country");
-      where("date", Number(latestRecordDate));
-    }
-  );
-  const institutionsAtDate =
-    journalStoreQueries.getResultTable(latestRecordDate);
+  const navigate = useNavigate();
 
   return (
     <Page
@@ -70,18 +66,16 @@ function New() {
         >
           <MdAdd className="m-auto" opacity={0.5} size={24} />
         </Card>
-        {Object.entries(institutionsAtDate).map(
-          ([institutionId, institution]) => (
-            <Card
-              key={institutionId}
-              className={styles.institutionCard}
-              onClick={() => void navigate(`/new/${institutionId}`)}
-            >
-              <strong>{institution.name}</strong>
-              <span className="mt-auto">{institution.country}</span>
-            </Card>
-          )
-        )}
+        {Object.entries(institutions).map(([institutionId, institution]) => (
+          <Card
+            key={institutionId}
+            className={styles.institutionCard}
+            onClick={() => void navigate(`/new/${institutionId}`)}
+          >
+            <strong>{institution.name}</strong>
+            <span className="mt-auto">{institution.country}</span>
+          </Card>
+        ))}
       </div>
       <Block className="opacity-40 gap-2 flex items-center mt-auto">
         <span>

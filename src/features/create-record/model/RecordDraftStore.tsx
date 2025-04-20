@@ -8,23 +8,30 @@ import {} from "tinybase/store";
 const STORE_ID = "record-draft";
 type Schemas = [typeof tinyBaseRecordDraftSchema, NoValuesSchema];
 
-const { useCreateStore, useProvideStore, useCreatePersister } =
+const { useCreateStore, useProvideStore, useCreatePersister, useTable } =
   UiReact as UiReact.WithSchemas<Schemas>;
 
 export const recordDraftStore = createStore().setTablesSchema(
   tinyBaseRecordDraftSchema
 );
 
-export const preferencesPersister = createIndexedDbPersister(
+export const recordDraftPersister = createIndexedDbPersister(
   recordDraftStore,
   STORE_ID
 );
+
+/**
+ * @returns Table with record's institutions
+ */
+export const useRecordDraftInstitutions = () => {
+  return useTable("institutions");
+};
 
 export const RecordDraftStore = () => {
   const store = useCreateStore(() => recordDraftStore);
   useCreatePersister(
     store,
-    () => preferencesPersister,
+    () => recordDraftPersister,
     [],
     async (persister) => {
       await persister.startAutoLoad();

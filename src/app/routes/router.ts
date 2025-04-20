@@ -14,7 +14,6 @@ export const router = createBrowserRouter([
   //   path: "new/:institutionId",
   //   Component: InstitutionForm,
   // },
-
   {
     path: "/",
     Component: Welcome,

@@ -4,6 +4,9 @@ import { MdAdd, MdAssessment, MdSettings, MdViewList } from "react-icons/md";
 import OverviewTab from "./OverviewTab";
 import { RecordsTab } from "./RecordsTab";
 import { useNavigate } from "react-router";
+import { createRecordDraft } from "@/features/create-record/lib/createRecordDraft";
+import { recordDraftPersister } from "@/features/create-record/model/RecordDraftStore";
+import { throwError } from "@/shared/lib/error-handling";
 
 /**
  * New component
@@ -21,7 +24,15 @@ function App() {
         icon={<MdAdd />}
         text="Add record"
         textPosition="after"
-        onClick={() => void navigate("/new")}
+        onClick={() => {
+          async function create() {
+            createRecordDraft();
+            await recordDraftPersister.save();
+            await recordDraftPersister.load();
+          }
+          create().catch((e) => throwError(e));
+          void navigate("/new");
+        }}
       />
       {activeTab === "tab-1" && <OverviewTab />}
       {activeTab === "tab-2" && <RecordsTab />}
