@@ -12,7 +12,7 @@ import {
   useJournalResultTable,
   useJournalSliceIds,
 } from "../model/JournalStore";
-import { Preferences } from "@/entities/preferences";
+import { Preferences } from "@/entities/preferences"; // FIX the dependency in same layer
 import { writeStringToFile } from "./writeStringToFile";
 
 /**
