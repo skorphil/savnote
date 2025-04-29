@@ -1,10 +1,13 @@
-import type {
-  RecordDraftAssetSchema,
-  RecordDraftInstitutionSchema,
+import {
+  recordDraftAssetSchema,
+  type RecordDraftAssetSchema,
+  type RecordDraftInstitutionSchema,
 } from "../model/recordDraftSchema";
 import {
   recordDraftStore,
   useRecordDraftLocalRowIds,
+  useRecordDraftRow,
+  type ValueIds,
 } from "../model/RecordDraftStore";
 
 /**
@@ -25,14 +28,33 @@ export class RecordDraft {
   }
 
   /**
-   * Hook to get institutionsTable
+   * Hook to get assets table, for given institution
    */
   useInstitutionAssets(institutionId: string) {
     return useRecordDraftLocalRowIds("assetsInstitution", institutionId);
   }
 
+  useInstitutionAsset(assetId: ValueIds<"assets">) {
+    return useRecordDraftRow("assets", assetId);
+  }
+
   getInstitutionData(institutionId: string) {
     return this.store.getRow("institutions", institutionId);
+  }
+
+  setAssetAmount(value: number, assetId: string) {
+    const schema = recordDraftAssetSchema.shape.amount;
+    try {
+      const validatedValue = schema?.parse(value);
+      return this.store.setCell("assets", assetId, "amount", validatedValue);
+    } catch (e) {
+      throw Error(e);
+    }
+  }
+
+  setAssetCurrency(value: string, assetId: string) {
+    const cellValue = value; // TODO add validation
+    return this.store.setCell("assets", assetId, "currency", cellValue);
   }
 }
 

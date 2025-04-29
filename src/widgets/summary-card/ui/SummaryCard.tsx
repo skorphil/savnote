@@ -18,7 +18,7 @@ function SummaryCard() {
           {summaryData?.map((record, id, array) => {
             // const row = Object.values(record);
             return (
-              <TableRow>
+              <TableRow key={id}>
                 <TableCell className={styles.tableCell}>
                   {unixToHumanReadable(Number(record.date))}
                 </TableCell>

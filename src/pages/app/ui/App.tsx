@@ -4,7 +4,6 @@ import { MdAdd, MdAssessment, MdSettings, MdViewList } from "react-icons/md";
 import OverviewTab from "./OverviewTab";
 import { RecordsTab } from "./RecordsTab";
 import { useNavigate } from "react-router";
-import { createRecordDraft } from "@/features/create-record/lib/createRecordDraft";
 
 /**
  * New component
@@ -21,8 +20,7 @@ function App() {
         text="Add record"
         textPosition="after"
         onClick={() => {
-          createRecordDraft();
-          void navigate("/new");
+          void navigate("/newrecord", { viewTransition: true });
         }}
       />
       {activeTab === "tab-1" && <OverviewTab />}

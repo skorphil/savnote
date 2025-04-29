@@ -3,17 +3,28 @@ import { Open } from "@/pages/open";
 import { createBrowserRouter } from "react-router";
 import { App } from "@/pages/app";
 import { New } from "@/pages/new";
-// import TestPage from "@/pages/test/TestPage";
+import { createRecordDraft } from "@/features/create-record/lib/createRecordDraft";
+import AssetEdit from "@/pages/new/ui/asset-edit/AssetEdit";
+import { InstitutionSheet } from "@/pages/new/ui/InstitutionSheet";
 
 export const router = createBrowserRouter([
   {
-    path: "new/:institutionId?",
+    path: "newrecord",
     Component: New,
+    loader: createRecordDraft,
+    children: [
+      {
+        path: "institutions/:institutionId",
+        Component: InstitutionSheet,
+      },
+    ],
   },
-  // {
-  //   path: "new/:institutionId",
-  //   Component: InstitutionForm,
-  // },
+
+  {
+    path: "newrecord/institutions/:institutionId/assets/:assetId/edit",
+    Component: AssetEdit,
+  },
+
   {
     path: "/",
     Component: Welcome,

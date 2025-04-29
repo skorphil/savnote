@@ -7,7 +7,6 @@ import {
   createStore,
 } from "tinybase/with-schemas";
 import { tinyBaseRecordDraftSchema } from "./tinyBaseRecordDraftSchema";
-import {} from "tinybase/store";
 
 const STORE_ID = "record-draft";
 
@@ -17,6 +16,7 @@ const {
   useCreatePersister,
   useTable,
   useLocalRowIds,
+  useRow,
 } = UiReact as UiReact.WithSchemas<Schemas>;
 
 export const recordDraftStore = createStore().setTablesSchema(
@@ -66,6 +66,11 @@ export const useRecordDraftTable = <TableId extends TableIds>(
   return useTable(tableId, recordDraftStore);
 };
 
+export const useRecordDraftRow = <TableId extends TableIds>(
+  tableId: TableId,
+  assetId: ValueIds<TableId>
+) => useRow(tableId, assetId, recordDraftStore);
+
 /* ---------- CODE BLOCK: <RecordDraftStore> definition  ---------- 
 Used to asign store to tinyBase Provider.
 Specific pattern of TinyBase: https://github.com/tinyplex/tinybase/issues/226
@@ -86,9 +91,12 @@ export const RecordDraftStore = () => {
 };
 
 type Schemas = [typeof tinyBaseRecordDraftSchema, NoValuesSchema];
-type TableIds = keyof typeof tinyBaseRecordDraftSchema;
-type ValueIds<TableId extends TableIds> =
-  keyof (typeof tinyBaseRecordDraftSchema)[TableId];
+export type TableIds = keyof typeof tinyBaseRecordDraftSchema;
+export type ValueIds<TableId extends TableIds> =
+  keyof (typeof tinyBaseRecordDraftSchema)[TableId] extends string
+    ? keyof (typeof tinyBaseRecordDraftSchema)[TableId]
+    : never;
+
 type RelationshipDefinitionArgs<TableId extends TableIds> = [
   relationshipId: string,
   localTableId: TableId,
