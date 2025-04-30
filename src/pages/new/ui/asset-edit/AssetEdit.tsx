@@ -1,36 +1,48 @@
-import { Navbar, Page, Link, Button } from "konsta/react";
+import { RecordDraft } from "@/features/create-record";
+import {
+  Button,
+  Checkbox,
+  Link,
+  List,
+  ListInput,
+  ListItem,
+  Navbar,
+  Page,
+} from "konsta/react";
 import { MdArrowBack } from "react-icons/md";
 import { useNavigate, useParams } from "react-router";
-import { AssetForm } from "../AssetForm";
+
 import type { ValueIds } from "@/features/create-record/model/RecordDraftStore";
+import { useReducer, type ChangeEvent } from "react";
+import { AmountInput } from "./AmountInput";
 
 /**
  * New component
  *
  */
 function AssetEdit() {
+  // TODO onAssetSave save all reducer values to record draft
+  // const {} = useReducer() // TODO add reducer to handle all input changes
   const { assetId } = useParams();
   const navigate = useNavigate();
+  const recordDraft = RecordDraft.instance;
+  if (!recordDraft || !assetId) return;
+  const { currency, description, institution, isEarning, name } =
+    recordDraft.useInstitutionAsset(assetId as ValueIds<"assets">);
 
-  if (!assetId) return;
   return (
     <Page>
       <Navbar
         left={
           <Link navbar onClick={() => void navigate(-1)}>
-            {/* 
-              navigate -1 somehow navigate to /new, not before. 
-              When sheet is closed by drag.
-              Needed to navigate -1 on sheet close instead of to /app to make it work 
-            */}
             <MdArrowBack size={24} />
           </Link>
         }
-        title="New record"
-        subtitle="Draft saved"
+        title="Edit asset"
+        subtitle={`${institution} / ${name}`}
         right={
           <div className="pr-3">
-            <Button className="min-w-32" rounded>
+            <Button outline className="min-w-20" rounded>
               Save
             </Button>
           </div>
@@ -40,9 +52,57 @@ function AssetEdit() {
         transparent={false}
       />
 
-      <AssetForm assetId={assetId as ValueIds<"assets">} />
+      <List>
+        <ListInput label="name" value={`${name}`} />
+        <div className="flex flex-row w-full">
+          <AmountInput assetId={assetId as ValueIds<"assets">} />
+          <ListInput
+            className="w-12"
+            label="currency"
+            value={currency}
+            onChange={(e) =>
+              handleCurrencyChange(
+                e as ChangeEvent<HTMLInputElement>,
+                recordDraft,
+                assetId
+              )
+            }
+          />
+        </div>
+        <ListItem
+          label
+          title="Earning asset"
+          media={
+            <Checkbox
+              component="div"
+              name="isEarning"
+              checked={isEarning}
+              // onChange={() => toggleGroupValue('Books')}
+            />
+          }
+        />
+        <ListInput
+          type="textarea"
+          label="Description"
+          value={description}
+          inputClassName="!h-20 resize-none"
+        />
+      </List>
     </Page>
   );
 }
 
 export default AssetEdit;
+
+function handleCurrencyChange(
+  e: ChangeEvent<HTMLInputElement>,
+  recordDraft: RecordDraft,
+  assetId: string
+) {
+  const value = e.target.value;
+  recordDraft.setAssetCurrency(value, assetId);
+}
+
+/* ---------- CODE BLOCK: Description ----------
+
+*/
