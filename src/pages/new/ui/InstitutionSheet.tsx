@@ -1,5 +1,5 @@
 import { RecordDraft } from "@/features/create-record";
-import { Badge, Link, List, ListItem, Toolbar } from "konsta/react";
+import { Badge, List, ListItem } from "konsta/react";
 import { Sheet } from "react-modal-sheet";
 import { useNavigate, useParams, type NavigateFunction } from "react-router";
 import type { ValueIds } from "@/features/create-record/model/RecordDraftStore";
@@ -71,15 +71,12 @@ export function InstitutionSheet() {
               ))}
           </List>
         </Sheet.Scroller>
+        <Sheet.Content>
+          <div className={`left-0 bottom-0 h-24`}>
+            // TODO institution toolbar
+          </div>
+        </Sheet.Content>
       </Sheet.Container>
-      <Sheet.Content>
-        <Toolbar className={`left-0 bottom-0 fixed`}>
-          <Link toolbar>Link 1</Link>
-          <Link toolbar>Link 2</Link>
-          <Link toolbar>Link 3</Link>
-        </Toolbar>
-      </Sheet.Content>
-      {/* <Sheet.Backdrop /> */}
     </Sheet>
   );
 }
@@ -102,7 +99,7 @@ function AssetListItem({
       media={"💰"} // <MdDiamond color="var(--blue-100)" size={24} />
       strongTitle={false}
       header={name}
-      after={isDirty && <Badge colors={{ bg: "bg-green-800" }}>UPD</Badge>}
+      after={isDirty && <Badge colors={{ bg: "bg-green-800" }}>upd</Badge>}
       footer={description}
       title={`${amount} ${currency}`}
       onClick={() => void navigate(`assets/${assetId}/edit`)}

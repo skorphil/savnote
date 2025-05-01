@@ -37,6 +37,36 @@ const quoteSchema2 = z.object({
   rate: z.number(),
 });
 
+const quotesSchema2 = z.record(quoteSchema2).refine(
+  (data) => {
+    const uniqueKeys = new Set<string>();
+    for (const key in data) {
+      uniqueKeys.add(key);
+      const parts = key.split(".");
+      if (parts.length !== 3) {
+        return false;
+      }
+      const [date, baseCurrency, counterCurrency] = parts;
+      if (!date || !baseCurrency || !counterCurrency) {
+        return false;
+      }
+      if (
+        data[key].date.toString() !== date ||
+        data[key].baseCurrency !== baseCurrency ||
+        data[key].counterCurrency !== counterCurrency
+      ) {
+        return false;
+      }
+    }
+    if (uniqueKeys.size !== Object.keys(data).length) return false;
+    return true;
+  },
+  {
+    message:
+      "Quote key must be unique and follow `date.baseCurrency.counterCurrency` pattern",
+  }
+);
+
 const recordsSchema2 = z.object({
   institutions: z.record(instiutionSchema2).refine(
     (data) => {
@@ -95,35 +125,7 @@ const recordsSchema2 = z.object({
         "Asset key must be unique and follow `date.institutionName.assetName` pattern",
     }
   ),
-  quotes: z.record(quoteSchema2).refine(
-    (data) => {
-      const uniqueKeys = new Set<string>();
-      for (const key in data) {
-        uniqueKeys.add(key);
-        const parts = key.split(".");
-        if (parts.length !== 3) {
-          return false;
-        }
-        const [date, baseCurrency, counterCurrency] = parts;
-        if (!date || !baseCurrency || !counterCurrency) {
-          return false;
-        }
-        if (
-          data[key].date.toString() !== date ||
-          data[key].baseCurrency !== baseCurrency ||
-          data[key].counterCurrency !== counterCurrency
-        ) {
-          return false;
-        }
-      }
-      if (uniqueKeys.size !== Object.keys(data).length) return false;
-      return true;
-    },
-    {
-      message:
-        "Quote key must be unique and follow `date.baseCurrency.counterCurrency` pattern",
-    }
-  ),
+  quotes: quotesSchema2,
 });
 
 const encryptionSchema2 = z.object({
@@ -151,12 +153,20 @@ const journalSchema2 = z.object({
 });
 
 type JournalSchema2 = z.infer<typeof journalSchema2>;
-type RecordSchema2 = z.infer<typeof recordsSchema2>;
+type RecordsSchema2 = z.infer<typeof recordsSchema2>;
 type MetaSchema2 = z.infer<typeof metaSchema2>;
 type EncryptionSchema2 = z.infer<typeof encryptionSchema2>;
+type QuotesSchema2 = z.infer<typeof quotesSchema2>;
 
-export type { JournalSchema2, RecordSchema2, MetaSchema2, EncryptionSchema2 };
+export type {
+  JournalSchema2,
+  RecordsSchema2,
+  MetaSchema2,
+  EncryptionSchema2,
+  QuotesSchema2,
+};
 export {
+  quotesSchema2,
   recordsSchema2,
   assetSchema2,
   instiutionSchema2,

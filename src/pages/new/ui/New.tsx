@@ -11,6 +11,7 @@ import { unixToHumanReadable } from "@/shared/lib/date-time-format";
 import { RecordDraft } from "@/features/create-record";
 
 import { InstitutionsGrid } from "./InstitutionsGrid";
+import { throwError } from "@/shared/lib/error-handling";
 type Schemas = [typeof tinyBaseRecordDraftSchema, NoValuesSchema];
 
 const { useTable } = UiReact as UiReact.WithSchemas<Schemas>; // TODO replace with method from
@@ -18,7 +19,7 @@ const { useTable } = UiReact as UiReact.WithSchemas<Schemas>; // TODO replace wi
 /**
  * Page displaying new record form
  */
-function New() {
+export function New() {
   const { institutionId } = useParams();
   const institutions = useTable("institutions", recordDraftStore);
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ function New() {
         subtitle="Draft saved"
         right={
           <div className="pr-3">
-            <Button className="min-w-32" rounded>
+            <Button className="min-w-32" rounded onClick={handleRecordSave}>
               Save
             </Button>
           </div>
@@ -81,4 +82,7 @@ function New() {
   );
 }
 
-export { New };
+function handleRecordSave() {
+  RecordDraft.instance?.addQuotes().catch((e) => throwError(e));
+  // TODO Journal.addRecord(RecordDraft.Instance)
+}

@@ -1,10 +1,11 @@
 import { readJournal } from "./readJournal";
 import { createEncryptionKey } from "./encryptionUtils";
-import { validateJournal } from "../model/validateJournal";
+import { validateJournal, validateRecord } from "../model/validateJournal";
 import type {
   EncryptionSchema,
   JournalSchema,
   MetaSchema,
+  RecordsSchema,
 } from "@/shared/journal-schema";
 import {
   journalStore,
@@ -14,6 +15,7 @@ import {
 } from "../model/JournalStore";
 import { Preferences } from "@/entities/preferences"; // FIX the dependency in same layer
 import { writeStringToFile } from "./writeStringToFile";
+import { throwError } from "@/shared/lib/error-handling";
 
 /**
  * Represents a journal instance. Provides various methods to work with a journal.
@@ -128,6 +130,15 @@ export class Journal {
   useJournalSliceIds = useJournalSliceIds;
   useJournalQueries = useJournalQueries;
   useJournalResultTable = useJournalResultTable;
+
+  addRecord(recordData: RecordsSchema) {
+    try {
+      const validatedRecordData = validateRecord(recordData as object);
+      this.records.setTables(validatedRecordData);
+    } catch (e) {
+      throwError(e);
+    }
+  }
 
   /* ---------- CODE BLOCK: private methods ---------- */
   private saveDirectoryToPersitentStorage() {

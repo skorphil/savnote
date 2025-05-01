@@ -1,34 +1,31 @@
-import { RecordDraft } from "@/features/create-record";
-import type { ValueIds } from "@/features/create-record/model/RecordDraftStore";
 import { ListInput } from "konsta/react";
 import { NumericFormat } from "react-number-format";
+import type { AssessmentAction } from "./useAssetState";
+import type { AssetInputsProps } from "./AssetEdit";
 
-export function AmountInput({ assetId }: { assetId: ValueIds<"assets"> }) {
-  const recordDraft = RecordDraft.instance;
-  if (!recordDraft) return;
-
-  const { amount } = recordDraft.useInstitutionAsset(assetId);
+export function AmountInput(props: AssetInputsProps<number>) {
+  const { assetDispatch, value } = props;
 
   return (
     <NumericFormat
       label={"amount"}
       thousandSeparator={" "}
-      value={amount}
+      value={value}
       customInput={ListInput}
-      onValueChange={({ value }) =>
-        handleAmountChange(value, recordDraft, assetId)
-      }
+      onValueChange={({ value }) => handleAmountChange(value, assetDispatch)}
     />
   );
 }
 
 function handleAmountChange(
   value: string,
-  recordDraft: RecordDraft,
-  assetId: string
+  assetDispatch: React.Dispatch<AssessmentAction>
 ) {
   // TODO validate ZOD
-  recordDraft.setAssetAmount(Number(value), assetId);
+  assetDispatch({
+    type: "update_value",
+    payload: { property: "amount", value: Number(value) },
+  });
 }
 
 /* ---------- CODE BLOCK: Description ----------

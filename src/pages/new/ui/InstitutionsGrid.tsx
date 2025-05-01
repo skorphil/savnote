@@ -10,7 +10,7 @@ type InstitutionsGridProps = {
   isInstitutionSelected: boolean;
 };
 export function InstitutionsGrid(props: InstitutionsGridProps) {
-  const { institutions, navigate, isInstitutionSelected } = props;
+  const { institutions, navigate /*isInstitutionSelected*/ } = props;
   return (
     <div className={`${styles.institutionsGrid}`}>
       {Object.entries(institutions).map(([institutionId, institution]) => (
@@ -19,7 +19,7 @@ export function InstitutionsGrid(props: InstitutionsGridProps) {
           className={styles.institutionCard}
           onClick={() =>
             void navigate(`/newrecord/institutions/${institutionId}`, {
-              replace: isInstitutionSelected ? true : false,
+              replace: true, // isInstitutionSelected ? true : false,
             })
           }
         >

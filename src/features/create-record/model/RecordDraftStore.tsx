@@ -3,6 +3,7 @@ import * as UiReact from "tinybase/ui-react/with-schemas";
 import {
   type GetCell,
   type NoValuesSchema,
+  createQueries,
   createRelationships,
   createStore,
 } from "tinybase/with-schemas";
@@ -19,6 +20,10 @@ const {
   useRow,
 } = UiReact as UiReact.WithSchemas<Schemas>;
 
+/**
+ * TinyBase Record Draft Store object.
+ * Direct use is allowed only in RecordDraft class.
+ */
 export const recordDraftStore = createStore().setTablesSchema(
   tinyBaseRecordDraftSchema
 );
@@ -27,6 +32,9 @@ export const recordDraftPersister = createIndexedDbPersister(
   recordDraftStore,
   STORE_ID
 );
+
+/* ---------- CODE BLOCK: Queries definition ---------- */
+export const recordDraftQueries = createQueries(recordDraftStore);
 
 /* ---------- CODE BLOCK: Relationships definition ---------- 
 Extra typings and iteration technique is used to properly type

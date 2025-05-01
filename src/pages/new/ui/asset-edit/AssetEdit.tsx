@@ -1,34 +1,26 @@
-import { RecordDraft } from "@/features/create-record";
 import {
-  Button,
-  Checkbox,
-  Link,
-  List,
-  ListInput,
-  ListItem,
-  Navbar,
-  Page,
-} from "konsta/react";
+  RecordDraft,
+  type RecordDraftAssetSchema,
+} from "@/features/create-record";
+import { Button, Link, List, Navbar, Page } from "konsta/react";
 import { MdArrowBack } from "react-icons/md";
-import { useNavigate, useParams } from "react-router";
-
-import type { ValueIds } from "@/features/create-record/model/RecordDraftStore";
-import { useReducer, type ChangeEvent } from "react";
+import { useNavigate } from "react-router";
 import { AmountInput } from "./AmountInput";
+import { useAssetState, type AssessmentAction } from "./useAssetState";
+import { IsEarningCheckbox } from "./IsEarningCheckbox";
+import { CurrencyInput } from "./CurrencyInput";
+import { DescriptionInput } from "./DescriptionInput";
+import { NameInput } from "./NameInput";
 
 /**
- * New component
- *
+ * Fullscreen modal with a form for editing asset
  */
 function AssetEdit() {
-  // TODO onAssetSave save all reducer values to record draft
-  // const {} = useReducer() // TODO add reducer to handle all input changes
-  const { assetId } = useParams();
   const navigate = useNavigate();
-  const recordDraft = RecordDraft.instance;
-  if (!recordDraft || !assetId) return;
-  const { currency, description, institution, isEarning, name } =
-    recordDraft.useInstitutionAsset(assetId as ValueIds<"assets">);
+  const assetData = useAssetState();
+  if (!assetData) return null;
+  const { assetDispatch, assetState, assetId } = assetData;
+  const { institution, name } = assetState;
 
   return (
     <Page>
@@ -42,7 +34,15 @@ function AssetEdit() {
         subtitle={`${institution} / ${name}`}
         right={
           <div className="pr-3">
-            <Button outline className="min-w-20" rounded>
+            <Button
+              outline
+              className="min-w-24"
+              rounded
+              onClick={() => {
+                handleAssetSave(assetId, assetState);
+                void navigate(-1);
+              }}
+            >
               Save
             </Button>
           </div>
@@ -53,39 +53,24 @@ function AssetEdit() {
       />
 
       <List>
-        <ListInput label="name" value={`${name}`} />
+        <NameInput assetDispatch={assetDispatch} value={assetState.name} />
         <div className="flex flex-row w-full">
-          <AmountInput assetId={assetId as ValueIds<"assets">} />
-          <ListInput
-            className="w-12"
-            label="currency"
-            value={currency}
-            onChange={(e) =>
-              handleCurrencyChange(
-                e as ChangeEvent<HTMLInputElement>,
-                recordDraft,
-                assetId
-              )
-            }
+          <AmountInput
+            assetDispatch={assetDispatch}
+            value={assetState.amount}
+          />
+          <CurrencyInput
+            assetDispatch={assetDispatch}
+            value={assetState.currency}
           />
         </div>
-        <ListItem
-          label
-          title="Earning asset"
-          media={
-            <Checkbox
-              component="div"
-              name="isEarning"
-              checked={isEarning}
-              // onChange={() => toggleGroupValue('Books')}
-            />
-          }
+        <IsEarningCheckbox
+          assetDispatch={assetDispatch}
+          value={assetState.isEarning}
         />
-        <ListInput
-          type="textarea"
-          label="Description"
-          value={description}
-          inputClassName="!h-20 resize-none"
+        <DescriptionInput
+          assetDispatch={assetDispatch}
+          value={assetState.description}
         />
       </List>
     </Page>
@@ -94,14 +79,28 @@ function AssetEdit() {
 
 export default AssetEdit;
 
-function handleCurrencyChange(
-  e: ChangeEvent<HTMLInputElement>,
-  recordDraft: RecordDraft,
-  assetId: string
-) {
-  const value = e.target.value;
-  recordDraft.setAssetCurrency(value, assetId);
+function handleAssetSave(assetId: string, assetValues: RecordDraftAssetSchema) {
+  const recordDraft = RecordDraft.instance;
+  if (!recordDraft) throw Error("recordDraft instance not exist");
+  const currentValues = recordDraft.getAssetData(assetId);
+
+  const keys = new Set([
+    ...Object.keys(assetValues),
+    ...Object.keys(currentValues),
+  ]);
+
+  for (const key of keys as Set<keyof RecordDraftAssetSchema>) {
+    if (assetValues[key] !== currentValues[key]) {
+      return recordDraft.saveAsset(assetId, { ...assetValues, isDirty: true }); // FIX compare with "original draft state" which needs to be created. Now dirty state is wrong
+    }
+  }
+  return recordDraft.saveAsset(assetId, { ...assetValues, isDirty: false });
 }
+
+export type AssetInputsProps<Value> = {
+  assetDispatch: React.Dispatch<AssessmentAction>;
+  value: Value;
+};
 
 /* ---------- CODE BLOCK: Description ----------
 
