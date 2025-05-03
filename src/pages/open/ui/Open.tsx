@@ -1,5 +1,5 @@
 import { Journal } from "@/entities/journal";
-import { Preferences, usePreferenceValue } from "@/entities/preferences";
+import { Preferences, usePreferenceValue } from "@/entities/user-config";
 import { throwError } from "@/shared/lib/error-handling";
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router";

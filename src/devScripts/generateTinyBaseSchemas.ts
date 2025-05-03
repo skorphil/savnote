@@ -4,7 +4,7 @@ import {
   quoteSchema,
 } from "@/shared/journal-schema";
 
-import { preferencesSchema1 } from "@/entities/preferences";
+import { preferencesSchema1 } from "@/entities/user-config";
 import { zObjectToTinyTable } from "@/shared/lib/zod-to-tiny-base";
 import type { TablesSchema } from "tinybase/with-schemas";
 import * as fs from "fs";

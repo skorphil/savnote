@@ -1,5 +1,5 @@
 import { Journal, journalStore, journalStoreQueries } from "@/entities/journal";
-import { Preferences } from "@/entities/preferences";
+import { Preferences } from "@/entities/user-config";
 
 const preferences = new Preferences();
 

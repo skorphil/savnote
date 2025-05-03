@@ -1,5 +1,5 @@
 import { Journal } from "@/entities/journal";
-import { Preferences } from "@/entities/preferences";
+import { Preferences } from "@/entities/user-config";
 import { unixToHumanReadable } from "@/shared/lib/date-time-format";
 import { Link, List, ListItem, Navbar } from "konsta/react";
 import { MdExitToApp } from "react-icons/md";

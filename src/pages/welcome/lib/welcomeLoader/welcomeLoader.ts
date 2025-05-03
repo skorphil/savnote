@@ -1,4 +1,4 @@
-import { Preferences, preferencesPersister } from "@/entities/preferences";
+import { Preferences, preferencesPersister } from "@/entities/user-config";
 import { redirect } from "react-router";
 
 export async function welcomeLoader() {

@@ -1,7 +1,7 @@
 import { Navbar, Link } from "konsta/react";
 import { SummaryCard } from "@/widgets/summary-card";
 import { MdExitToApp } from "react-icons/md";
-import { Preferences } from "@/entities/preferences";
+import { Preferences } from "@/entities/user-config";
 
 const preferences = new Preferences();
 /**

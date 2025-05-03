@@ -1,4 +1,4 @@
-import { Preferences } from "@/entities/preferences"; // FIX the dependency in same layer
+import { Preferences } from "@/entities/user-config";
 import type {
   EncryptionSchema,
   JournalSchema,
