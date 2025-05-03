@@ -1,3 +1,4 @@
+import type { RecordsSchema } from "@/shared/journal-schema";
 import type {
   RecordDraftAssetSchema,
   RecordDraftInstitutionSchema,
@@ -10,6 +11,7 @@ import {
   type ValueIds,
 } from "../model/RecordDraftStore";
 import { validateRecordDraftAsset } from "../model/validateRecordDraft";
+import { validateRecord } from "@/entities/journal/model/validateJournal";
 
 /**
  * Represents a record draft instance. Provides various methods to work with a record draft.
@@ -62,9 +64,40 @@ export class RecordDraft {
     this.store.setRow("assets", assetId, validatedAssetValues);
   }
 
-  // saveRecordToJournal() {
-  //   const recordData = this.store.getTables();
-  // }
+  async getRecordData(): Promise<RecordsSchema> {
+    const date = Date.now();
+    const quotes = await this.getQuotes(date);
+    const { assets, institutions } = this.store.getTables();
+    if (!assets || !institutions || !quotes)
+      throw Error("RecordDraft is empty");
+    const cleanedAssets: Record<string, object> = {};
+    Object.values(assets).forEach((asset) => {
+      const { isDirty, ...assetData } = asset;
+      const { institution, name } = assetData;
+      void isDirty;
+      cleanedAssets[`${date}.${institution}.${name}`] = { ...assetData, date };
+    });
+
+    const cleanedInstitutions: Record<string, object> = {};
+    Object.values(institutions).forEach((institution) => {
+      const { isDirty, ...institutionData } = institution;
+      const { name } = institutionData;
+      void isDirty;
+      cleanedInstitutions[`${date}.${name}`] = { ...institutionData, date };
+    });
+
+    const record = validateRecord({
+      quotes,
+      institutions: cleanedInstitutions,
+      assets: cleanedAssets,
+    });
+    return record;
+  }
+
+  static delete() {
+    this.instance?.store.delTables();
+    this.instance = undefined;
+  }
 
   private getBaseCurrencies() {
     const assets = this.store.getTable("assets");
@@ -75,9 +108,9 @@ export class RecordDraft {
     return Array.from(baseCurrencies);
   }
 
-  async addQuotes(
-    counterCurrencies = ["usd", "rub", "amd", "brl"],
-    date = Date.now()
+  async getQuotes(
+    date: number,
+    counterCurrencies = ["usd", "rub", "amd", "brl"]
   ) {
     const baseCurrencies = this.getBaseCurrencies();
     const quotes: RecordDraftQuotesSchema = {};
@@ -99,7 +132,7 @@ export class RecordDraft {
     });
 
     await Promise.all(quotesDataPromises);
-    this.store.setTable("quotes", quotes);
+    return quotes;
   }
 
   private async fetchQuote(baseCurrency: string, date?: string) {

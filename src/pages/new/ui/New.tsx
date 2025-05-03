@@ -12,6 +12,7 @@ import { RecordDraft } from "@/features/create-record";
 
 import { InstitutionsGrid } from "./InstitutionsGrid";
 import { throwError } from "@/shared/lib/error-handling";
+import { Journal } from "@/entities/journal";
 type Schemas = [typeof tinyBaseRecordDraftSchema, NoValuesSchema];
 
 const { useTable } = UiReact as UiReact.WithSchemas<Schemas>; // TODO replace with method from
@@ -44,7 +45,14 @@ export function New() {
         subtitle="Draft saved"
         right={
           <div className="pr-3">
-            <Button className="min-w-32" rounded onClick={handleRecordSave}>
+            <Button
+              className="min-w-32"
+              rounded
+              onClick={() => {
+                handleRecordSave().catch((e) => throwError(e));
+                void navigate("/app");
+              }}
+            >
               Save
             </Button>
           </div>
@@ -82,7 +90,10 @@ export function New() {
   );
 }
 
-function handleRecordSave() {
-  RecordDraft.instance?.addQuotes().catch((e) => throwError(e));
-  // TODO Journal.addRecord(RecordDraft.Instance)
+async function handleRecordSave() {
+  const recordDraft = RecordDraft.instance;
+  if (!recordDraft) return;
+  const recordData = await recordDraft.getRecordData();
+  Journal.instance?.addRecord(recordData);
+  RecordDraft.delete();
 }

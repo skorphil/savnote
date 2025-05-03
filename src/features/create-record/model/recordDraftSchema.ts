@@ -12,7 +12,6 @@ const recordDraftInstitutionSchema = instiutionSchema.extend({
 });
 
 const recordDraftQuoteSchema = quoteSchema;
-
 const recordDraftQuotesSchema = quotesSchema;
 
 type RecordDraftAssetSchema = z.infer<typeof recordDraftAssetSchema>;

@@ -11,7 +11,7 @@ import {
   useJournalResultTable,
   useJournalSliceIds,
 } from "../model/JournalStore";
-import { validateJournal, validateRecord } from "../model/validateJournal";
+import { validateJournal } from "../model/validateJournal";
 import { createEncryptionKey } from "./encryptionUtils";
 import { readJournal } from "./readJournal";
 import { writeStringToFile } from "./writeStringToFile";
@@ -134,9 +134,19 @@ export class Journal {
 
   /* ---------- CODE BLOCK: Setters ---------- */
   addRecord(recordData: RecordsSchema) {
+    // setRow used because setTable overwrites tinyBase store.
     try {
-      const validatedRecordData = validateRecord(recordData as object);
-      this.store.setTables(validatedRecordData);
+      const { assets, institutions, quotes } = recordData;
+      Object.entries(assets).forEach(([assetId, assetData]) =>
+        this.store.setRow("assets", assetId, assetData)
+      );
+      Object.entries(institutions).forEach(([institutionId, institutionData]) =>
+        this.store.setRow("institutions", institutionId, institutionData)
+      );
+      Object.entries(quotes).forEach(([quoteId, quoteData]) =>
+        this.store.setRow("quotes", quoteId, quoteData)
+      );
+      this.saveToDevice();
     } catch (e) {
       throwError(e);
     }
