@@ -1,4 +1,4 @@
-import { throwError } from "@/shared/lib/error-handling";
+import { throwError } from "@/shared/error-handling";
 import { handleJournalOpen } from "./handleJournalOpen";
 import styles from "./Welcome.module.css";
 import { Block, List, ListItem, Page } from "konsta/react";

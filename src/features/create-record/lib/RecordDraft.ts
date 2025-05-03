@@ -8,10 +8,11 @@ import {
   recordDraftStore,
   useRecordDraftLocalRowIds,
   useRecordDraftRow,
+  useRecordDraftTable,
   type ValueIds,
 } from "../model/RecordDraftStore";
 import { validateRecordDraftAsset } from "../model/validateRecordDraft";
-import { validateRecord } from "@/entities/journal/model/validateJournal";
+import { validateRecord } from "@/entities/journal";
 
 /**
  * Represents a record draft instance. Provides various methods to work with a record draft.
@@ -39,6 +40,10 @@ export class RecordDraft {
 
   useInstitutionAsset(assetId: ValueIds<"assets">) {
     return useRecordDraftRow("assets", assetId);
+  }
+
+  useInstitutions() {
+    return useRecordDraftTable("institutions");
   }
 
   getInstitutionData(institutionId: string) {

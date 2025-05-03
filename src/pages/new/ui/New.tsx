@@ -1,30 +1,24 @@
 import { Button, Page, Link, Navbar, BlockTitle, Block } from "konsta/react";
 import { MdArrowBack, MdInfoOutline } from "react-icons/md";
 import { Outlet, useNavigate, useParams } from "react-router";
-import { recordDraftStore } from "@/features/create-record/model/RecordDraftStore";
 
-import * as UiReact from "tinybase/ui-react/with-schemas";
-
-import type { tinyBaseRecordDraftSchema } from "@/features/create-record/model/tinyBaseRecordDraftSchema";
-import type { NoValuesSchema } from "tinybase/with-schemas";
 import { unixToHumanReadable } from "@/shared/lib/date-time-format";
 import { RecordDraft } from "@/features/create-record";
 
 import { InstitutionsGrid } from "./InstitutionsGrid";
-import { throwError } from "@/shared/lib/error-handling";
+import { throwError } from "@/shared/error-handling";
 import { Journal } from "@/entities/journal";
-type Schemas = [typeof tinyBaseRecordDraftSchema, NoValuesSchema];
-
-const { useTable } = UiReact as UiReact.WithSchemas<Schemas>; // TODO replace with method from
 
 /**
  * Page displaying new record form
  */
 export function New() {
   const { institutionId } = useParams();
-  const institutions = useTable("institutions", recordDraftStore);
+  const institutions = RecordDraft.instance?.useInstitutions();
   const navigate = useNavigate();
   const date = RecordDraft.instance?.previousRecordDate;
+
+  if (!institutions) return null;
 
   return (
     <Page

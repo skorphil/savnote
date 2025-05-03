@@ -1,7 +1,7 @@
-import { throwError } from "@/shared/lib/error-handling";
+import { throwError } from "@/shared/error-handling";
 import { showOpenFileDialog } from "@/entities/journal";
 import { Preferences } from "@/entities/user-config";
-import { readJournal } from "@/entities/journal/lib/readJournal";
+import { readJournal } from "@/entities/journal";
 
 export async function handleJournalOpen() {
   try {

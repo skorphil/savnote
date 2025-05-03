@@ -4,7 +4,7 @@ import type {
   MetaSchema,
   RecordsSchema,
 } from "@/shared/journal-schema";
-import { throwError } from "@/shared/lib/error-handling";
+import { throwError } from "@/shared/error-handling";
 import {
   journalStore,
   useJournalQueries,

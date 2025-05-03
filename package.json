@@ -1,16 +1,17 @@
 {
   "name": "savnote",
+  "author": "Philipp Rich",
   "private": true,
   "version": "0.0.1",
   "type": "module",
   "packageManager": "pnpm@10.6.1",
-  "description": "Private savings journal",
+  "description": "Android app for tracking personal savings",
   "//": [
     "'konsta' requires tailwind v3. Not working with v4"
   ],
   "scripts": {
     "generate-schema": "tsx src/devScripts/generateTinyBaseSchemas.ts ",
-    "license": "license-report --config license-report-config.json --output=markdown > LICENSES.md && echo 'For all dependencies under the **Apache 2.0 License**, refer to the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).\n\nFor all dependencies under the **MIT License**, refer to the [MIT License](https://opensource.org/license/MIT).' >> LICENSES.md",
+    "license-report": "license-report --config license-report-config.json --output=markdown > LICENSES.md && echo 'For all dependencies under the **Apache 2.0 License**, refer to the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).\n\nFor all dependencies under the **MIT License**, refer to the [MIT License](https://opensource.org/license/MIT).' >> LICENSES.md",
     "test": "vitest",
     "dev": "pnpm generate-schema && vite",
     "dev:android": "pnpm generate-schema && tauri android dev",
@@ -39,8 +40,7 @@
     "react-router": "^7.3.0",
     "tauri-plugin-androidpermissionprompt-api": "^0.1.1",
     "tinybase": "^5.4.9",
-    "zod": "^3.24.2",
-    "zod-to-json-schema": "^3.24.5"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

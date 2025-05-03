@@ -1,5 +1,5 @@
 import { ZodError } from "zod";
-import { throwError } from "@/shared/lib/error-handling";
+import { throwError } from "@/shared/error-handling";
 import {
   recordDraftAssetSchema,
   type RecordDraftAssetSchema,

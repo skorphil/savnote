@@ -1,5 +1,5 @@
 import { readTextFile } from "@tauri-apps/plugin-fs";
-import { throwError } from "@/shared/lib/error-handling";
+import { throwError } from "@/shared/error-handling";
 import { journalFromString } from "./journalFromString";
 import type { JournalSchema } from "@/shared/journal-schema";
 

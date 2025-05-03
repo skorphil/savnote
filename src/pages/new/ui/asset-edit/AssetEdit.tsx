@@ -15,7 +15,7 @@ import { NameInput } from "./NameInput";
 /**
  * Fullscreen modal with a form for editing asset
  */
-function AssetEdit() {
+export function AssetEdit() {
   const navigate = useNavigate();
   const assetData = useAssetState();
   if (!assetData) return null;
@@ -76,8 +76,6 @@ function AssetEdit() {
     </Page>
   );
 }
-
-export default AssetEdit;
 
 function handleAssetSave(assetId: string, assetValues: RecordDraftAssetSchema) {
   const recordDraft = RecordDraft.instance;

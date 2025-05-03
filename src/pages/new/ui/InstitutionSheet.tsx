@@ -2,7 +2,7 @@ import { RecordDraft } from "@/features/create-record";
 import { Badge, List, ListItem } from "konsta/react";
 import { Sheet } from "react-modal-sheet";
 import { useNavigate, useParams, type NavigateFunction } from "react-router";
-import type { ValueIds } from "@/features/create-record/model/RecordDraftStore";
+import type { ValueIds } from "@/features/create-record";
 
 export function InstitutionSheet() {
   const navigate = useNavigate();
