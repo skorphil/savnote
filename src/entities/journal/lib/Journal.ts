@@ -1,4 +1,3 @@
-import { Preferences } from "@/entities/user-config";
 import type {
   EncryptionSchema,
   JournalSchema,
@@ -18,12 +17,12 @@ import { readJournal } from "./readJournal";
 import { writeStringToFile } from "./writeStringToFile";
 
 /**
- * Represents a journal instance. Provides various methods to work with a journal.
- * Initialised with .open() or .create() static methods
- * @returns Singletone Journal instance
+ * Represents a journal. Provides various methods to work with a journal.
+ * Initialised with .open() static method
+ * Instance must be used to manage currently opened journal.
  * @example
  * const userJournal = Journal.open(...)
- * const data = Journal.instance?.useJournalSlices
+ * const data = Journal.instance?.useJournalSlices()
  */
 export class Journal {
   static instance: Journal | undefined;
@@ -32,10 +31,9 @@ export class Journal {
   private meta!: MetaSchema;
   private encryption: EncryptionSchema | undefined = undefined;
   private encryptionKey: CryptoKey | null = null;
-  records = journalStore;
+  store = journalStore;
 
-  constructor(props: JournalConctructorProps) {
-    if (Journal.instance) return Journal.instance;
+  private constructor(props: JournalConctructorProps) {
     Journal.instance = this;
     const { directory, journalData } = props;
     if (!directory || !journalData)
@@ -46,11 +44,12 @@ export class Journal {
     this.directory = directory;
     this.meta = journalData.meta;
     this.encryption = journalData.encryption;
-    this.saveDirectoryToPersitentStorage();
 
-    if (journalData.records && typeof journalData.records !== "string") {
-      this.records.setTables(journalData.records);
+    /* ---------- CODE BLOCK: Check if provided journal is encrypted ---------- */
+    if (journalData.records && typeof journalData.records === "object") {
+      this.store.setTables(journalData.records);
     }
+
     if (journalData.records && typeof journalData.records === "string") {
       this.cipher = journalData.records;
     }
@@ -58,27 +57,23 @@ export class Journal {
 
   /**
    * Creates journal instance from existing journal.
-   * If `targetUri` provided, the data from `sourceDirectory` will be copied to `targetUri`
-   * @param props.sourceDirectory Existing file directory
-   * @param props.targetDirectory (optional) Target file directory with read/write permissions.
-   * Required if sorcedirectory doesn't provide write permissions
-   *
-   * @returns Journal singletone instance
+   * Owervrites existing journal instance
+   * @param directory Existing file directory
+   * @returns Journal instance
    */
-  static async open(props: JournalOpenProps) {
-    if (Journal.instance) return Journal.instance;
-    const { directory } = props;
+  static async create(directory: string) {
+    this.delete();
     const journalData = await readJournal(directory);
-    const journal = new Journal({
-      directory,
-      journalData,
-    });
-
-    return journal;
+    return new Journal({ directory, journalData });
   }
 
+  /**
+   * Deletes current Journal instance:
+   * - in-memory storage of journal Data
+   * - journal instance
+   */
   static delete() {
-    this.instance?.records.delTables();
+    this.instance?.store.delTables();
     this.instance = undefined;
   }
 
@@ -98,54 +93,10 @@ export class Journal {
     const journal: object = {
       meta: this.meta,
       encryption: this.encryption,
-      records: this.records.getTables() || undefined, // TODO add encryption
+      records: this.store.getTables() || undefined, // TODO add encryption
     };
     const stringifiedJournalData = JSON.stringify(validateJournal(journal));
     writeStringToFile(this.directory, stringifiedJournalData);
-  }
-
-  saveTest(string: string) {
-    writeStringToFile(this.directory, string);
-  }
-
-  getEncryptionState() {
-    return {
-      encryption: this.encryption !== null,
-      decrypted: this.records.hasTable("institutions"),
-    };
-  }
-
-  getJournalName() {
-    return this.meta.name;
-  }
-
-  getJournalDirectory() {
-    return this.directory;
-  }
-
-  getEncryptionParameters() {
-    return this.encryption?.derivedKeyAlgorithmName || null;
-  }
-
-  useJournalSliceIds = useJournalSliceIds;
-  useJournalQueries = useJournalQueries;
-  useJournalResultTable = useJournalResultTable;
-
-  addRecord(recordData: RecordsSchema) {
-    try {
-      const validatedRecordData = validateRecord(recordData as object);
-      this.records.setTables(validatedRecordData);
-    } catch (e) {
-      throwError(e);
-    }
-  }
-
-  /* ---------- CODE BLOCK: private methods ---------- */
-  private saveDirectoryToPersitentStorage() {
-    if (!this.directory) throw Error("No directory specified for journal file");
-    new Preferences().updatePreferences({
-      currentJournalDirectory: this.directory,
-    });
   }
 
   async createEncryption(baseKey: string) {
@@ -158,17 +109,39 @@ export class Journal {
     this.encryptionKey = encryptionParameters.encryptionKey;
     // this.meta.encryption = encryptionParameters.encryptionMeta; // The left-hand side of an assignment expression may not be an optional property access.
   }
+
+  /* ---------- CODE BLOCK: Getters ---------- */
+  getEncryptionState() {
+    return {
+      encryption: this.encryption !== null,
+      decrypted: this.store.hasTable("institutions"),
+    };
+  }
+  getJournalName() {
+    return this.meta.name;
+  }
+  getJournalDirectory() {
+    return this.directory;
+  }
+  getEncryptionParameters() {
+    return this.encryption?.derivedKeyAlgorithmName || null;
+  }
+
+  /* ---------- CODE BLOCK: Hooks ---------- */
+  useJournalSliceIds = useJournalSliceIds;
+  useJournalQueries = useJournalQueries;
+  useJournalResultTable = useJournalResultTable;
+
+  /* ---------- CODE BLOCK: Setters ---------- */
+  addRecord(recordData: RecordsSchema) {
+    try {
+      const validatedRecordData = validateRecord(recordData as object);
+      this.store.setTables(validatedRecordData);
+    } catch (e) {
+      throwError(e);
+    }
+  }
 }
-
-// type JournalCreateProps = {
-//   password?: string;
-//   directory: string;
-//   name?: string;
-// };
-
-type JournalOpenProps = {
-  directory: string;
-};
 
 type JournalConctructorProps = {
   directory: string;
@@ -176,7 +149,7 @@ type JournalConctructorProps = {
 };
 
 /* ---------- Comments ----------
-- Used singletone patter because app is managing single journal only.
+- Used singletone pattern because app is managing single journal only.
 
 - Choosed singletone over `object` or `static class`
 to make it more extendable in the future
@@ -189,82 +162,3 @@ https://www.reddit.com/r/CouchDB/comments/1jgigdp/pouchdbadaptermemory_uncaught_
 Storing records in indexedDB is not suitable because they are unencrypted.
 There is no reliable way to clean indexedDB on app close.
 */
-
-/**
- * Creates journal instance from scratch.
- * @returns Journal singletone instance
- */
-// static async create(props: JournalCreateProps) {
-//   const { directory, name, password } = props;
-
-//   const journalData: JournalSchema = {
-//     ...defaultNewJournalData,
-//     meta: {
-//       ...defaultNewJournalData.meta,
-//       name: name,
-//     },
-//   };
-
-//   const journal = new Journal({
-//     directory: directory,
-//     journalData: journalData,
-//   });
-
-//   if (password) await journal.createEncryption(password);
-
-//   return journal;
-// }
-
-// async function encryptJSON(password, jsonData) {
-//   const encoder = new TextEncoder();
-//   const salt = window.crypto.getRandomValues(new Uint8Array(16));
-//   const iv = window.crypto.getRandomValues(new Uint8Array(12));
-
-//   const key = await deriveKey(password, salt);
-
-//   const jsonString = JSON.stringify(jsonData);
-//   const encryptedData = await window.crypto.subtle.encrypt(
-//     { name: "AES-GCM", iv: iv },
-//     key,
-//     encoder.encode(jsonString)
-//   );
-
-//   return {
-//     salt: Array.from(salt),
-//     iv: Array.from(iv),
-//     data: Array.from(new Uint8Array(encryptedData)),
-//   };
-// }
-
-// // Example usage
-// (async () => {
-//   const password = prompt("Enter your password:");
-//   const jsonData = { message: "Hello, encrypted world!" };
-
-//   const encryptedJson = await encryptJSON(password, jsonData);
-//   console.log("Encrypted JSON:", JSON.stringify(encryptedJson));
-// })();
-
-// async function decryptJSON(password, encryptedJson) {
-//   const decoder = new TextDecoder();
-//   const salt = new Uint8Array(encryptedJson.salt);
-//   const iv = new Uint8Array(encryptedJson.iv);
-//   const encryptedData = new Uint8Array(encryptedJson.data);
-
-//   const key = await deriveKey(password, salt);
-
-//   const decryptedData = await window.crypto.subtle.decrypt(
-//     { name: "AES-GCM", iv: iv },
-//     key,
-//     encryptedData
-//   );
-
-//   return JSON.parse(decoder.decode(decryptedData));
-// }
-
-// // Example usage
-// (async () => {
-//   const password = prompt("Enter your password:");
-//   const decryptedJson = await decryptJSON(password, encryptedJson);
-//   console.log("Decrypted JSON:", decryptedJson);
-// })();

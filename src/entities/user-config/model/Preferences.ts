@@ -18,7 +18,7 @@ export class Preferences {
   updatePreferences(preferences: PreferencesProps) {
     const values = this.store.getValues();
     const updatedValues = { ...values, ...preferences };
-    return this.store.setValues(updatedValues);
+    this.store.setValues(updatedValues);
   }
 
   deleteValue(preference: keyof PreferencesProps) {

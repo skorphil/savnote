@@ -46,7 +46,7 @@ function Welcome() {
           onClick={() => {
             const handler = async () => {
               await handleJournalOpen();
-              await navigate("/open");
+              await navigate("/");
             };
             handler().catch((e) => throwError(e));
           }}

@@ -23,12 +23,12 @@ function Open() {
   const journalUri = usePreferenceValue("currentJournalDirectory");
   const [journal, setJournal] = useState<undefined | Journal>(undefined);
   useEffect(() => {
-    if (!journalUri) {
-      void navigate("/");
-      return;
-    }
     async function openJournal() {
-      const journal = await Journal.open({ directory: journalUri as string });
+      if (!journalUri) {
+        void navigate("/");
+        return;
+      }
+      const journal = await Journal.create(journalUri);
       setJournal(journal);
     }
 
