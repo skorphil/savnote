@@ -31,27 +31,7 @@ Features:
 Read more about vision of SavNote in [VISION.md](VISION.md).
 
 
----
-## Contribution
-### Quick Start
-Install dependencies:
-```
-pnpm install
-```
+## Contributing
+Contributions are welcomed. At the moment, best way to start is to create an issue with your suggestions and ideas.
 
-Install `android-studio` on yor system: https://developer.android.com/studio
-Install `ndk` within `android-studio`: Settings > Languages & Frameworks > SDK Tools
-
-Set the `NDK_HOME`, `ANDROID_HOME` PATH variables (ANDROID_HOME is seen in Settings > Languages & Frameworks):
-```
-export ANDROID_HOME=YOUR_PATH/Android/sdk
-export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
-
-export NDK_HOME=$ANDROID_HOME/ndk/29.0.13113456
-export PATH=$PATH:$NDK_HOME
-```
-
-Initialize Android project:
-```
-pnpm tauri android init
-```
+See [Contributing guide](/CONTRIBUTING.md) for more details.
