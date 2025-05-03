@@ -17,7 +17,8 @@
     "tauri": "tauri",
     "build:android-debug": "pnpm generate-schema && tauri android build --debug",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "fsd-check": "pnpm exec steiger ./src"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.3.0",
@@ -43,6 +44,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
+    "@feature-sliced/steiger-plugin": "^0.5.5",
     "@tauri-apps/cli": "^2.3.1",
     "@types/node": "^22.13.10",
     "@types/numeral": "^2.0.5",
@@ -52,7 +54,9 @@
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.22.0",
+    "eslint-plugin-import": "^2.31.0",
     "postcss": "^8.5.3",
+    "steiger": "^0.5.6",
     "tailwindcss": "=3.4.17",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2",

@@ -1,21 +1,21 @@
-import { readJournal } from "./readJournal";
-import { createEncryptionKey } from "./encryptionUtils";
-import { validateJournal, validateRecord } from "../model/validateJournal";
+import { Preferences } from "@/entities/preferences"; // FIX the dependency in same layer
 import type {
   EncryptionSchema,
   JournalSchema,
   MetaSchema,
   RecordsSchema,
 } from "@/shared/journal-schema";
+import { throwError } from "@/shared/lib/error-handling";
 import {
   journalStore,
   useJournalQueries,
   useJournalResultTable,
   useJournalSliceIds,
 } from "../model/JournalStore";
-import { Preferences } from "@/entities/preferences"; // FIX the dependency in same layer
+import { validateJournal, validateRecord } from "../model/validateJournal";
+import { createEncryptionKey } from "./encryptionUtils";
+import { readJournal } from "./readJournal";
 import { writeStringToFile } from "./writeStringToFile";
-import { throwError } from "@/shared/lib/error-handling";
 
 /**
  * Represents a journal instance. Provides various methods to work with a journal.
