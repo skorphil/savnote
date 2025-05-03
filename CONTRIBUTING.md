@@ -52,7 +52,7 @@ Tinybase makes it possible to avoid redux, use-form-hook etc.
 
 **[android-fs](https://github.com/aiueo13/tauri-plugin-android-fs)**
 Best rust library I found for managing files in android. Provides file dialogs with write access in android 11+ 
-Shoutout to @aiueo13 for the help. 
+Shoutout to [@aiueo13](https://github.com/aiueo13) for the help!
 Without him, I wouldnt be able to implement local file management, because I'm noob at rust.
 
 **[react-number-format](https://s-yadav.github.io/react-number-format)**
