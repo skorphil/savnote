@@ -25,8 +25,9 @@ pnpm tauri android init
 
 ## Project structure: 
 [Feature sliced design](https://feature-sliced.github.io/documentation/docs) was chosen because
-1. it is already documented, so no need to describe project structure explicitly
+1. It is documented, so no need to describe project structure explicitly
 2. it looks quite logical and follows common development approach
+3. There is a linter and other tools available to manage project structure
 
 
 ## Core tech stack:
