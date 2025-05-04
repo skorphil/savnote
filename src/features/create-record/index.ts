@@ -1,6 +1,6 @@
 export { RecordDraft } from "./lib/RecordDraft";
 export { validateRecordDraftAsset } from "./model/validateRecordDraft";
-export { createRecordDraft } from "./lib/createRecordDraft";
+export { getRecordDraftData } from "./lib/getRecordDraftData";
 export { RecordDraftStore } from "./model/RecordDraftStore";
 export { tinyBaseRecordDraftSchema } from "./model/tinyBaseRecordDraftSchema";
 

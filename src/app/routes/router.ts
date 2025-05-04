@@ -3,13 +3,13 @@ import { Open } from "@/pages/open";
 import { createBrowserRouter } from "react-router";
 import { App } from "@/pages/app";
 import { New, AssetEdit, InstitutionSheet } from "@/pages/new";
-import { createRecordDraft } from "@/features/create-record";
+// import { createRecordDraft } from "@/features/create-record";
 
 export const router = createBrowserRouter([
   {
     path: "newrecord",
     Component: New,
-    loader: createRecordDraft,
+    // loader: createRecordDraft,
     children: [
       {
         path: "institutions/:institutionId",

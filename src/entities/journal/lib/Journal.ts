@@ -1,17 +1,19 @@
-import type {
-  EncryptionSchema,
-  JournalSchema,
-  MetaSchema,
-  RecordsSchema,
+import {
+  type EncryptionSchema,
+  type JournalSchema,
+  type MetaSchema,
+  type RecordsSchema,
 } from "@/shared/journal-schema";
 import { throwError } from "@/shared/error-handling";
 import {
   journalStore,
+  journalStoreIndexes,
+  journalStoreQueries,
   useJournalQueries,
   useJournalResultTable,
   useJournalSliceIds,
 } from "../model/JournalStore";
-import { validateJournal } from "../model/validateJournal";
+import { validateJournal, validateRecord } from "../model/validateJournal";
 import { createEncryptionKey } from "./encryptionUtils";
 import { readJournal } from "./readJournal";
 import { writeStringToFile } from "./writeStringToFile";
@@ -32,6 +34,7 @@ export class Journal {
   private encryption: EncryptionSchema | undefined = undefined;
   private encryptionKey: CryptoKey | null = null;
   store = journalStore;
+  storeIndexes = journalStoreIndexes;
 
   private constructor(props: JournalConctructorProps) {
     Journal.instance = this;
@@ -125,6 +128,74 @@ export class Journal {
   }
   getEncryptionParameters() {
     return this.encryption?.derivedKeyAlgorithmName || null;
+  }
+
+  getLatestRecord() {
+    const latestRecordDate =
+      journalStoreIndexes.getSliceIds("InstitutionsByDate")[0];
+
+    /* ---------- CODE BLOCK: Get latest institutions ---------- */
+    const latestInstitutionsQueryId = "latestRecordInstitutions";
+    journalStoreQueries.setQueryDefinition(
+      latestInstitutionsQueryId,
+      "institutions",
+      ({ select, where }) => {
+        select("country");
+        select("date");
+        select("name");
+        where("date", Number(latestRecordDate));
+      }
+    );
+    const latestRecordInstitutions = journalStoreQueries.getResultTable(
+      latestInstitutionsQueryId
+    );
+
+    /* ---------- CODE BLOCK: Get latest assets ---------- */
+    const latestAssetsQueryId = "latestRecordAssets";
+    journalStoreQueries.setQueryDefinition(
+      latestAssetsQueryId,
+      "assets",
+      ({ select, where }) => {
+        select("amount");
+        select("currency");
+        select("date");
+        select("description");
+        select("institution");
+        select("isEarning");
+        select("name");
+        where("date", Number(latestRecordDate));
+      }
+    );
+    const latestRecordAssets =
+      journalStoreQueries.getResultTable(latestAssetsQueryId);
+
+    /* ---------- CODE BLOCK: Get latest quotes ---------- */
+    const latestQuotesQueryId = "latestRecordQuotes";
+    journalStoreQueries.setQueryDefinition(
+      latestQuotesQueryId,
+      "quotes",
+      ({ select, where }) => {
+        select("baseCurrency");
+        select("counterCurrency");
+        select("date");
+        select("rate");
+        where("date", Number(latestRecordDate));
+      }
+    );
+    const latestRecordQuotes =
+      journalStoreQueries.getResultTable(latestQuotesQueryId);
+
+    /* ---------- CODE BLOCK: Type output record ---------- */
+    const latestRecord = validateRecord({
+      institutions: latestRecordInstitutions,
+      assets: latestRecordAssets,
+      quotes: latestRecordQuotes,
+    });
+
+    return {
+      recordData: latestRecord,
+      date: latestRecordDate,
+    };
   }
 
   /* ---------- CODE BLOCK: Hooks ---------- */

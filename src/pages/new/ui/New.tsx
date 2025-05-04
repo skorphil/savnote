@@ -3,20 +3,42 @@ import { MdArrowBack, MdInfoOutline } from "react-icons/md";
 import { Outlet, useNavigate, useParams } from "react-router";
 
 import { unixToHumanReadable } from "@/shared/lib/date-time-format";
-import { RecordDraft } from "@/features/create-record";
+import { getRecordDraftData, RecordDraft } from "@/features/create-record";
 
 import { InstitutionsGrid } from "./InstitutionsGrid";
 import { throwError } from "@/shared/error-handling";
 import { Journal } from "@/entities/journal";
+import { useMemo } from "react";
+
+/**
+ * Checks if recordDraft data exist in persistent storage. Returns existing
+ * recordDraft or create new recordDraft from latest record in journal
+ * @returns
+ */
+function getRecordDraft() {
+  const existingRecordDraft = RecordDraft.resume();
+  if (!existingRecordDraft) {
+    const initialData = getRecordDraftData(); // TODO scenario if empty
+    const newRecordDraft = RecordDraft.create(
+      initialData.recordDraftData,
+      initialData.recordDate
+    );
+    return newRecordDraft;
+  }
+
+  return existingRecordDraft;
+}
 
 /**
  * Page displaying new record form
  */
 export function New() {
   const { institutionId } = useParams();
-  const institutions = RecordDraft.instance?.useInstitutions();
   const navigate = useNavigate();
-  const date = RecordDraft.instance?.previousRecordDate;
+  const recordDraft = useMemo(getRecordDraft, []);
+
+  const institutions = recordDraft.useInstitutions();
+  const date = recordDraft.previousRecordDate;
 
   if (!institutions) return null;
 

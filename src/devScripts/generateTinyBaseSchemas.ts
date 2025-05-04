@@ -16,16 +16,14 @@ import {
   recordDraftQuoteSchema,
 } from "@/features/create-record/model/recordDraftSchema";
 
-generatePersistentStateSchema();
+generateUserConfigSchema();
 generateRecordsSchema();
 generateRecordDraftSchema();
 
-function generatePersistentStateSchema() {
+function generateUserConfigSchema() {
   const preferences: ValuesSchema = zObjectToTinyTable(preferencesSchema1);
-
-  // write appState to ts file
   appendConstToFile(
-    "src/entities/preferences/model/tinyBasePreferencesSchema.ts",
+    "src/entities/user-config/model/tinyBasePreferencesSchema.ts",
     "tinyBasePreferencesSchema",
     preferences
   );
@@ -70,17 +68,12 @@ function appendConstToFile(
     `export const ${constName}\\s*=\\s*(\\{[\\s\\S]*?\\})\\s*as const;`,
     "m"
   );
-  // Find the "emptyVar" declaration
+
   const match = content.match(regex);
 
   if (match) {
-    // Parse the existing object
-    // const existingObject = eval(`(${match[1]})`);
-
-    // Merge new data
     const updatedObject = { ...tablesObject };
 
-    // Replace in content
     const updatedContent = content.replace(
       match[0],
       `export const ${constName} = ${JSON.stringify(
@@ -90,7 +83,6 @@ function appendConstToFile(
       )} as const;`
     );
 
-    // Write back the updated file
     fs.writeFileSync(filePath, updatedContent, "utf8");
     console.log(`Updated ${constName} successfully!`);
   } else {

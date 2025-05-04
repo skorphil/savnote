@@ -15,64 +15,64 @@ import { validateRecordDraftAsset } from "../model/validateRecordDraft";
 import { validateRecord } from "@/entities/journal";
 
 /**
- * Represents a record draft instance. Provides various methods to work with a record draft.
- * @returns Singletone record draft instance
+ * Provides various methods to work with a record draft.
+ * Initialised with .create() or .load()
  * @example
+ * const recordDraft =
+ *  RecordDraft.load() ? RecordDraft.load() || RecordDraft.new()
+ * const assets =
+ *  recordDraft.useInstitutionAssets("1655409600000.Bank Of America")
  */
 export class RecordDraft {
   static instance: RecordDraft | undefined;
-  store = recordDraftStore;
+  static store = recordDraftStore;
   previousRecordDate: number | undefined;
-  constructor(recordDraftData?: RecordDraftData, previousRecordDate?: number) {
-    if (RecordDraft.instance) return RecordDraft.instance;
-    RecordDraft.instance = this;
 
-    if (recordDraftData) this.store.setTables(recordDraftData);
-    this.previousRecordDate = previousRecordDate;
+  private constructor(
+    recordDraftData?: RecordDraftData,
+    previousRecordDate?: number
+  ) {
+    RecordDraft.instance = this;
+    if (recordDraftData) RecordDraft.store.setTables(recordDraftData);
+    if (previousRecordDate) this.previousRecordDate = previousRecordDate;
+  }
+
+  /* ---------- CODE BLOCK: Lifecycle ---------- */
+  /**
+   * Creates new recordDraft instance from scratch.
+   * Removes current instance and its data (if exist)
+   * @returns recordDraft instance
+   */
+  static create(recordDraftData: RecordDraftData, previousRecordDate?: number) {
+    this.delete();
+    return new RecordDraft(recordDraftData, previousRecordDate);
+    // load fromJournal
+    // create empty state
   }
 
   /**
-   * Hook to get assets table, for given institution
+   * Creates new recordDraft instance from persistent state.
+   * @returns recordDraft instance
+   * @throws Error if recordDraft not saved in persistent store.
    */
-  useInstitutionAssets(institutionId: string) {
-    return useRecordDraftLocalRowIds("assetsInstitution", institutionId);
+  static resume() {
+    const isSaved =
+      RecordDraft.store.hasTable("assets") &&
+      RecordDraft.store.hasTable("institutions");
+    if (!isSaved) return null;
+    return this.instance ? this.instance : new RecordDraft();
   }
 
-  useInstitutionAsset(assetId: ValueIds<"assets">) {
-    return useRecordDraftRow("assets", assetId);
+  static delete() {
+    this.store.delTables();
+    this.instance = undefined;
   }
 
-  useInstitutions() {
-    return useRecordDraftTable("institutions");
-  }
-
-  getInstitutionData(institutionId: string) {
-    return this.store.getRow("institutions", institutionId);
-  }
-
-  getAssetData(assetId: string) {
-    return this.store.getRow("assets", assetId);
-  }
-
-  // setAssetAmount(value: number, assetId: string) {
-  //   const schema = recordDraftAssetSchema.shape.amount;
-  //   try {
-  //     const validatedValue = schema?.parse(value);
-  //     return this.store.setCell("assets", assetId, "amount", validatedValue);
-  //   } catch (e) {
-  //     throw Error(e);
-  //   }
-  // }
-
-  saveAsset(assetId: string, assetValues: RecordDraftAssetSchema) {
-    const validatedAssetValues = validateRecordDraftAsset(assetValues);
-    this.store.setRow("assets", assetId, validatedAssetValues);
-  }
-
+  /* ---------- CODE BLOCK: Getters ---------- */
   async getRecordData(): Promise<RecordsSchema> {
     const date = Date.now();
     const quotes = await this.getQuotes(date);
-    const { assets, institutions } = this.store.getTables();
+    const { assets, institutions } = RecordDraft.store.getTables();
     if (!assets || !institutions || !quotes)
       throw Error("RecordDraft is empty");
     const cleanedAssets: Record<string, object> = {};
@@ -99,18 +99,28 @@ export class RecordDraft {
     return record;
   }
 
-  static delete() {
-    this.instance?.store.delTables();
-    this.instance = undefined;
+  /* ---------- CODE BLOCK: Hooks ---------- */
+  /**
+   * Hook to get assets table, for given institution
+   */
+  useInstitutionAssets(institutionId: string) {
+    return useRecordDraftLocalRowIds("assetsInstitution", institutionId);
   }
 
-  private getBaseCurrencies() {
-    const assets = this.store.getTable("assets");
-    const baseCurrencies = new Set<string>();
-    Object.values(assets).forEach(
-      (asset) => asset.currency && baseCurrencies.add(asset.currency)
-    );
-    return Array.from(baseCurrencies);
+  useInstitutionAsset(assetId: ValueIds<"assets">) {
+    return useRecordDraftRow("assets", assetId);
+  }
+
+  useInstitutions() {
+    return useRecordDraftTable("institutions");
+  }
+
+  getInstitutionData(institutionId: string) {
+    return RecordDraft.store.getRow("institutions", institutionId);
+  }
+
+  getAssetData(assetId: string) {
+    return RecordDraft.store.getRow("assets", assetId);
   }
 
   async getQuotes(
@@ -140,6 +150,25 @@ export class RecordDraft {
     return quotes;
   }
 
+  /* ---------- CODE BLOCK: Setters ---------- */
+  /**
+   * Saves asset to recordDraft persistent store
+   */
+  saveAsset(assetId: string, assetValues: RecordDraftAssetSchema) {
+    const validatedAssetValues = validateRecordDraftAsset(assetValues);
+    RecordDraft.store.setRow("assets", assetId, validatedAssetValues);
+  }
+
+  /* ---------- CODE BLOCK: Private utilities ---------- */
+  private getBaseCurrencies() {
+    const assets = RecordDraft.store.getTable("assets");
+    const baseCurrencies = new Set<string>();
+    Object.values(assets).forEach(
+      (asset) => asset.currency && baseCurrencies.add(asset.currency)
+    );
+    return Array.from(baseCurrencies);
+  }
+
   private async fetchQuote(baseCurrency: string, date?: string) {
     // TODO add fallback url https://github.com/fawazahmed0/exchange-api?tab=readme-ov-file#additional-fallback-url-on-cloudflare
     // TODO zod check date format
@@ -151,11 +180,6 @@ export class RecordDraft {
     const quoteData = (await response.json()) as QuoteData;
     return quoteData;
   }
-
-  // setAssetCurrency(value: string, assetId: string) {
-  //   const cellValue = value; // TODO add validation
-  //   return this.store.setCell("assets", assetId, "currency", cellValue);
-  // }
 }
 
 type RecordDraftData = {
