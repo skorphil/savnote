@@ -3,13 +3,14 @@ import type { AssetInputsProps } from "./AssetEdit";
 import type { AssessmentAction } from "./useAssetState";
 
 export function IsEarningCheckbox(props: AssetInputsProps<boolean>) {
-  const { assetDispatch, value } = props;
+  const { assetDispatch, value, disabled } = props;
   return (
     <ListItem
       label
       title="Earning asset"
       media={
         <Checkbox
+          disabled={disabled}
           component="div"
           name="isEarning"
           checked={value}

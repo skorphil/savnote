@@ -3,10 +3,12 @@ import { Badge, List, ListItem } from "konsta/react";
 import { Sheet } from "react-modal-sheet";
 import { useNavigate, useParams, type NavigateFunction } from "react-router";
 import type { ValueIds } from "@/features/create-record";
+import { useState } from "react";
 
 export function InstitutionSheet() {
   const navigate = useNavigate();
   const { institutionId } = useParams();
+  const [isOpen, setIsOpen] = useState<boolean>(true);
   if (!institutionId) return;
   const recordDraftInstance = RecordDraft.instance;
   const institutionAssetsIds =
@@ -28,12 +30,13 @@ export function InstitutionSheet() {
   return (
     <Sheet
       dragVelocityThreshold={100}
-      isOpen
-      onCloseStart={() => {
-        void navigate(-1);
-      }}
+      isOpen={isOpen}
+      // onCloseStart={() => {
+      //   void navigate(-1);
+      // }}
       onClose={() => {
-        void navigate(-1);
+        setIsOpen(false);
+        setTimeout(() => void navigate("/newrecord", { replace: true }), 0);
       }}
       // BUG naviagtion history updates with a freeze: this causing: card not
       // navigating when clicked shotly after sheet being closed. Maybe due to sheet animation?
@@ -91,10 +94,18 @@ function AssetListItem({
   const recordDraft = RecordDraft.instance;
   if (!recordDraft) return;
 
-  const { name, amount, currency, description, isDirty } =
+  const { name, amount, currency, description, isDirty, isDeleted } =
     recordDraft.useInstitutionAsset(assetId);
   return (
     <ListItem
+      colors={
+        isDeleted
+          ? {
+              primaryTextMaterial: "text-neutral-500 line-through",
+              secondaryTextMaterial: "text-neutral-500 line-through",
+            }
+          : {}
+      }
       link
       media={"💰"} // <MdDiamond color="var(--blue-100)" size={24} />
       strongTitle={false}
@@ -102,7 +113,9 @@ function AssetListItem({
       after={isDirty && <Badge colors={{ bg: "bg-green-800" }}>upd</Badge>}
       footer={description}
       title={`${amount} ${currency}`}
-      onClick={() => void navigate(`assets/${assetId}/edit`)}
+      onClick={() =>
+        void navigate(`assets/${assetId}/edit`, { viewTransition: true })
+      }
     />
   );
 }

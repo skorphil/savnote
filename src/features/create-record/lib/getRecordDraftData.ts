@@ -19,13 +19,20 @@ export function getRecordDraftData() {
       (recordDraftInstitutions[institutionId] = {
         ...institutionData,
         isDirty: false,
+        isDeleted: false,
+        isNew: false,
       })
   );
 
   const recordDraftAssets: Record<string, RecordDraftAssetSchema> = {};
   Object.entries(assets).forEach(
     ([assetId, assetData]) =>
-      (recordDraftAssets[assetId] = { ...assetData, isDirty: false })
+      (recordDraftAssets[assetId] = {
+        ...assetData,
+        isDirty: false,
+        isDeleted: false,
+        isNew: false,
+      })
   );
 
   return {

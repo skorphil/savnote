@@ -19,6 +19,12 @@ export const tinyBaseRecordDraftSchema = {
     },
     "isDirty": {
       "type": "boolean"
+    },
+    "isDeleted": {
+      "type": "boolean"
+    },
+    "isNew": {
+      "type": "boolean"
     }
   },
   "assets": {
@@ -44,6 +50,12 @@ export const tinyBaseRecordDraftSchema = {
       "type": "string"
     },
     "isDirty": {
+      "type": "boolean"
+    },
+    "isDeleted": {
+      "type": "boolean"
+    },
+    "isNew": {
       "type": "boolean"
     }
   },

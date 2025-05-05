@@ -2,18 +2,23 @@ import { ListInput } from "konsta/react";
 import type { AssetInputsProps } from "./AssetEdit";
 import type { ChangeEvent } from "react";
 import type { AssessmentAction } from "./useAssetState";
+import { ReadOnlyInput } from "./ReadOnlyInput";
 
 /**
  * New component
  *
  */
 export function CurrencyInput(props: AssetInputsProps<string>) {
-  const { assetDispatch, value } = props;
+  const { assetDispatch, value, disabled } = props;
+  const label = "Currency";
+
+  if (disabled) return <ReadOnlyInput label={label} value={value} />;
+
   return (
     <ListInput
       type="select"
       className="w-12"
-      label="currency"
+      label={label}
       value={value}
       onChange={(e: ChangeEvent<HTMLInputElement>) =>
         handleCurrencyChange(e.target.value, assetDispatch)

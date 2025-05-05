@@ -9,7 +9,6 @@ import {
   useRecordDraftLocalRowIds,
   useRecordDraftRow,
   useRecordDraftTable,
-  type ValueIds,
 } from "../model/RecordDraftStore";
 import { validateRecordDraftAsset } from "../model/validateRecordDraft";
 import { validateRecord } from "@/entities/journal";
@@ -19,7 +18,7 @@ import { validateRecord } from "@/entities/journal";
  * Initialised with .create() or .load()
  * @example
  * const recordDraft =
- *  RecordDraft.load() ? RecordDraft.load() || RecordDraft.new()
+ *  RecordDraft.resume() ? RecordDraft.resume() || RecordDraft.new()
  * const assets =
  *  recordDraft.useInstitutionAssets("1655409600000.Bank Of America")
  */
@@ -77,17 +76,19 @@ export class RecordDraft {
       throw Error("RecordDraft is empty");
     const cleanedAssets: Record<string, object> = {};
     Object.values(assets).forEach((asset) => {
-      const { isDirty, ...assetData } = asset;
+      const { isDirty, isDeleted, isNew, ...assetData } = asset;
+      if (isDeleted) return;
       const { institution, name } = assetData;
-      void isDirty;
+      void [isDirty, isDeleted, isNew];
       cleanedAssets[`${date}.${institution}.${name}`] = { ...assetData, date };
     });
 
     const cleanedInstitutions: Record<string, object> = {};
     Object.values(institutions).forEach((institution) => {
-      const { isDirty, ...institutionData } = institution;
+      const { isDirty, isDeleted, isNew, ...institutionData } = institution;
+      if (isDeleted) return;
       const { name } = institutionData;
-      void isDirty;
+      void [isDirty, isDeleted, isNew];
       cleanedInstitutions[`${date}.${name}`] = { ...institutionData, date };
     });
 
@@ -107,7 +108,7 @@ export class RecordDraft {
     return useRecordDraftLocalRowIds("assetsInstitution", institutionId);
   }
 
-  useInstitutionAsset(assetId: ValueIds<"assets">) {
+  useInstitutionAsset(assetId: string) {
     return useRecordDraftRow("assets", assetId);
   }
 

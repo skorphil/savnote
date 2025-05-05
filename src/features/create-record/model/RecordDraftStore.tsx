@@ -76,7 +76,7 @@ export const useRecordDraftTable = <TableId extends TableIds>(
 
 export const useRecordDraftRow = <TableId extends TableIds>(
   tableId: TableId,
-  assetId: ValueIds<TableId>
+  assetId: string
 ) => useRow(tableId, assetId, recordDraftStore);
 
 /* ---------- CODE BLOCK: <RecordDraftStore> definition  ---------- 

@@ -1,9 +1,8 @@
 import {
   RecordDraft,
   type RecordDraftAssetSchema,
-  validateRecordDraftAsset,
 } from "@/features/create-record";
-import { useReducer } from "react";
+import { useReducer, useEffect } from "react";
 import { useParams } from "react-router";
 
 type assetActionTypes = "update_value";
@@ -42,30 +41,44 @@ const defaultState = {
   isEarning: false,
   description: "",
   isDirty: false,
+  isNew: false,
+  isDeleted: false,
 };
 
-function getAssetState(assetId: string | undefined): RecordDraftAssetSchema {
-  if (assetId === undefined) return defaultState;
+// function getAssetState(assetId: string | undefined): RecordDraftAssetSchema {
+//   if (assetId === undefined) return defaultState;
 
-  const recordDraft = RecordDraft.instance;
-  const recordDraftAssetState = recordDraft?.getAssetData(assetId);
-  if (recordDraftAssetState === undefined) return defaultState;
+//   const recordDraft = RecordDraft.instance;
+//   const recordDraftAssetState = recordDraft?.getAssetData(assetId);
+//   if (recordDraftAssetState === undefined) return defaultState;
 
-  const validatedRecordDraftAsset = validateRecordDraftAsset(
-    recordDraftAssetState
-  );
-  return validatedRecordDraftAsset;
-}
+//   const validatedRecordDraftAsset = validateRecordDraftAsset(
+//     recordDraftAssetState
+//   );
+//   return validatedRecordDraftAsset;
+// }
 
 /**
  * Provides state and functions for AssetEditComponent
  */
 export function useAssetState() {
+  const recordDraft = RecordDraft.resume();
+  if (!recordDraft) return null;
   const { assetId } = useParams();
-  const [assetState, assetDispatch] = useReducer(
-    assetReducer,
-    assetId,
-    getAssetState
-  );
+  const assetData = recordDraft.useInstitutionAsset(assetId as string);
+
+  const [assetState, assetDispatch] = useReducer(assetReducer, defaultState);
+
+  useEffect(() => {
+    if (assetData) {
+      Object.entries(assetData).forEach(([key, value]) => {
+        assetDispatch({
+          type: "update_value",
+          payload: { property: key as keyof RecordDraftAssetSchema, value },
+        });
+      });
+    }
+  }, [assetData]);
+
   return assetId ? { assetDispatch, assetState, assetId } : null;
 }

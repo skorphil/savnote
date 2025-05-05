@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 
-/**
- * Test Page
- */
-function TestPage() {
+export function ViewportSize() {
   const [innerSize, setInnerSize] = useState<string | null>(null);
   const [docHeight, setDocHeight] = useState<string | null>(null);
   const [visualViewport, setVisualViewport] = useState<string | null>(null);
@@ -51,5 +48,3 @@ function TestPage() {
     </div>
   );
 }
-
-export default TestPage;

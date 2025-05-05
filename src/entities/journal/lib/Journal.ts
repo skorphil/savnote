@@ -14,7 +14,7 @@ import {
   useJournalSliceIds,
 } from "../model/JournalStore";
 import { validateJournal, validateRecord } from "../model/validateJournal";
-import { createEncryptionKey } from "./encryptionUtils";
+// import { createEncryptionKey } from "./encryptionUtils";
 import { readJournal } from "./readJournal";
 import { writeStringToFile } from "./writeStringToFile";
 
@@ -28,11 +28,11 @@ import { writeStringToFile } from "./writeStringToFile";
  */
 export class Journal {
   static instance: Journal | undefined;
-  private cipher: string | 0 = 0;
+  // private cipher: string | 0 = 0;
   private directory!: string;
   private meta!: MetaSchema;
   private encryption: EncryptionSchema | undefined = undefined;
-  private encryptionKey: CryptoKey | null = null;
+  // private encryptionKey: CryptoKey | null = null;
   store = journalStore;
   storeIndexes = journalStoreIndexes;
 
@@ -53,9 +53,9 @@ export class Journal {
       this.store.setTables(journalData.records);
     }
 
-    if (journalData.records && typeof journalData.records === "string") {
-      this.cipher = journalData.records;
-    }
+    // if (journalData.records && typeof journalData.records === "string") {
+    //   this.cipher = journalData.records;
+    // }
   }
 
   /**
@@ -102,16 +102,16 @@ export class Journal {
     writeStringToFile(this.directory, stringifiedJournalData);
   }
 
-  async createEncryption(baseKey: string) {
-    if (this.encryptionKey)
-      throw Error(
-        "Encryption password already exist. To change encription, run .changeEncryption()"
-      );
-    const encryptionParameters = await createEncryptionKey(baseKey);
+  // async createEncryption(baseKey: string) {
+  //   if (this.encryptionKey)
+  //     throw Error(
+  //       "Encryption password already exist. To change encription, run .changeEncryption()"
+  //     );
+  //   const encryptionParameters = await createEncryptionKey(baseKey);
 
-    this.encryptionKey = encryptionParameters.encryptionKey;
-    // this.meta.encryption = encryptionParameters.encryptionMeta; // The left-hand side of an assignment expression may not be an optional property access.
-  }
+  //   this.encryptionKey = encryptionParameters.encryptionKey;
+  //   // this.meta.encryption = encryptionParameters.encryptionMeta; // The left-hand side of an assignment expression may not be an optional property access.
+  // }
 
   /* ---------- CODE BLOCK: Getters ---------- */
   getEncryptionState() {

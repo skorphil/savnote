@@ -1,25 +1,27 @@
 import styles from "./InstitutionsGrid.module.css";
 import { Card } from "konsta/react";
 import { MdAdd } from "react-icons/md";
-import type { NavigateFunction } from "react-router";
+import { useParams, type NavigateFunction } from "react-router";
 import type { Table } from "tinybase/store";
 
 type InstitutionsGridProps = {
   institutions: Table;
   navigate: NavigateFunction;
-  isInstitutionSelected: boolean;
+  // isInstitutionSelected: boolean;
 };
 export function InstitutionsGrid(props: InstitutionsGridProps) {
+  const { institutionId: selectedInstitutionId } = useParams();
   const { institutions, navigate /*isInstitutionSelected*/ } = props;
   return (
     <div className={`${styles.institutionsGrid}`}>
       {Object.entries(institutions).map(([institutionId, institution]) => (
         <Card
           key={institutionId}
+          outline={institutionId === selectedInstitutionId}
           className={styles.institutionCard}
           onClick={() =>
             void navigate(`/newrecord/institutions/${institutionId}`, {
-              replace: true, // isInstitutionSelected ? true : false,
+              replace: selectedInstitutionId ? true : false,
             })
           }
         >

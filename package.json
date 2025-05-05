@@ -17,6 +17,7 @@
     "dev:android": "pnpm generate-schema && tauri android dev",
     "tauri": "tauri",
     "build:android-debug": "pnpm generate-schema && tauri android build --debug",
+    "build:android": "pnpm generate-schema && tauri android build --apk",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "fsd-check": "pnpm exec steiger ./src"

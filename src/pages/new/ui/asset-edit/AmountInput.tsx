@@ -2,13 +2,19 @@ import { ListInput } from "konsta/react";
 import { NumericFormat } from "react-number-format";
 import type { AssessmentAction } from "./useAssetState";
 import type { AssetInputsProps } from "./AssetEdit";
+import { ReadOnlyInput } from "./ReadOnlyInput";
 
 export function AmountInput(props: AssetInputsProps<number>) {
-  const { assetDispatch, value } = props;
+  const { assetDispatch, value, disabled } = props;
+  const label = "Amount";
+
+  if (disabled) return <ReadOnlyInput label={label} value={value} />;
 
   return (
     <NumericFormat
-      label={"amount"}
+      disabled={disabled}
+      colors={disabled ? { bgMaterial: "transparent" } : {}}
+      label={label}
       thousandSeparator={" "}
       value={value}
       customInput={ListInput}

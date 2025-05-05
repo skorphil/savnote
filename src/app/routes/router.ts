@@ -3,13 +3,14 @@ import { Open } from "@/pages/open";
 import { createBrowserRouter } from "react-router";
 import { App } from "@/pages/app";
 import { New, AssetEdit, InstitutionSheet } from "@/pages/new";
+import { journalLoader } from "../loaders/journalLoader";
 // import { createRecordDraft } from "@/features/create-record";
 
 export const router = createBrowserRouter([
   {
     path: "newrecord",
     Component: New,
-    // loader: createRecordDraft,
+    loader: journalLoader,
     children: [
       {
         path: "institutions/:institutionId",
@@ -35,5 +36,14 @@ export const router = createBrowserRouter([
   {
     path: "app",
     Component: App,
+    loader: journalLoader,
   },
 ]);
+
+/* ---------- Comment ---------- 
+
+React Router Data mode was choosen for extra features like loaders.
+But later I replaced initial loaders with traditional approach (loading when component opens)
+Mostly because an app must constantly check if Journal still in-memory and redirect user if not
+
+*/

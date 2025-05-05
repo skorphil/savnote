@@ -48,7 +48,7 @@ export function New() {
     >
       <Navbar
         left={
-          <Link navbar onClick={() => void navigate(-1)}>
+          <Link navbar onClick={() => void navigate(institutionId ? -2 : -1)}>
             {/* 
               navigate -1 somehow navigate to /new, not before. 
               When sheet is closed by drag.
@@ -86,11 +86,7 @@ export function New() {
         false
       )}
 
-      <InstitutionsGrid
-        institutions={institutions}
-        navigate={navigate}
-        isInstitutionSelected={institutionId ? true : false}
-      />
+      <InstitutionsGrid institutions={institutions} navigate={navigate} />
 
       <Block className="opacity-40 gap-2 flex items-center mt-auto">
         <span>
