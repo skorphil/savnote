@@ -14,7 +14,7 @@
     "license-report": "license-report --config license-report-config.json --output=markdown > LICENSES.md && echo 'For all dependencies under the **Apache 2.0 License**, refer to the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).\n\nFor all dependencies under the **MIT License**, refer to the [MIT License](https://opensource.org/license/MIT).' >> LICENSES.md",
     "test": "vitest",
     "dev": "pnpm generate-schema && vite",
-    "dev:android": "pnpm generate-schema && tauri android dev",
+    "dev:android": "adb reverse tcp:8097 tcp:8097 & pnpm generate-schema && tauri android dev",
     "tauri": "tauri",
     "build:android-debug": "pnpm generate-schema && tauri android build --debug",
     "build:android": "pnpm generate-schema && tauri android build --apk",

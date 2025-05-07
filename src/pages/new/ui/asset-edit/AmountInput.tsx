@@ -3,16 +3,27 @@ import { NumericFormat } from "react-number-format";
 import type { AssessmentAction } from "./useAssetState";
 import type { AssetInputsProps } from "./AssetEdit";
 import { ReadOnlyInput } from "./ReadOnlyInput";
+import { useEffect, useRef } from "react";
 
 export function AmountInput(props: AssetInputsProps<number>) {
   const { assetDispatch, value, disabled } = props;
   const label = "Amount";
+  const inputRef = useRef<{ inputEl: HTMLInputElement } | null>(null);
+
+  useEffect(() => {
+    if (inputRef.current?.inputEl instanceof HTMLInputElement) {
+      const inputElement = inputRef.current.inputEl;
+      inputElement.setSelectionRange(0, inputElement.value.length);
+    }
+  }, []);
 
   if (disabled) return <ReadOnlyInput label={label} value={value} />;
 
   return (
     <NumericFormat
-      disabled={disabled}
+      getInputRef={inputRef}
+      autoFocus
+      outline
       colors={disabled ? { bgMaterial: "transparent" } : {}}
       label={label}
       thousandSeparator={" "}

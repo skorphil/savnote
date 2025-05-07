@@ -16,6 +16,7 @@ export function CurrencyInput(props: AssetInputsProps<string>) {
 
   return (
     <ListInput
+      outline
       type="select"
       className="w-12"
       label={label}

@@ -44,11 +44,11 @@ export function New() {
 
   return (
     <Page
-      className={`${institutionId && "pb-[240px]"} no-scrollbar flex flex-col`}
+      className={`${institutionId && "pb-[400px]"} no-scrollbar flex flex-col`}
     >
       <Navbar
         left={
-          <Link navbar onClick={() => void navigate(institutionId ? -2 : -1)}>
+          <Link navbar onClick={() => void navigate(-1)}>
             {/* 
               navigate -1 somehow navigate to /new, not before. 
               When sheet is closed by drag.
@@ -73,7 +73,7 @@ export function New() {
             </Button>
           </div>
         }
-        colors={{ bgMaterial: "bg-transparent" }}
+        colors={{ bgMaterial: "bg-md-light-surface dark:bg-md-dark-surface" }}
         className="top-0"
         transparent={false}
       />

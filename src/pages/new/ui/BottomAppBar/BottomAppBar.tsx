@@ -20,7 +20,9 @@ export function BottomAppBar(props: BottomAppBarProps) {
   return (
     <div className={`${styles.appBar} ${bg}`}>
       <div className="flex flex-row gap-0">
-        {leftButtons?.map((button) => button)}
+        {leftButtons?.map((button, id) => (
+          <div key={`bottom-bar-${id}`}>{button}</div>
+        ))}
       </div>
       {fab}
     </div>

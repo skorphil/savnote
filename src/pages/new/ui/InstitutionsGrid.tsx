@@ -21,7 +21,7 @@ export function InstitutionsGrid(props: InstitutionsGridProps) {
           className={styles.institutionCard}
           onClick={() =>
             void navigate(`/newrecord/institutions/${institutionId}`, {
-              replace: selectedInstitutionId ? true : false,
+              replace: true,
             })
           }
         >

@@ -16,6 +16,7 @@ export function DescriptionInput(props: AssetInputsProps<string>) {
 
   return (
     <ListInput
+      outline
       type="textarea"
       label={label}
       value={value}

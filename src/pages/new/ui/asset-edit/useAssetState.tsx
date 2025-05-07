@@ -1,8 +1,9 @@
 import {
   RecordDraft,
+  validateRecordDraftAsset,
   type RecordDraftAssetSchema,
 } from "@/features/create-record";
-import { useReducer, useEffect } from "react";
+import { useReducer } from "react";
 import { useParams } from "react-router";
 
 type assetActionTypes = "update_value";
@@ -45,40 +46,41 @@ const defaultState = {
   isDeleted: false,
 };
 
-// function getAssetState(assetId: string | undefined): RecordDraftAssetSchema {
-//   if (assetId === undefined) return defaultState;
+function getAssetState(assetId: string | undefined): RecordDraftAssetSchema {
+  if (assetId === undefined) return defaultState;
 
-//   const recordDraft = RecordDraft.instance;
-//   const recordDraftAssetState = recordDraft?.getAssetData(assetId);
-//   if (recordDraftAssetState === undefined) return defaultState;
+  const recordDraft = RecordDraft.instance;
+  const recordDraftAssetState = recordDraft?.getAssetData(assetId);
+  if (recordDraftAssetState === undefined) return defaultState;
 
-//   const validatedRecordDraftAsset = validateRecordDraftAsset(
-//     recordDraftAssetState
-//   );
-//   return validatedRecordDraftAsset;
-// }
+  const validatedRecordDraftAsset = validateRecordDraftAsset(
+    recordDraftAssetState
+  );
+  return validatedRecordDraftAsset;
+}
 
 /**
  * Provides state and functions for AssetEditComponent
  */
 export function useAssetState() {
-  const recordDraft = RecordDraft.resume();
-  if (!recordDraft) return null;
   const { assetId } = useParams();
-  const assetData = recordDraft.useInstitutionAsset(assetId as string);
 
-  const [assetState, assetDispatch] = useReducer(assetReducer, defaultState);
+  const [assetState, assetDispatch] = useReducer(
+    assetReducer,
+    assetId,
+    getAssetState // i need this to reactively update useReducer
+  );
 
-  useEffect(() => {
-    if (assetData) {
-      Object.entries(assetData).forEach(([key, value]) => {
-        assetDispatch({
-          type: "update_value",
-          payload: { property: key as keyof RecordDraftAssetSchema, value },
-        });
-      });
-    }
-  }, [assetData]);
+  // useEffect(() => {
+  //   if (assetData) {
+  //     Object.entries(assetData).forEach(([key, value]) => {
+  //       assetDispatch({
+  //         type: "update_value",
+  //         payload: { property: key as keyof RecordDraftAssetSchema, value },
+  //       });
+  //     });
+  //   }
+  // }, [assetData]);
 
   return assetId ? { assetDispatch, assetState, assetId } : null;
 }

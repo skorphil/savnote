@@ -15,11 +15,12 @@ import { ReadOnlyInput } from "./ReadOnlyInput";
 
 /**
  * Fullscreen modal with a form for editing asset
+ * It contains local state and commit changes to recordDraft with Save button
  */
 export function AssetEdit() {
   const navigate = useNavigate();
   const assetData = useAssetState();
-  if (!assetData) return null;
+  if (!assetData) return navigate(-1);
   const { assetDispatch, assetState, assetId } = assetData;
   const { institution, name } = assetState;
 
@@ -45,11 +46,6 @@ export function AssetEdit() {
           type: "update_value",
           payload: { property: "isDeleted", value: false },
         });
-        // const updatedState = {
-        //   ...assetState,
-        //   isDeleted: false,
-        // };
-        // handleAssetSave(assetId, updatedState);
       }}
     >
       Restore
@@ -76,6 +72,8 @@ export function AssetEdit() {
         <ReadOnlyInput label="Name" value={assetState.name} />
         <div className="flex flex-row w-full">
           <AmountInput
+            // key={assetId + "amount"}
+            // inputKey={assetId + "amount"}
             assetDispatch={assetDispatch}
             value={assetState.amount}
             disabled={assetState.isDeleted}
@@ -144,6 +142,7 @@ export type AssetInputsProps<Value> = {
   assetDispatch: React.Dispatch<AssessmentAction>;
   value: Value;
   disabled?: boolean;
+  inputKey?: string;
 };
 
 /* ---------- CODE BLOCK: Description ----------

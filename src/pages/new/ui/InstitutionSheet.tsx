@@ -1,9 +1,11 @@
 import { RecordDraft } from "@/features/create-record";
-import { Badge, List, ListItem } from "konsta/react";
+import { Badge, Fab, List, ListItem, Link } from "konsta/react";
 import { Sheet } from "react-modal-sheet";
 import { useNavigate, useParams, type NavigateFunction } from "react-router";
 import type { ValueIds } from "@/features/create-record";
 import { useState } from "react";
+import { BottomAppBar } from "./BottomAppBar";
+import { MdAdd, MdDeleteOutline } from "react-icons/md";
 
 export function InstitutionSheet() {
   const navigate = useNavigate();
@@ -15,28 +17,29 @@ export function InstitutionSheet() {
     recordDraftInstance?.useInstitutionAssets(institutionId);
   const institutionData =
     recordDraftInstance?.getInstitutionData(institutionId);
-  let flag: string;
-  switch (institutionData?.country) {
-    case "ru":
-      flag = "🇷🇺";
-      break;
-    case "am":
-      flag = "🇦🇲";
-      break;
-    default:
-      flag = "🌍";
-  }
+  // let flag: string;
+  // switch (institutionData?.country) {
+  //   case "ru":
+  //     flag = "🇷🇺";
+  //     break;
+  //   case "am":
+  //     flag = "🇦🇲";
+  //     break;
+  //   default:
+  //     flag = "🌍";
+  // }
 
   return (
     <Sheet
-      dragVelocityThreshold={100}
+      dragVelocityThreshold={50}
       isOpen={isOpen}
       // onCloseStart={() => {
       //   void navigate(-1);
       // }}
       onClose={() => {
         setIsOpen(false);
-        setTimeout(() => void navigate("/newrecord", { replace: true }), 0);
+        void navigate("/newrecord", { replace: true });
+        // setTimeout(() => void navigate("/newrecord"), 0);
       }}
       // BUG naviagtion history updates with a freeze: this causing: card not
       // navigating when clicked shotly after sheet being closed. Maybe due to sheet animation?
@@ -44,40 +47,75 @@ export function InstitutionSheet() {
       // await navigate here not working
       // removing { replace: true } seems not working
 
-      snapPoints={[360]}
+      snapPoints={[400]}
       initialSnap={0}
     >
       <Sheet.Container>
         <Sheet.Header />
-        <Sheet.Content disableDrag className=" h-[80px] hairline-b">
-          <List className="my-0">
+        <Sheet.Content disableDrag>
+          <ul className="my-0 hairline-b relative">
             {institutionId && (
               <ListItem
+                className="my-0 hairline-b"
                 link
                 strongTitle
-                media={flag}
-                title={institutionData?.name}
-                footer={`${institutionAssetsIds?.length} assets`}
+                // media={flag}
+                title={`${institutionData?.name}`}
+                text={`${institutionAssetsIds?.length} assets`}
               />
             )}
-          </List>
-        </Sheet.Content>
-        <Sheet.Scroller>
-          <List className="mt-4 mb-14">
-            {institutionAssetsIds &&
-              institutionAssetsIds.map((assetId) => (
-                <AssetListItem
-                  key={assetId}
-                  navigate={navigate}
-                  assetId={assetId as ValueIds<"assets">}
-                /> // TODO Improve typings
-              ))}
-          </List>
-        </Sheet.Scroller>
-        <Sheet.Content>
-          <div className={`left-0 bottom-0 h-24`}>
-            // TODO institution toolbar
-          </div>
+          </ul>
+          <BottomAppBar
+            leftButtons={[
+              <Link navbar>
+                <MdDeleteOutline size={24} />
+              </Link>,
+            ]}
+            bg="bg-[#313131]"
+            fab={
+              <Fab
+                icon={<MdAdd />}
+                text="New asset"
+                colors={{
+                  bgMaterial:
+                    "bg-md-light-secondary-container dark:bg-md-dark-secondary-container",
+                }}
+                textPosition="after"
+              />
+            }
+          />
+          <Sheet.Scroller className="pb-[40px]">
+            <List className="mt-4 mb-14">
+              {institutionAssetsIds &&
+                institutionAssetsIds.map((assetId) => {
+                  const recordDraft = RecordDraft.resume();
+                  if (!recordDraft) return;
+                  const { isDeleted } = recordDraft.getAssetData(assetId);
+                  if (isDeleted) return;
+                  return (
+                    <AssetListItem
+                      key={assetId}
+                      navigate={navigate}
+                      assetId={assetId as ValueIds<"assets">}
+                    /> // TODO Improve typings
+                  );
+                })}
+              {institutionAssetsIds &&
+                institutionAssetsIds.map((assetId) => {
+                  const recordDraft = RecordDraft.resume();
+                  if (!recordDraft) return;
+                  const { isDeleted } = recordDraft.getAssetData(assetId);
+                  if (!isDeleted) return;
+                  return (
+                    <AssetListItem
+                      key={assetId}
+                      navigate={navigate}
+                      assetId={assetId as ValueIds<"assets">}
+                    /> // TODO Improve typings
+                  );
+                })}
+            </List>
+          </Sheet.Scroller>
         </Sheet.Content>
       </Sheet.Container>
     </Sheet>
@@ -107,7 +145,7 @@ function AssetListItem({
           : {}
       }
       link
-      media={"💰"} // <MdDiamond color="var(--blue-100)" size={24} />
+      // media={<MdMoney className="opacity-70" size={24} />}
       strongTitle={false}
       header={name}
       after={isDirty && <Badge colors={{ bg: "bg-green-800" }}>upd</Badge>}
