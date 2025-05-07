@@ -1,6 +1,6 @@
 import { Checkbox, ListItem } from "konsta/react";
 import type { AssetInputsProps } from "./AssetEdit";
-import type { AssessmentAction } from "./useAssetState";
+import type { AssessmentAction } from "./useAssetDispatch";
 
 export function IsEarningCheckbox(props: AssetInputsProps<boolean>) {
   const { assetDispatch, value, disabled } = props;

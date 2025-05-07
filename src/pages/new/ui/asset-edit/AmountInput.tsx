@@ -1,28 +1,29 @@
 import { ListInput } from "konsta/react";
 import { NumericFormat } from "react-number-format";
-import type { AssessmentAction } from "./useAssetState";
+import type { AssessmentAction } from "./useAssetDispatch";
 import type { AssetInputsProps } from "./AssetEdit";
 import { ReadOnlyInput } from "./ReadOnlyInput";
 import { useEffect, useRef } from "react";
 
 export function AmountInput(props: AssetInputsProps<number>) {
-  const { assetDispatch, value, disabled } = props;
+  const { assetDispatch, value, disabled, autoFocus } = props;
   const label = "Amount";
   const inputRef = useRef<{ inputEl: HTMLInputElement } | null>(null);
 
   useEffect(() => {
+    if (!autoFocus) return;
     if (inputRef.current?.inputEl instanceof HTMLInputElement) {
       const inputElement = inputRef.current.inputEl;
+      inputElement.focus();
       inputElement.setSelectionRange(0, inputElement.value.length);
     }
-  }, []);
+  }, [disabled]);
 
   if (disabled) return <ReadOnlyInput label={label} value={value} />;
 
   return (
     <NumericFormat
       getInputRef={inputRef}
-      autoFocus
       outline
       colors={disabled ? { bgMaterial: "transparent" } : {}}
       label={label}

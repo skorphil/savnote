@@ -4,33 +4,50 @@ import {
 } from "@/features/create-record";
 import { Button, Card, Link, List, Navbar, Page } from "konsta/react";
 import { MdArrowBack, MdDeleteOutline } from "react-icons/md";
-import { useNavigate } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import { AmountInput } from "./AmountInput";
-import { useAssetState, type AssessmentAction } from "./useAssetState";
+import { useAssetDispatch, type AssessmentAction } from "./useAssetDispatch";
 import { IsEarningCheckbox } from "./IsEarningCheckbox";
 import { CurrencyInput } from "./CurrencyInput";
 import { DescriptionInput } from "./DescriptionInput";
 import { BottomAppBar } from "../BottomAppBar";
-import { ReadOnlyInput } from "./ReadOnlyInput";
+import type { assetStateLoader } from "../../lib/assetStateLoader";
+import { NameInput } from "./NameInput";
 
 /**
- * Fullscreen modal with a form for editing asset
+ * Page with a fullscreen modal with a form for editing asset
  * It contains local state and commit changes to recordDraft with Save button
  */
 export function AssetEdit() {
+  const {
+    assetData: initialState,
+    assetId,
+    institutionId,
+  } = useLoaderData<ReturnType<typeof assetStateLoader>>(); // how to type?
   const navigate = useNavigate();
-  const assetData = useAssetState();
-  if (!assetData) return navigate(-1);
-  const { assetDispatch, assetState, assetId } = assetData;
-  const { institution, name } = assetState;
+  const [assetState, assetDispatch] = useAssetDispatch({
+    ...initialState,
+    errors: [],
+  });
+  const {
+    amount,
+    currency,
+    description,
+    institution,
+    name,
+    isDeleted,
+    isEarning,
+    errors,
+  } = assetState;
 
-  const topBarCTA = !assetState.isDeleted ? (
+  const topBarCTA = !isDeleted ? (
     <Button
+      disabled={errors.length === 0 ? false : true}
       outline
       className="min-w-24"
       rounded
       onClick={() => {
-        handleAssetSave(assetId, assetState);
+        handleAssetSave(assetState, assetId);
         void navigate(-1);
       }}
     >
@@ -68,35 +85,42 @@ export function AssetEdit() {
         transparent={false}
       />
       <List>
-        {assetState.isDeleted && <Card>To edit asset, restore it first</Card>}
-        <ReadOnlyInput label="Name" value={assetState.name} />
+        {isDeleted && <Card>To edit asset, restore it first</Card>}
+        <NameInput
+          institutionAssetsNames={getInstitutionAssetsNames(institutionId)}
+          autoFocus={!assetId ? true : false}
+          assetDispatch={assetDispatch}
+          value={name}
+          disabled={assetId !== undefined || isDeleted}
+        />
         <div className="flex flex-row w-full">
           <AmountInput
+            autoFocus={assetId ? true : false}
             // key={assetId + "amount"}
             // inputKey={assetId + "amount"}
             assetDispatch={assetDispatch}
-            value={assetState.amount}
-            disabled={assetState.isDeleted}
+            value={amount}
+            disabled={isDeleted}
           />
           <CurrencyInput
             assetDispatch={assetDispatch}
-            value={assetState.currency}
-            disabled={assetState.isDeleted}
+            value={currency}
+            disabled={isDeleted}
           />
         </div>
         <IsEarningCheckbox
           assetDispatch={assetDispatch}
-          value={assetState.isEarning}
-          disabled={assetState.isDeleted}
+          value={isEarning}
+          disabled={isDeleted}
         />
         <DescriptionInput
           assetDispatch={assetDispatch}
-          value={assetState.description}
-          disabled={assetState.isDeleted}
+          value={description}
+          disabled={isDeleted}
         />
       </List>
 
-      {assetState.isDeleted || (
+      {isDeleted || (
         <BottomAppBar
           leftButtons={[
             <Link
@@ -107,7 +131,7 @@ export function AssetEdit() {
                   ...assetState,
                   isDeleted: true,
                 };
-                void handleAssetSave(assetId, updatedState);
+                void handleAssetSave(updatedState, assetId);
               }}
             >
               <MdDeleteOutline size={24} />
@@ -120,22 +144,45 @@ export function AssetEdit() {
   );
 }
 
-function handleAssetSave(assetId: string, assetValues: RecordDraftAssetSchema) {
+function handleAssetSave(
+  assetValues: RecordDraftAssetSchema,
+  assetId?: string
+) {
+  if (assetId === undefined) {
+    const { date, name, institution } = assetValues;
+    assetId = `${date}.${institution}.${name}`;
+  }
+  // TODO create assetId for new asset (id not provided)
   const recordDraft = RecordDraft.instance;
   if (!recordDraft) throw Error("recordDraft instance not exist");
   const currentValues = recordDraft.getAssetData(assetId);
 
   const keys = new Set([
     ...Object.keys(assetValues),
-    ...Object.keys(currentValues),
+    ...(currentValues ? Object.keys(currentValues) : []), // fix
   ]);
 
   for (const key of keys as Set<keyof RecordDraftAssetSchema>) {
-    if (assetValues[key] !== currentValues[key]) {
-      return recordDraft.saveAsset(assetId, { ...assetValues, isDirty: true }); // FIX compare with "original draft state" which needs to be created. Now dirty state is wrong
+    if (currentValues && assetValues[key] !== currentValues[key]) {
+      return recordDraft.saveAsset(assetId, { ...assetValues, isDirty: true });
     }
   }
   return recordDraft.saveAsset(assetId, { ...assetValues, isDirty: false });
+}
+
+function getInstitutionAssetsNames(institutionId: string) {
+  const recordDraft = RecordDraft.instance;
+  if (!recordDraft) throw Error("recordDraft instance not exist");
+  const institutionAssets = recordDraft.getInstitutionAssets(institutionId);
+  if (institutionAssets.length === 0) return undefined;
+  const assetNames: string[] = [];
+  institutionAssets.forEach((assetId) => {
+    const assetData = recordDraft.getAssetData(assetId);
+    if (assetData) {
+      assetNames.push(assetData.name);
+    }
+  });
+  return assetNames;
 }
 
 export type AssetInputsProps<Value> = {
@@ -143,6 +190,7 @@ export type AssetInputsProps<Value> = {
   value: Value;
   disabled?: boolean;
   inputKey?: string;
+  autoFocus?: boolean;
 };
 
 /* ---------- CODE BLOCK: Description ----------

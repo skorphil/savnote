@@ -14,6 +14,7 @@ import type {
   JournalSchema2,
   QuotesSchema2,
   AssetSchema2,
+  InstiutionSchema2,
 } from "./journalSchema2";
 
 export {
@@ -32,4 +33,5 @@ export type {
   RecordsSchema2 as RecordsSchema,
   QuotesSchema2 as QuotesSchema,
   AssetSchema2 as AssetSchema,
+  InstiutionSchema2 as InstiutionSchema,
 };

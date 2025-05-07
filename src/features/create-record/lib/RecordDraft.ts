@@ -5,6 +5,7 @@ import type {
   RecordDraftQuotesSchema,
 } from "../model/recordDraftSchema";
 import {
+  recordDraftRelationships,
   recordDraftStore,
   useRecordDraftLocalRowIds,
   useRecordDraftRow,
@@ -120,8 +121,17 @@ export class RecordDraft {
     return RecordDraft.store.getRow("institutions", institutionId);
   }
 
+  getInstitutionAssets(institutionId: string) {
+    return recordDraftRelationships.getLocalRowIds(
+      "assetsInstitution",
+      institutionId
+    );
+  }
+
   getAssetData(assetId: string) {
-    return RecordDraft.store.getRow("assets", assetId);
+    const assetData = RecordDraft.store.getRow("assets", assetId);
+    if (Object.keys(assetData).length === 0) return undefined;
+    return validateRecordDraftAsset(assetData);
   }
 
   async getQuotes(

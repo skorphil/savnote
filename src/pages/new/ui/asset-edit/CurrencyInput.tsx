@@ -1,7 +1,7 @@
 import { ListInput } from "konsta/react";
 import type { AssetInputsProps } from "./AssetEdit";
 import type { ChangeEvent } from "react";
-import type { AssessmentAction } from "./useAssetState";
+import type { AssessmentAction } from "./useAssetDispatch";
 import { ReadOnlyInput } from "./ReadOnlyInput";
 
 /**

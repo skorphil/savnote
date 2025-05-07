@@ -13,7 +13,11 @@ import {
   useJournalResultTable,
   useJournalSliceIds,
 } from "../model/JournalStore";
-import { validateJournal, validateRecord } from "../model/validateJournal";
+import {
+  validateInstitution,
+  validateJournal,
+  validateRecord,
+} from "../model/validateJournal";
 // import { createEncryptionKey } from "./encryptionUtils";
 import { readJournal } from "./readJournal";
 import { writeStringToFile } from "./writeStringToFile";
@@ -128,6 +132,13 @@ export class Journal {
   }
   getEncryptionParameters() {
     return this.encryption?.derivedKeyAlgorithmName || null;
+  }
+
+  getInstitution(institutionId: string) {
+    const institutionData = validateInstitution(
+      this.store.getRow("institutions", institutionId)
+    );
+    return institutionData;
   }
 
   getLatestRecord() {

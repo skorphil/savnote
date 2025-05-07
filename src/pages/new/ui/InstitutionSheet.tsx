@@ -76,6 +76,9 @@ export function InstitutionSheet() {
               <Fab
                 icon={<MdAdd />}
                 text="New asset"
+                onClick={() => {
+                  void navigate("assets/create", { viewTransition: true });
+                }}
                 colors={{
                   bgMaterial:
                     "bg-md-light-secondary-container dark:bg-md-dark-secondary-container",
