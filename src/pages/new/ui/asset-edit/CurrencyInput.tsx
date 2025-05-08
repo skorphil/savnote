@@ -18,13 +18,16 @@ export function CurrencyInput(props: AssetInputsProps<string>) {
     <ListInput
       outline
       type="select"
-      className="w-12"
+      // className="w-20"
       label={label}
       value={value}
       onChange={(e: ChangeEvent<HTMLInputElement>) =>
         handleCurrencyChange(e.target.value, assetDispatch)
       }
     >
+      <option value="" disabled hidden>
+        Select...
+      </option>
       <option value="usd">USD</option>
       <option value="rub">RUB</option>
       <option value="amd">AMD</option>

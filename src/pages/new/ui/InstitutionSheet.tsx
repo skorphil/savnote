@@ -3,7 +3,7 @@ import { Badge, Fab, List, ListItem, Link } from "konsta/react";
 import { Sheet } from "react-modal-sheet";
 import { useNavigate, useParams, type NavigateFunction } from "react-router";
 import type { ValueIds } from "@/features/create-record";
-import { useState } from "react";
+import { type ReactElement, useState } from "react";
 import { BottomAppBar } from "./BottomAppBar";
 import { MdAdd, MdDeleteOutline } from "react-icons/md";
 
@@ -135,8 +135,15 @@ function AssetListItem({
   const recordDraft = RecordDraft.instance;
   if (!recordDraft) return;
 
-  const { name, amount, currency, description, isDirty, isDeleted } =
+  const { name, amount, currency, description, isDirty, isDeleted, isNew } =
     recordDraft.useInstitutionAsset(assetId);
+
+  let badge: ReactElement | undefined;
+
+  if (isNew) badge = <Badge colors={{ bg: "bg-neutral-600" }}>new</Badge>;
+  if (isDirty && !isNew)
+    badge = <Badge colors={{ bg: "bg-neutral-600" }}>updated</Badge>;
+
   return (
     <ListItem
       colors={
@@ -151,7 +158,7 @@ function AssetListItem({
       // media={<MdMoney className="opacity-70" size={24} />}
       strongTitle={false}
       header={name}
-      after={isDirty && <Badge colors={{ bg: "bg-green-800" }}>upd</Badge>}
+      after={badge}
       footer={description}
       title={`${amount} ${currency}`}
       onClick={() =>

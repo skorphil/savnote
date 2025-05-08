@@ -15,7 +15,7 @@ const defaultState: RecordDraftAssetSchema = {
   isEarning: false,
   description: "",
   isDirty: false,
-  isNew: false,
+  isNew: true,
   isDeleted: false,
 };
 

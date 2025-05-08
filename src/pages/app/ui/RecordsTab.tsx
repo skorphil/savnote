@@ -1,5 +1,6 @@
 import { Journal } from "@/entities/journal";
 import { Preferences } from "@/entities/user-config";
+import { RecordDraft } from "@/features/create-record";
 import { unixToHumanReadable } from "@/shared/lib/date-time-format";
 import { Link, List, ListItem, Navbar } from "konsta/react";
 import { MdExitToApp } from "react-icons/md";
@@ -48,5 +49,6 @@ export { RecordsTab };
 
 function handleJournalExit() {
   Journal.delete();
+  RecordDraft.delete();
   new Preferences().deleteValue("currentJournalDirectory");
 }

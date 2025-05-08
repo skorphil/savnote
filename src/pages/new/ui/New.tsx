@@ -49,11 +49,6 @@ export function New() {
       <Navbar
         left={
           <Link navbar onClick={() => void navigate(-1)}>
-            {/* 
-              navigate -1 somehow navigate to /new, not before. 
-              When sheet is closed by drag.
-              Needed to navigate -1 on sheet close instead of to /app to make it work 
-            */}
             <MdArrowBack size={24} />
           </Link>
         }
@@ -105,6 +100,7 @@ export function New() {
 async function handleRecordSave() {
   const recordDraft = RecordDraft.instance;
   if (!recordDraft) return;
+  // TODO handle Quote parsing error
   const recordData = await recordDraft.getRecordData();
   Journal.instance?.addRecord(recordData);
   RecordDraft.delete();
