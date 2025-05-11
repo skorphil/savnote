@@ -1,5 +1,5 @@
 import { Button, Page, Link, Navbar, BlockTitle, Block } from "konsta/react";
-import { MdArrowBack, MdInfoOutline } from "react-icons/md";
+import { MdArrowBack, MdDone, MdInfoOutline } from "react-icons/md";
 import { Outlet, useNavigate, useParams } from "react-router";
 
 import { unixToHumanReadable } from "@/shared/lib/date-time-format";
@@ -52,18 +52,19 @@ export function New() {
             <MdArrowBack size={24} />
           </Link>
         }
-        title="New record"
-        subtitle="Draft saved"
+        title="New entry"
+        subtitle="Pre-filled from 31 May 2024"
         right={
           <div className="pr-3">
             <Button
-              className="min-w-32"
+              className="min-w-26 gap-2"
               rounded
               onClick={() => {
                 handleRecordSave().catch((e) => throwError(e));
                 void navigate("/app");
               }}
             >
+              <MdDone size={24} />
               Save
             </Button>
           </div>

@@ -11,7 +11,10 @@ import {
   useRecordDraftRow,
   useRecordDraftTable,
 } from "../model/RecordDraftStore";
-import { validateRecordDraftAsset } from "../model/validateRecordDraft";
+import {
+  validateRecordDraftAsset,
+  validateRecordDraftInstitution,
+} from "../model/validateRecordDraft";
 import { validateRecord } from "@/entities/journal";
 
 /**
@@ -77,11 +80,19 @@ export class RecordDraft {
       throw Error("RecordDraft is empty");
     const cleanedAssets: Record<string, object> = {};
     Object.values(assets).forEach((asset) => {
+      /* ---------- CODE BLOCK: Ignore deleted institution assets ---------- */
+      const institutionDeleted = this.getInstitutionData(
+        `${asset.date}.${asset.institution}`
+      )?.isDeleted;
       const { isDirty, isDeleted, isNew, ...assetData } = asset;
-      if (isDeleted) return;
+      void [isDirty, isNew];
+      if (isDeleted || institutionDeleted) return;
       const { institution, name } = assetData;
-      void [isDirty, isDeleted, isNew];
-      cleanedAssets[`${date}.${institution}.${name}`] = { ...assetData, date };
+
+      cleanedAssets[`${date}.${institution}.${name}`] = {
+        ...assetData,
+        date,
+      };
     });
 
     const cleanedInstitutions: Record<string, object> = {};
@@ -89,7 +100,7 @@ export class RecordDraft {
       const { isDirty, isDeleted, isNew, ...institutionData } = institution;
       if (isDeleted) return;
       const { name } = institutionData;
-      void [isDirty, isDeleted, isNew];
+      void [isDirty, isNew];
       cleanedInstitutions[`${date}.${name}`] = { ...institutionData, date };
     });
 
@@ -109,8 +120,12 @@ export class RecordDraft {
     return useRecordDraftLocalRowIds("assetsInstitution", institutionId);
   }
 
-  useInstitutionAsset(assetId: string) {
+  useAssetData(assetId: string) {
     return useRecordDraftRow("assets", assetId);
+  }
+
+  useInstitutionData(institutionId: string) {
+    return useRecordDraftRow("institutions", institutionId);
   }
 
   useInstitutions() {
@@ -118,7 +133,12 @@ export class RecordDraft {
   }
 
   getInstitutionData(institutionId: string) {
-    return RecordDraft.store.getRow("institutions", institutionId);
+    const institutionData = RecordDraft.store.getRow(
+      "institutions",
+      institutionId
+    );
+    if (Object.keys(institutionData).length === 0) return undefined;
+    return validateRecordDraftInstitution(institutionData);
   }
 
   getInstitutionAssets(institutionId: string) {
@@ -128,7 +148,7 @@ export class RecordDraft {
     );
   }
 
-  getAssetData(assetId: string) {
+  getAssetData(assetId: string): RecordDraftAssetSchema | undefined {
     const assetData = RecordDraft.store.getRow("assets", assetId);
     if (Object.keys(assetData).length === 0) return undefined;
     return validateRecordDraftAsset(assetData);
@@ -170,13 +190,31 @@ export class RecordDraft {
     RecordDraft.store.setRow("assets", assetId, validatedAssetValues);
   }
 
+  saveInstitution(
+    institutionId: string,
+    institutionValues: RecordDraftInstitutionSchema
+  ) {
+    const validatedInstitutionValues =
+      validateRecordDraftInstitution(institutionValues);
+    RecordDraft.store.setRow(
+      "institutions",
+      institutionId,
+      validatedInstitutionValues
+    );
+  }
+
   /* ---------- CODE BLOCK: Private utilities ---------- */
   private getBaseCurrencies() {
     const assets = RecordDraft.store.getTable("assets");
     const baseCurrencies = new Set<string>();
-    Object.values(assets).forEach(
-      (asset) => asset.currency && baseCurrencies.add(asset.currency)
-    );
+    Object.values(assets).forEach((asset) => {
+      /* ---------- CODE BLOCK: Ignore assets for deleted institutions ---------- */
+      const institutionDeleted = this.getInstitutionData(
+        `${asset.date}.${asset.institution}`
+      )?.isDeleted;
+      if (asset.currency && !asset.isDeleted && !institutionDeleted)
+        baseCurrencies.add(asset.currency);
+    });
     return Array.from(baseCurrencies);
   }
 

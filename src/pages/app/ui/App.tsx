@@ -1,6 +1,13 @@
 import { Page, Tabbar, Icon, TabbarLink, Fab } from "konsta/react";
 import { useState } from "react";
-import { MdAdd, MdAssessment, MdSettings, MdViewList } from "react-icons/md";
+import {
+  // MdAdd,
+  MdAssessment,
+  MdEditNote,
+  // MdNoteAdd,
+  MdSettings,
+  MdViewList,
+} from "react-icons/md";
 import OverviewTab from "./OverviewTab";
 import { RecordsTab } from "./RecordsTab";
 import { useNavigate } from "react-router";
@@ -16,8 +23,10 @@ function App() {
     <Page className="no-scrollbar pb-24-safe">
       <Fab
         className="fixed right-4-safe bottom-24-safe z-20"
-        icon={<MdAdd />}
-        text="Add record"
+        // icon={<MdNoteAdd />}
+        // text="Add savings entry"
+        icon={<MdEditNote />}
+        text="Resume savings entry"
         textPosition="after"
         onClick={() => {
           void navigate("/newrecord", { viewTransition: true });

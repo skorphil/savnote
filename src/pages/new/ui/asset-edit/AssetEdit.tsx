@@ -3,7 +3,7 @@ import {
   type RecordDraftAssetSchema,
 } from "@/features/create-record";
 import { Button, Card, Link, List, Navbar, Page } from "konsta/react";
-import { MdArrowBack, MdDeleteOutline } from "react-icons/md";
+import { MdClose, MdDeleteOutline } from "react-icons/md";
 import { useLoaderData, useNavigate } from "react-router";
 import { AmountInput } from "./AmountInput";
 import { useAssetDispatch, type AssessmentAction } from "./useAssetDispatch";
@@ -43,20 +43,20 @@ export function AssetEdit() {
   const topBarCTA = !isDeleted ? (
     <Button
       disabled={errors.length === 0 ? false : true}
-      outline
-      className="min-w-24"
+      clear
+      // className="min-w-20"
       rounded
       onClick={() => {
         handleAssetSave(assetState, assetId);
         void navigate(-1);
       }}
     >
-      Save
+      Save asset
     </Button>
   ) : (
     <Button
-      outline
-      className="min-w-24"
+      // outline
+      // className="min-w-24"
       rounded
       onClick={() => {
         assetDispatch({
@@ -65,7 +65,7 @@ export function AssetEdit() {
         });
       }}
     >
-      Restore
+      Restore asset
     </Button>
   );
 
@@ -74,14 +74,14 @@ export function AssetEdit() {
       <Navbar
         left={
           <Link navbar onClick={() => void navigate(-1)}>
-            <MdArrowBack size={24} />
+            <MdClose size={24} />
           </Link>
         }
         title={"Edit asset"}
         subtitle={`${institution} / ${name}`}
         right={<div className="pr-3">{topBarCTA}</div>}
         colors={{ bgMaterial: "bg-transparent" }}
-        className="top-0"
+        className="top-0 bg-neutral-800"
         transparent={false}
       />
       <List>
@@ -152,14 +152,14 @@ function handleAssetSave(
     const { date, name, institution } = assetValues;
     assetId = `${date}.${institution}.${name}`;
   }
-  // TODO create assetId for new asset (id not provided)
+  // TODO compare current values with initial to define isDirty
   const recordDraft = RecordDraft.instance;
   if (!recordDraft) throw Error("recordDraft instance not exist");
   const currentValues = recordDraft.getAssetData(assetId);
 
   const keys = new Set([
     ...Object.keys(assetValues),
-    ...(currentValues ? Object.keys(currentValues) : []), // fix
+    ...(currentValues ? Object.keys(currentValues) : []),
   ]);
 
   for (const key of keys as Set<keyof RecordDraftAssetSchema>) {

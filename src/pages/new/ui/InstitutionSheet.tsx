@@ -2,32 +2,91 @@ import { RecordDraft } from "@/features/create-record";
 import { Badge, Fab, List, ListItem, Link } from "konsta/react";
 import { Sheet } from "react-modal-sheet";
 import { useNavigate, useParams, type NavigateFunction } from "react-router";
-import type { ValueIds } from "@/features/create-record";
+import type {
+  RecordDraftInstitutionSchema,
+  ValueIds,
+} from "@/features/create-record";
 import { type ReactElement, useState } from "react";
 import { BottomAppBar } from "./BottomAppBar";
-import { MdAdd, MdDeleteOutline } from "react-icons/md";
+import {
+  MdAdd,
+  MdDeleteOutline,
+  MdInfoOutline,
+  MdRestore,
+} from "react-icons/md";
+import { validateRecordDraftInstitution } from "@/features/create-record/model/validateRecordDraft";
 
 export function InstitutionSheet() {
   const navigate = useNavigate();
   const { institutionId } = useParams();
   const [isOpen, setIsOpen] = useState<boolean>(true);
-  if (!institutionId) return;
+  if (!institutionId) return null;
   const recordDraftInstance = RecordDraft.instance;
+  if (!recordDraftInstance) return navigate("/newrecord", { replace: true });
   const institutionAssetsIds =
-    recordDraftInstance?.useInstitutionAssets(institutionId);
-  const institutionData =
-    recordDraftInstance?.getInstitutionData(institutionId);
-  // let flag: string;
-  // switch (institutionData?.country) {
-  //   case "ru":
-  //     flag = "🇷🇺";
-  //     break;
-  //   case "am":
-  //     flag = "🇦🇲";
-  //     break;
-  //   default:
-  //     flag = "🌍";
-  // }
+    recordDraftInstance.useInstitutionAssets(institutionId);
+  let institutionData: RecordDraftInstitutionSchema;
+  try {
+    institutionData = validateRecordDraftInstitution(
+      recordDraftInstance.useInstitutionData(institutionId)
+    );
+  } catch (e) {
+    void e;
+    return navigate("/newrecord", { replace: true });
+  }
+
+  const bottomLeftButtons = institutionData.isDeleted
+    ? [
+        <Link
+          onClick={() => {
+            const updatedState = {
+              ...institutionData,
+              isDeleted: false,
+            };
+            void handleInstitutionSave(updatedState, institutionId);
+          }}
+          navbar
+        >
+          <MdRestore size={24} />
+        </Link>,
+      ]
+    : [
+        <Link
+          onClick={() => {
+            setIsOpen(false);
+            void navigate("/newrecord", { replace: true });
+
+            const updatedState = {
+              ...institutionData,
+              isDeleted: true,
+            };
+            void handleInstitutionSave(updatedState, institutionId);
+          }}
+          navbar
+        >
+          <MdDeleteOutline size={24} />
+        </Link>,
+      ];
+
+  const bottomFab = institutionData.isDeleted ? (
+    <div className="opacity-40 text-sm flex flex-row gap-1 items-center">
+      <MdInfoOutline size={24} />
+      <span>Restore institution to edit it</span>
+    </div>
+  ) : (
+    <Fab
+      icon={<MdAdd />}
+      text="Add asset"
+      onClick={() => {
+        void navigate("assets/create", { viewTransition: true });
+      }}
+      colors={{
+        bgMaterial:
+          "bg-md-light-secondary-container dark:bg-md-dark-secondary-container",
+      }}
+      textPosition="after"
+    />
+  );
 
   return (
     <Sheet
@@ -66,26 +125,9 @@ export function InstitutionSheet() {
             )}
           </ul>
           <BottomAppBar
-            leftButtons={[
-              <Link navbar>
-                <MdDeleteOutline size={24} />
-              </Link>,
-            ]}
+            leftButtons={bottomLeftButtons}
             bg="bg-[#313131]"
-            fab={
-              <Fab
-                icon={<MdAdd />}
-                text="New asset"
-                onClick={() => {
-                  void navigate("assets/create", { viewTransition: true });
-                }}
-                colors={{
-                  bgMaterial:
-                    "bg-md-light-secondary-container dark:bg-md-dark-secondary-container",
-                }}
-                textPosition="after"
-              />
-            }
+            fab={bottomFab}
           />
           <Sheet.Scroller className="pb-[40px]">
             <List className="mt-4 mb-14">
@@ -100,6 +142,7 @@ export function InstitutionSheet() {
                       key={assetId}
                       navigate={navigate}
                       assetId={assetId as ValueIds<"assets">}
+                      disabled={institutionData.isDeleted}
                     /> // TODO Improve typings
                   );
                 })}
@@ -114,6 +157,7 @@ export function InstitutionSheet() {
                       key={assetId}
                       navigate={navigate}
                       assetId={assetId as ValueIds<"assets">}
+                      disabled={institutionData.isDeleted}
                     /> // TODO Improve typings
                   );
                 })}
@@ -128,42 +172,84 @@ export function InstitutionSheet() {
 function AssetListItem({
   assetId,
   navigate,
+  disabled, // why its undefined? i passed true
 }: {
   assetId: ValueIds<"assets">;
   navigate: NavigateFunction;
+  disabled?: boolean;
 }) {
   const recordDraft = RecordDraft.instance;
   if (!recordDraft) return;
 
   const { name, amount, currency, description, isDirty, isDeleted, isNew } =
-    recordDraft.useInstitutionAsset(assetId);
+    recordDraft.useAssetData(assetId);
 
   let badge: ReactElement | undefined;
 
   if (isNew) badge = <Badge colors={{ bg: "bg-neutral-600" }}>new</Badge>;
-  if (isDirty && !isNew)
+  if (isDirty && !isNew && !isDeleted)
     badge = <Badge colors={{ bg: "bg-neutral-600" }}>updated</Badge>;
 
   return (
     <ListItem
-      colors={
-        isDeleted
+      colors={{
+        ...(isDeleted
           ? {
               primaryTextMaterial: "text-neutral-500 line-through",
               secondaryTextMaterial: "text-neutral-500 line-through",
             }
-          : {}
-      }
-      link
-      // media={<MdMoney className="opacity-70" size={24} />}
+          : {}),
+        ...(disabled
+          ? {
+              primaryTextMaterial: "text-neutral-500 line-through",
+              secondaryTextMaterial: "text-neutral-500 line-through",
+            }
+          : {}),
+      }}
+      link={!disabled}
       strongTitle={false}
       header={name}
       after={badge}
       footer={description}
       title={`${amount} ${currency}`}
-      onClick={() =>
-        void navigate(`assets/${assetId}/edit`, { viewTransition: true })
+      onClick={
+        !disabled
+          ? () =>
+              void navigate(`assets/${assetId}/edit`, { viewTransition: true })
+          : undefined
       }
     />
   );
+}
+
+function handleInstitutionSave(
+  institutionValues: RecordDraftInstitutionSchema,
+  institutionId?: string
+) {
+  if (institutionId === undefined) {
+    const { date, name } = institutionValues;
+    institutionId = `${date}.${name}`;
+  }
+  // TODO compare current values with initial to define isDirty
+  const recordDraft = RecordDraft.instance;
+  if (!recordDraft) throw Error("recordDraft instance not exist");
+  const currentValues = recordDraft.getInstitutionData(institutionId);
+
+  const keys = new Set([
+    ...Object.keys(institutionId),
+    ...(currentValues ? Object.keys(currentValues) : []),
+  ]);
+
+  for (const key of keys as Set<keyof RecordDraftInstitutionSchema>) {
+    if (currentValues && institutionValues[key] !== currentValues[key]) {
+      return recordDraft.saveInstitution(institutionId, {
+        ...institutionValues,
+        isDirty: true,
+      });
+    }
+  }
+  return recordDraft.saveInstitution(institutionId, {
+    ...institutionValues,
+    isDirty: false,
+  });
 }

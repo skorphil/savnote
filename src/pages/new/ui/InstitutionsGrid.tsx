@@ -18,7 +18,9 @@ export function InstitutionsGrid(props: InstitutionsGridProps) {
         <Card
           key={institutionId}
           outline={institutionId === selectedInstitutionId}
-          className={styles.institutionCard}
+          className={`${styles.institutionCard} ${
+            institution.isDeleted && "line-through opacity-40" // fix
+          }`}
           onClick={() =>
             void navigate(`/newrecord/institutions/${institutionId}`, {
               replace: true,
