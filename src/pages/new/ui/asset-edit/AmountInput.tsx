@@ -25,6 +25,10 @@ export function AmountInput(props: AssetInputsProps<number>) {
     <NumericFormat
       getInputRef={inputRef}
       outline
+      isAllowed={(values) => {
+        const { floatValue } = values;
+        return floatValue ? floatValue > 0 : false;
+      }}
       colors={disabled ? { bgMaterial: "transparent" } : {}}
       label={label}
       thousandSeparator={" "}
@@ -39,6 +43,7 @@ function handleAmountChange(
   value: string,
   assetDispatch: React.Dispatch<AssessmentAction>
 ) {
+  if (Number(value) < 0) return;
   // TODO validate ZOD
   assetDispatch({
     type: "update_value",

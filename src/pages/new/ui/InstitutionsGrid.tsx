@@ -7,7 +7,6 @@ import type { Table } from "tinybase/store";
 type InstitutionsGridProps = {
   institutions: Table;
   navigate: NavigateFunction;
-  // isInstitutionSelected: boolean;
 };
 export function InstitutionsGrid(props: InstitutionsGridProps) {
   const { institutionId: selectedInstitutionId } = useParams();
