@@ -1,6 +1,4 @@
-<div align="center">
-  <img src=".github/savnote.png" alt="SavNote" />
-</div>
+<img src=".github/savnote.png" alt="SavNote" />
 
 # ⚠️ UNDER DEVOLOPMENT
 App is on the early stage of development. Currently not available for use. Star project if you are interested – this will motivate me to work harder. Contributions are welcome – reach out to me by opening an issue.
