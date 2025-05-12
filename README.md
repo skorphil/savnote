@@ -1,5 +1,5 @@
 <div align="center">
-  <img src=".github/savnote.png" alt="SavNote" style="max-width: 160px; max-height: 160px;" />
+  <img src=".github/savnote.png" alt="SavNote" />
 </div>
 
 # ⚠️ UNDER DEVOLOPMENT
