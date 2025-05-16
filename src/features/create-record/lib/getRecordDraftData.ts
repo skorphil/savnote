@@ -11,29 +11,32 @@ export function getRecordDraftData() {
     date,
   } = Journal.instance.getLatestRecord();
 
-  /* ---------- CODE BLOCK: Add isDirty property to draft entities ---------- */
+  /* ---------- CODE BLOCK: Convert Journal entries to recordDraft entries ---------- */
   const recordDraftInstitutions: Record<string, RecordDraftInstitutionSchema> =
     {};
-  Object.entries(institutions).forEach(
-    ([institutionId, institutionData]) =>
-      (recordDraftInstitutions[institutionId] = {
-        ...institutionData,
-        isDirty: false,
-        isDeleted: false,
-        isNew: false,
-      })
-  );
+  Object.values(institutions).forEach(({ date, name, ...data }) => {
+    void date;
+    recordDraftInstitutions[name] = {
+      ...data,
+      name,
+      isDirty: false,
+      isDeleted: false,
+      isNew: false,
+    };
+  });
 
   const recordDraftAssets: Record<string, RecordDraftAssetSchema> = {};
-  Object.entries(assets).forEach(
-    ([assetId, assetData]) =>
-      (recordDraftAssets[assetId] = {
-        ...assetData,
-        isDirty: false,
-        isDeleted: false,
-        isNew: false,
-      })
-  );
+  Object.values(assets).forEach(({ date, name, institution, ...data }) => {
+    void date;
+    recordDraftAssets[`${institution}.${name}`] = {
+      ...data,
+      institution,
+      name,
+      isDirty: false,
+      isDeleted: false,
+      isNew: false,
+    };
+  });
 
   return {
     recordDraftData: {

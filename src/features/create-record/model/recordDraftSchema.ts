@@ -6,16 +6,20 @@ import {
 } from "@/shared/journal-schema";
 import { z } from "zod";
 
-const recordDraftAssetSchema = assetSchema.extend({
-  isDirty: z.boolean(),
-  isDeleted: z.boolean(),
-  isNew: z.boolean(),
-});
-const recordDraftInstitutionSchema = instiutionSchema.extend({
-  isDirty: z.boolean(),
-  isDeleted: z.boolean(),
-  isNew: z.boolean(),
-});
+const recordDraftAssetSchema = assetSchema
+  .extend({
+    isDirty: z.boolean(),
+    isDeleted: z.boolean(),
+    isNew: z.boolean(),
+  })
+  .omit({ date: true });
+const recordDraftInstitutionSchema = instiutionSchema
+  .extend({
+    isDirty: z.boolean(),
+    isDeleted: z.boolean(),
+    isNew: z.boolean(),
+  })
+  .omit({ date: true });
 
 const recordDraftQuoteSchema = quoteSchema;
 const recordDraftQuotesSchema = quotesSchema;

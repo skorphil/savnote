@@ -4,10 +4,9 @@ import {
   validateRecordDraftAsset,
   type RecordDraftAssetSchema,
 } from "@/features/create-record";
-import { Journal } from "@/entities/journal";
 
 const defaultState: RecordDraftAssetSchema = {
-  date: 0,
+  // date: 0,
   institution: "",
   name: "",
   amount: 0,
@@ -33,13 +32,11 @@ export function assetStateLoader({
 
   // if no assetId in uri, thats a new asset creation
   if (assetId === undefined) {
-    const { date: institutionDate, name: institutionName } =
-      getInstitutionData(institutionId);
+    const institutionName = institutionId;
     return {
       assetData: {
         ...defaultState,
         institution: institutionName,
-        date: institutionDate,
       },
       institutionId,
     };
@@ -48,13 +45,12 @@ export function assetStateLoader({
   const recordDraft = RecordDraft.resume();
   const recordDraftAssetState = recordDraft?.getAssetData(assetId);
   if (recordDraftAssetState === undefined) {
-    const { date: institutionDate, name: institutionName } =
-      getInstitutionData(institutionId);
+    const institutionName = institutionId;
     return {
       assetData: {
         ...defaultState,
         institution: institutionName,
-        date: institutionDate,
+        // date: institutionDate,
       },
       institutionId,
     };
@@ -67,8 +63,8 @@ export function assetStateLoader({
   return { assetData: validatedRecordDraftAsset, assetId, institutionId };
 }
 
-const getInstitutionData = (institutionId: string) => {
-  const journal = Journal.instance;
-  if (!journal) return redirect("/open") as never;
-  return journal.getInstitution(institutionId);
-};
+// const getJournalInstitutionData = (institutionId: string) => {
+//   const journal = Journal.instance;
+//   if (!journal) return redirect("/open") as never;
+//   return journal.getInstitution(institutionId);
+// };

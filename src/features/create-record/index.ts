@@ -3,6 +3,7 @@ export { validateRecordDraftAsset } from "./model/validateRecordDraft";
 export { getRecordDraftData } from "./lib/getRecordDraftData";
 export { RecordDraftStore } from "./model/RecordDraftStore";
 export { tinyBaseRecordDraftSchema } from "./model/tinyBaseRecordDraftSchema";
+export { removeDateFromId } from "./lib/removeDateFromId";
 
 export type { ValueIds } from "./model/RecordDraftStore";
 export type {

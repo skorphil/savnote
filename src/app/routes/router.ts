@@ -5,6 +5,7 @@ import { App } from "@/pages/app";
 import { New, AssetEdit, InstitutionSheet } from "@/pages/new";
 import { journalLoader } from "../loaders/journalLoader";
 import { assetStateLoader } from "@/pages/new/lib/assetStateLoader";
+import { InstitutionEdit } from "@/pages/new/ui/institution-edit/InstitutionEdit";
 // import { createRecordDraft } from "@/features/create-record";
 
 export const router = createBrowserRouter([
@@ -29,6 +30,12 @@ export const router = createBrowserRouter([
   {
     path: "newrecord/institutions/:institutionId/assets/:assetId/edit",
     Component: AssetEdit,
+    loader: assetStateLoader,
+  },
+
+  {
+    path: "newrecord/institutions/create",
+    Component: InstitutionEdit,
     loader: assetStateLoader,
   },
 

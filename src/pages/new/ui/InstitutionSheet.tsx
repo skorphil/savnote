@@ -135,7 +135,8 @@ export function InstitutionSheet() {
                 institutionAssetsIds.map((assetId) => {
                   const recordDraft = RecordDraft.resume();
                   if (!recordDraft) return;
-                  const { isDeleted } = recordDraft.getAssetData(assetId);
+                  const isDeleted =
+                    recordDraft.getAssetData(assetId)?.isDeleted;
                   if (isDeleted) return;
                   return (
                     <AssetListItem
@@ -150,7 +151,8 @@ export function InstitutionSheet() {
                 institutionAssetsIds.map((assetId) => {
                   const recordDraft = RecordDraft.resume();
                   if (!recordDraft) return;
-                  const { isDeleted } = recordDraft.getAssetData(assetId);
+                  const isDeleted =
+                    recordDraft.getAssetData(assetId)?.isDeleted;
                   if (!isDeleted) return;
                   return (
                     <AssetListItem
@@ -227,8 +229,8 @@ function handleInstitutionSave(
   institutionId?: string
 ) {
   if (institutionId === undefined) {
-    const { date, name } = institutionValues;
-    institutionId = `${date}.${name}`;
+    const { name } = institutionValues;
+    institutionId = `${name}`;
   }
   // TODO compare current values with initial to define isDirty
   const recordDraft = RecordDraft.instance;

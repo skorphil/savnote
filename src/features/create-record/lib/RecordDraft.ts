@@ -78,11 +78,13 @@ export class RecordDraft {
     const { assets, institutions } = RecordDraft.store.getTables();
     if (!assets || !institutions || !quotes)
       throw Error("RecordDraft is empty");
+
+    /* ---------- CODE BLOCK: Extract assets in Journal format ---------- */
     const cleanedAssets: Record<string, object> = {};
     Object.values(assets).forEach((asset) => {
       /* ---------- CODE BLOCK: Ignore deleted institution assets ---------- */
       const institutionDeleted = this.getInstitutionData(
-        `${asset.date}.${asset.institution}`
+        `${asset.institution}`
       )?.isDeleted;
       const { isDirty, isDeleted, isNew, ...assetData } = asset;
       void [isDirty, isNew];
@@ -95,6 +97,7 @@ export class RecordDraft {
       };
     });
 
+    /* ---------- CODE BLOCK: Extract institutions in Journal format ---------- */
     const cleanedInstitutions: Record<string, object> = {};
     Object.values(institutions).forEach((institution) => {
       const { isDirty, isDeleted, isNew, ...institutionData } = institution;
@@ -210,7 +213,7 @@ export class RecordDraft {
     Object.values(assets).forEach((asset) => {
       /* ---------- CODE BLOCK: Ignore assets for deleted institutions ---------- */
       const institutionDeleted = this.getInstitutionData(
-        `${asset.date}.${asset.institution}`
+        `${asset.institution}`
       )?.isDeleted;
       if (asset.currency && !asset.isDeleted && !institutionDeleted)
         baseCurrencies.add(asset.currency);

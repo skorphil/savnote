@@ -46,7 +46,7 @@ const assetsInstitutionRelationship: RelationshipDefinitionArgs<"assets"> = [
   "assetsInstitution",
   "assets",
   "institutions",
-  (getCell) => `${getCell("date")}.${getCell("institution")}`, //
+  (getCell) => `${getCell("institution")}`, //
 ];
 
 const recordDraftRelationshipsSchema = {
