@@ -1,7 +1,8 @@
-<img src=".github/savnote.png" alt="SavNote" />
-
-# ⚠️ UNDER DEVOLOPMENT
+### ⚠️ UNDER DEVOLOPMENT
 App is on the early stage of development. Currently not available for use. Star project if you are interested – this will motivate me to work harder. Contributions are welcome – reach out to me by opening an issue.
+
+---
+<img src=".github/savnote.png" alt="SavNote" />
 
 # SavNote – Private Savings Journal
 SavNote is an open-source app for tracking your personal savings.
@@ -12,17 +13,8 @@ How it works:
 By only recording the changes, you can quickly and easily update your savings records without having to re-enter all of your information each month.
 3. SavNote will store your records and provide a clear overview of your savings.
 
-Features:
-- Summary trend
-- Total value in chosen currency
-- Breakdown of savings by currency
-- Geographic distribution of savings (by country)
-- Distribution of savings across institutions (banks, brokers, or cryptocurrency wallets)
-- Earning assets to total assets ratio
-
 
 ## Core Values
-*SavNote* is built on the following core values:
 * **Data ownership**: You have full control over your data, which is stored locally on your device. Your savings data remains accessible even if you uninstall the app, and you can use it independently of *SavNote*.
 * **Data privacy**: Your data is encrypted and protected by a password, ensuring that only you can access it.
 * **Android-first**: Android-centric design, focusing on delivering a seamless and intuitive mobile experience.
@@ -30,7 +22,7 @@ Features:
 
 
 ## Project Vision  
-Read more about vision of SavNote in [VISION.md](VISION.md).
+Read more about vision of SavNote in [wiki | vision](https://github.com/skorphil/savnote/wiki/SavNote-Vision).
 
 
 ## Contributing
