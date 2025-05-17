@@ -1,8 +1,8 @@
 import {
   assetSchema,
   quoteSchema,
-  instiutionSchema,
   quotesSchema,
+  institutionSchema,
 } from "@/shared/journal-schema";
 import { z } from "zod";
 
@@ -13,7 +13,7 @@ const recordDraftAssetSchema = assetSchema
     isNew: z.boolean(),
   })
   .omit({ date: true });
-const recordDraftInstitutionSchema = instiutionSchema
+const recordDraftInstitutionSchema = institutionSchema
   .extend({
     isDirty: z.boolean(),
     isDeleted: z.boolean(),

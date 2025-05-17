@@ -9,6 +9,9 @@ const assetNameSchema = assetSchema.shape.name;
 const label = "Name";
 
 type NameInputProps = {
+  /**
+   * All asset names for given institution for current record
+   */
   institutionAssetsNames: string[] | undefined;
 };
 

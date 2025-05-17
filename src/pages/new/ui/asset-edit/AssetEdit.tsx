@@ -149,8 +149,8 @@ function handleAssetSave(
   assetId?: string
 ) {
   if (assetId === undefined) {
-    const { date, name, institution } = assetValues;
-    assetId = `${date}.${institution}.${name}`;
+    const { name, institution } = assetValues;
+    assetId = `${institution}.${name}`;
   }
   // TODO compare current values with initial to define isDirty
   const recordDraft = RecordDraft.instance;

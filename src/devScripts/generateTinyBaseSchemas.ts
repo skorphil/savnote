@@ -1,6 +1,6 @@
 import {
   assetSchema,
-  instiutionSchema,
+  institutionSchema,
   quoteSchema,
 } from "@/shared/journal-schema";
 
@@ -45,7 +45,7 @@ function generateRecordDraftSchema() {
 
 function generateRecordsSchema() {
   const records: TablesSchema = {
-    institutions: zObjectToTinyTable(instiutionSchema),
+    institutions: zObjectToTinyTable(institutionSchema),
     assets: zObjectToTinyTable(assetSchema),
     quotes: zObjectToTinyTable(quoteSchema),
   };

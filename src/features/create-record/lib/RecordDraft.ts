@@ -151,6 +151,11 @@ export class RecordDraft {
     );
   }
 
+  getInstitutions() {
+    const institutions = RecordDraft.store.getRowIds("institutions");
+    return institutions.length < 1 ? undefined : institutions;
+  }
+
   getAssetData(assetId: string): RecordDraftAssetSchema | undefined {
     const assetData = RecordDraft.store.getRow("assets", assetId);
     if (Object.keys(assetData).length === 0) return undefined;

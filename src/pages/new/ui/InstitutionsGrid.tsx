@@ -33,7 +33,7 @@ export function InstitutionsGrid(props: InstitutionsGridProps) {
       <Card
         key={"add-institution"}
         className={styles.institutionCard}
-        onClick={() => void navigate(``)} // TODO add Link
+        onClick={() => void navigate(`/newrecord/institutions/create`)}
       >
         <MdAdd className="m-auto" opacity={0.5} size={24} />
       </Card>

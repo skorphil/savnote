@@ -42,16 +42,5 @@ export function useAssetDispatch(
     errors: [],
   });
 
-  // useEffect(() => {
-  //   if (assetData) {
-  //     Object.entries(assetData).forEach(([key, value]) => {
-  //       assetDispatch({
-  //         type: "update_value",
-  //         payload: { property: key as keyof RecordDraftAssetSchema, value },
-  //       });
-  //     });
-  //   }
-  // }, [assetData]);
-
   return [assetState, assetDispatch];
 }

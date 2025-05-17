@@ -42,6 +42,7 @@ export function assetStateLoader({
     };
   }
 
+  /* ---------- CODE BLOCK: Get existing recordDraft asset data ---------- */
   const recordDraft = RecordDraft.resume();
   const recordDraftAssetState = recordDraft?.getAssetData(assetId);
   if (recordDraftAssetState === undefined) {

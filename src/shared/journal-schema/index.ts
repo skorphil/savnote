@@ -1,7 +1,7 @@
 import {
   journalSchema2,
   assetSchema2,
-  instiutionSchema2,
+  institutionSchema2,
   quoteSchema2,
   quotesSchema2,
   recordsSchema2,
@@ -14,13 +14,13 @@ import type {
   JournalSchema2,
   QuotesSchema2,
   AssetSchema2,
-  InstiutionSchema2,
+  InstitutionSchema2,
 } from "./journalSchema2";
 
 export {
   journalSchema2 as journalSchema,
   assetSchema2 as assetSchema,
-  instiutionSchema2 as instiutionSchema,
+  institutionSchema2 as institutionSchema,
   quoteSchema2 as quoteSchema,
   quotesSchema2 as quotesSchema,
   recordsSchema2 as recordsSchema,
@@ -33,5 +33,5 @@ export type {
   RecordsSchema2 as RecordsSchema,
   QuotesSchema2 as QuotesSchema,
   AssetSchema2 as AssetSchema,
-  InstiutionSchema2 as InstiutionSchema,
+  InstitutionSchema2 as InstitutionSchema,
 };

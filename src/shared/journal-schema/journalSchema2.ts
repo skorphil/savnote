@@ -4,7 +4,7 @@ import { z } from "zod";
 Flattened schema to support tinyBase and probably SQLite in the future
 */
 
-const instiutionSchema2 = z.object({
+const institutionSchema2 = z.object({
   date: z.number().int(),
   name: z.string().refine((value) => !value.includes("."), {
     message: "Institution name must not contain a dot (.)",
@@ -68,7 +68,7 @@ const quotesSchema2 = z.record(quoteSchema2).refine(
 );
 
 const recordsSchema2 = z.object({
-  institutions: z.record(instiutionSchema2).refine(
+  institutions: z.record(institutionSchema2).refine(
     (data) => {
       const uniqueKeys = new Set<string>();
       for (const key in data) {
@@ -158,7 +158,7 @@ type MetaSchema2 = z.infer<typeof metaSchema2>;
 type EncryptionSchema2 = z.infer<typeof encryptionSchema2>;
 type QuotesSchema2 = z.infer<typeof quotesSchema2>;
 type AssetSchema2 = z.infer<typeof assetSchema2>;
-type InstiutionSchema2 = z.infer<typeof instiutionSchema2>;
+type InstitutionSchema2 = z.infer<typeof institutionSchema2>;
 
 export type {
   JournalSchema2,
@@ -167,13 +167,13 @@ export type {
   EncryptionSchema2,
   QuotesSchema2,
   AssetSchema2,
-  InstiutionSchema2,
+  InstitutionSchema2,
 };
 export {
   quotesSchema2,
   recordsSchema2,
   assetSchema2,
-  instiutionSchema2,
+  institutionSchema2,
   quoteSchema2,
   journalSchema2,
   encryptionSchema2,

@@ -2,12 +2,12 @@ import { ZodError } from "zod";
 import type {
   RecordsSchema,
   JournalSchema,
-  InstiutionSchema,
+  InstitutionSchema,
 } from "@/shared/journal-schema";
 import {
   journalSchema,
   recordsSchema,
-  instiutionSchema,
+  institutionSchema,
 } from "@/shared/journal-schema";
 import { throwError } from "@/shared/error-handling";
 
@@ -42,9 +42,9 @@ export function validateRecord(data: object): RecordsSchema {
   }
 }
 
-export function validateInstitution(data: object): InstiutionSchema {
+export function validateInstitution(data: object): InstitutionSchema {
   try {
-    return instiutionSchema.parse(data);
+    return institutionSchema.parse(data);
   } catch (e) {
     if (e instanceof ZodError) {
       throw Error(
