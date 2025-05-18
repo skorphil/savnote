@@ -7,6 +7,7 @@ import { journalLoader } from "../loaders/journalLoader";
 import { assetStateLoader } from "@/pages/new/lib/assetStateLoader";
 import { InstitutionEdit } from "@/pages/new/ui/institution-edit/InstitutionEdit";
 import { institutionStateLoader } from "@/pages/new/lib/institutionStateLoader";
+import { CreateJournal } from "@/pages/create-journal";
 // import { createRecordDraft } from "@/features/create-record";
 
 export const router = createBrowserRouter([
@@ -20,6 +21,11 @@ export const router = createBrowserRouter([
         Component: InstitutionSheet,
       },
     ],
+  },
+
+  {
+    path: "create",
+    Component: CreateJournal,
   },
 
   {

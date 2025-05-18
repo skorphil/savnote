@@ -145,6 +145,7 @@ const metaSchema2 = z.object({
   version: z.literal(2),
   name: z.string(),
   id: z.string(),
+  description: z.string().optional(),
 });
 
 const journalSchema2 = z.object({

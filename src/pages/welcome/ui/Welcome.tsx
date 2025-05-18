@@ -35,7 +35,7 @@ function Welcome() {
           innerClassName={itemClass}
           link
           onClick={() => {
-            console.log(crypto.randomUUID());
+            void navigate("/create");
           }}
           strongTitle={true}
           className="hairline-b relative"

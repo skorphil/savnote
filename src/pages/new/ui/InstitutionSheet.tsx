@@ -28,9 +28,8 @@ export function InstitutionSheet() {
     recordDraftInstance.useInstitutionAssets(institutionId);
   let institutionData: RecordDraftInstitutionSchema;
   try {
-    institutionData = validateRecordDraftInstitution(
-      recordDraftInstance.useInstitutionData(institutionId)
-    );
+    const data = recordDraftInstance.useInstitutionData(institutionId);
+    institutionData = validateRecordDraftInstitution(data);
   } catch (e) {
     void e;
     return navigate("/newrecord", { replace: true }) as never;
