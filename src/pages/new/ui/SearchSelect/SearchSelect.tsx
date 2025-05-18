@@ -2,7 +2,7 @@ import { ListInput } from "konsta/react";
 import { useState } from "react";
 import { SearchDialog } from "./SearchDialog";
 
-type ComboBoxProps = {
+type SearchSelectProps = {
   onValueChange: (value: string | number) => unknown;
   data: readonly Record<string, unknown>[];
   outline?: boolean;
@@ -10,19 +10,38 @@ type ComboBoxProps = {
   value: string | number;
   required?: boolean;
   errors?: string[];
+  keysToSearch: string[];
+  subtitleKey?: string;
+  titleKey: string;
+  valueKey: string;
 };
 
 /**
- * New component
+ * Select input component (dropdown) with option search
  */
-function ComboBox(props: ComboBoxProps) {
-  const { data, onValueChange, outline, label, value, required, errors } =
-    props;
+export function SearchSelect(props: SearchSelectProps) {
+  const {
+    data,
+    onValueChange,
+    outline,
+    label,
+    value,
+    required,
+    errors,
+    keysToSearch,
+    titleKey,
+    valueKey,
+    subtitleKey,
+  } = props;
   const [isOpened, setIsOpened] = useState<boolean>(false);
   return (
     <>
       {isOpened && (
         <SearchDialog
+          titleKey={titleKey}
+          valueKey={valueKey}
+          subtitleKey={subtitleKey}
+          keysToSearch={keysToSearch}
           value={value}
           outline={outline}
           onClose={() => setIsOpened(false)}
@@ -38,16 +57,14 @@ function ComboBox(props: ComboBoxProps) {
         error={errors?.[0] || undefined}
         dropdown
         required={required}
-        value={value === "" ? "No country" : value}
+        readOnly
+        value={value}
         label={label}
         outline={outline}
         onClick={() => {
-          console.log("clicked on input");
           setIsOpened(true);
         }}
       />
     </>
   );
 }
-
-export default ComboBox;

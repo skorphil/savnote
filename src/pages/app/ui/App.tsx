@@ -3,7 +3,8 @@ import { useState } from "react";
 import {
   // MdAdd,
   MdAssessment,
-  MdEditNote,
+  // MdEditNote,
+  MdNoteAdd,
   // MdNoteAdd,
   MdSettings,
   MdViewList,
@@ -23,10 +24,10 @@ function App() {
     <Page className="no-scrollbar pb-24-safe">
       <Fab
         className="fixed right-4-safe bottom-24-safe z-20"
-        // icon={<MdNoteAdd />}
-        // text="Add savings entry"
-        icon={<MdEditNote />}
-        text="Resume savings entry"
+        // icon={<MdEditNote />}
+        // text="Resume savings entry"
+        icon={<MdNoteAdd />}
+        text="Add savings entry"
         textPosition="after"
         onClick={() => {
           void navigate("/newrecord", { viewTransition: true });

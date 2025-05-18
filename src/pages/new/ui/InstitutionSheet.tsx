@@ -22,7 +22,8 @@ export function InstitutionSheet() {
   const [isOpen, setIsOpen] = useState<boolean>(true);
   if (!institutionId) return null;
   const recordDraftInstance = RecordDraft.instance;
-  if (!recordDraftInstance) return navigate("/newrecord", { replace: true });
+  if (!recordDraftInstance)
+    return navigate("/newrecord", { replace: true }) as never;
   const institutionAssetsIds =
     recordDraftInstance.useInstitutionAssets(institutionId);
   let institutionData: RecordDraftInstitutionSchema;
@@ -32,7 +33,7 @@ export function InstitutionSheet() {
     );
   } catch (e) {
     void e;
-    return navigate("/newrecord", { replace: true });
+    return navigate("/newrecord", { replace: true }) as never;
   }
 
   const bottomLeftButtons = institutionData.isDeleted
@@ -181,7 +182,7 @@ function AssetListItem({
   disabled?: boolean;
 }) {
   const recordDraft = RecordDraft.instance;
-  if (!recordDraft) return;
+  if (!recordDraft) return null;
 
   const { name, amount, currency, description, isDirty, isDeleted, isNew } =
     recordDraft.useAssetData(assetId);

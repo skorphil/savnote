@@ -1,8 +1,8 @@
 import { ListInput } from "konsta/react";
 import type { AssetInputsProps } from "./AssetEdit";
 import { ReadOnlyInput } from "./ReadOnlyInput";
-import { type ChangeEvent, useState } from "react";
-import type { AssessmentAction } from "./useAssetDispatch";
+import { type ChangeEvent } from "react";
+import type { AssetAction } from "./useAssetDispatch";
 import { assetSchema } from "@/shared/journal-schema";
 
 const assetNameSchema = assetSchema.shape.name;
@@ -19,9 +19,15 @@ type NameInputProps = {
  * Asset name input
  */
 export function NameInput(props: AssetInputsProps<string> & NameInputProps) {
-  const { assetDispatch, value, disabled, autoFocus, institutionAssetsNames } =
-    props;
-  const [error, setError] = useState<string | undefined>(undefined);
+  const {
+    assetDispatch,
+    value,
+    disabled,
+    autoFocus,
+    institutionAssetsNames,
+    errors,
+  } = props;
+  // const [errors, setErrors] = useState<string[] | undefined>(errors);
 
   if (disabled) return <ReadOnlyInput label={label} value={value} />;
 
@@ -30,16 +36,19 @@ export function NameInput(props: AssetInputsProps<string> & NameInputProps) {
       required
       outline
       autoFocus={autoFocus}
-      error={error}
+      error={errors?.[0]}
       type="text"
       label={label}
       value={value}
       inputClassName="resize-none"
       onChange={(e: ChangeEvent<HTMLInputElement>) => {
-        setError(undefined);
+        // setError(undefined);
         assetDispatch({
-          type: "update_value",
-          payload: { property: "errors", value: [] },
+          type: "set_error",
+          payload: {
+            property: "name",
+            value: undefined,
+          },
         });
         const validationErrors = handleChange(
           assetDispatch,
@@ -47,12 +56,11 @@ export function NameInput(props: AssetInputsProps<string> & NameInputProps) {
           institutionAssetsNames
         );
         if (validationErrors) {
-          setError(validationErrors.join(","));
           assetDispatch({
-            type: "update_value",
+            type: "set_error",
             payload: {
-              property: "errors",
-              value: [...value, ...validationErrors],
+              property: "name",
+              value: validationErrors,
             },
           });
         }
@@ -62,7 +70,7 @@ export function NameInput(props: AssetInputsProps<string> & NameInputProps) {
 }
 
 function handleChange(
-  assetDispatch: React.Dispatch<AssessmentAction>,
+  assetDispatch: React.Dispatch<AssetAction>,
   value: string,
   institutionAssetsNames: string[] | undefined
 ) {

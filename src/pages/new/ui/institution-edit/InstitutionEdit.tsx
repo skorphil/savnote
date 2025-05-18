@@ -1,4 +1,8 @@
-import { NavigateFunction, useLoaderData, useNavigate } from "react-router";
+import {
+  type NavigateFunction,
+  useLoaderData,
+  useNavigate,
+} from "react-router";
 import type { institutionStateLoader } from "../../lib/institutionStateLoader";
 import {
   type ExtendedDraftInstitutionState,
@@ -9,13 +13,13 @@ import { InstitutionNameInput } from "./InstitutionNameInput";
 import { Link, List, ListItem, Navbar, Page, Toggle } from "konsta/react";
 import { MdClose } from "react-icons/md";
 import { RecordDraft } from "@/features/create-record";
-import ComboBox from "../ComboBox/ComboBox";
-import { countriesList } from "@/countries-names/countries";
+import { countriesList } from "@/shared/countries-names/countries";
 import { useState } from "react";
+import { SearchSelect } from "../SearchSelect";
 
 /**
- * New component
- *
+ * Fullscreen modal, containing institution form.
+ * Can be used for editing existing institution or creating new one.
  */
 export function InstitutionEdit() {
   const navigate = useNavigate();
@@ -79,7 +83,10 @@ export function InstitutionEdit() {
           }
         />
         {noCountry || (
-          <ComboBox
+          <SearchSelect
+            keysToSearch={["en"]}
+            titleKey="en"
+            valueKey="alpha2"
             errors={errors?.country || undefined}
             required
             value={country.length === 0 ? "Select country..." : country}

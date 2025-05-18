@@ -1,23 +1,41 @@
 import { type RecordDraftAssetSchema } from "@/features/create-record";
 import { useReducer } from "react";
 
-type ExtendedDraftAssetState = RecordDraftAssetSchema & { errors: string[] };
+type AssetFormErrors = Partial<
+  Record<
+    keyof Omit<RecordDraftAssetSchema, "isDeleted" | "isDirty" | "isNew">,
+    string[] | undefined
+  >
+>;
 
-type assetActionTypes = "update_value";
+export type ExtendedDraftAssetState = RecordDraftAssetSchema & {
+  errors?: AssetFormErrors;
+};
 
 type UpdateAssetValuePayload<T extends keyof ExtendedDraftAssetState> = {
   property: T;
   value: ExtendedDraftAssetState[T];
 };
 
-export type AssessmentAction = {
-  type: assetActionTypes;
-  payload: UpdateAssetValuePayload<keyof ExtendedDraftAssetState>;
+type AddErrorValuePayload = {
+  // how to get
+  property: keyof AssetFormErrors;
+  value: string[] | undefined;
 };
+
+export type AssetAction =
+  | {
+      type: "update_value";
+      payload: UpdateAssetValuePayload<keyof ExtendedDraftAssetState>;
+    }
+  | {
+      type: "set_error";
+      payload: AddErrorValuePayload;
+    };
 
 function assetReducer(
   assetState: ExtendedDraftAssetState,
-  action: AssessmentAction
+  action: AssetAction
 ) {
   const payload = action.payload;
 
@@ -26,6 +44,14 @@ function assetReducer(
       return {
         ...assetState,
         [payload.property]: payload.value,
+      };
+    case "set_error":
+      return {
+        ...assetState,
+        errors: {
+          ...assetState.errors,
+          [payload.property]: payload.value,
+        },
       };
   }
 }
@@ -36,10 +62,9 @@ function assetReducer(
  */
 export function useAssetDispatch(
   initialState: ExtendedDraftAssetState
-): [ExtendedDraftAssetState, React.Dispatch<AssessmentAction>] {
+): [ExtendedDraftAssetState, React.Dispatch<AssetAction>] {
   const [assetState, assetDispatch] = useReducer(assetReducer, {
     ...initialState,
-    errors: [],
   });
 
   return [assetState, assetDispatch];

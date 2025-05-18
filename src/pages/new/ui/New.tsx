@@ -53,7 +53,7 @@ export function New() {
           </Link>
         }
         title="New entry"
-        subtitle="Pre-filled from 31 May 2024"
+        // subtitle="Pre-filled from 31 May 2024"
         right={
           <div className="pr-3">
             <Button

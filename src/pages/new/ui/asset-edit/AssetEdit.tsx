@@ -4,15 +4,26 @@ import {
 } from "@/features/create-record";
 import { Button, Card, Link, List, Navbar, Page } from "konsta/react";
 import { MdClose, MdDeleteOutline } from "react-icons/md";
-import { useLoaderData, useNavigate } from "react-router";
+import { NavigateFunction, useLoaderData, useNavigate } from "react-router";
 import { AmountInput } from "./AmountInput";
-import { useAssetDispatch, type AssessmentAction } from "./useAssetDispatch";
+import {
+  type ExtendedDraftAssetState,
+  useAssetDispatch,
+  type AssetAction,
+} from "./useAssetDispatch";
 import { IsEarningCheckbox } from "./IsEarningCheckbox";
-import { CurrencyInput } from "./CurrencyInput";
 import { DescriptionInput } from "./DescriptionInput";
 import { BottomAppBar } from "../BottomAppBar";
 import type { assetStateLoader } from "../../lib/assetStateLoader";
 import { NameInput } from "./NameInput";
+import { currenciesByCode } from "@/shared/currencies";
+import { SearchSelect } from "../SearchSelect";
+
+const currenciesList = Object.entries(currenciesByCode).map(
+  ([code, nameEn]) => {
+    return { code: code, en: nameEn };
+  }
+);
 
 /**
  * Page with a fullscreen modal with a form for editing asset
@@ -27,7 +38,6 @@ export function AssetEdit() {
   const navigate = useNavigate();
   const [assetState, assetDispatch] = useAssetDispatch({
     ...initialState,
-    errors: [],
   });
   const {
     amount,
@@ -42,13 +52,11 @@ export function AssetEdit() {
 
   const topBarCTA = !isDeleted ? (
     <Button
-      disabled={errors.length === 0 ? false : true}
       clear
       // className="min-w-20"
       rounded
       onClick={() => {
-        handleAssetSave(assetState, assetId);
-        void navigate(-1);
+        handleAssetSave(navigate, assetState, assetDispatch, assetId);
       }}
     >
       Save asset
@@ -70,7 +78,7 @@ export function AssetEdit() {
   );
 
   return (
-    <Page className="pb-[80px]">
+    <Page className="z-1 pb-[80px]">
       <Navbar
         left={
           <Link navbar onClick={() => void navigate(-1)}>
@@ -81,19 +89,20 @@ export function AssetEdit() {
         subtitle={`${institution} / ${name}`}
         right={<div className="pr-3">{topBarCTA}</div>}
         colors={{ bgMaterial: "bg-transparent" }}
-        className="top-0 bg-neutral-800"
+        className="!z-15 top-0 bg-neutral-800"
         transparent={false}
       />
       <List>
         {isDeleted && <Card>To edit asset, restore it first</Card>}
         <NameInput
+          errors={errors?.name}
           institutionAssetsNames={getInstitutionAssetsNames(institutionId)}
           autoFocus={!assetId ? true : false}
           assetDispatch={assetDispatch}
           value={name}
           disabled={assetId !== undefined || isDeleted}
         />
-        <div className="flex flex-row w-full">
+        <div className="flex flex-row w-full gap-0">
           <AmountInput
             autoFocus={assetId ? true : false}
             // key={assetId + "amount"}
@@ -102,12 +111,39 @@ export function AssetEdit() {
             value={amount}
             disabled={isDeleted}
           />
-          <CurrencyInput
+
+          <SearchSelect
+            errors={errors?.currency}
+            keysToSearch={["en", "code"]}
+            titleKey="en"
+            valueKey="code"
+            subtitleKey="code"
+            data={currenciesList}
+            onValueChange={(value) => {
+              assetDispatch({
+                type: "set_error",
+                payload: {
+                  property: "currency",
+                  value: undefined,
+                },
+              });
+              assetDispatch({
+                type: "update_value",
+                payload: { property: "currency", value: value },
+              });
+            }}
+            value={currency.length > 0 ? currency : "Select currency..."}
+            label="Currency"
+            required
+            outline
+          />
+          {/* <CurrencyInput
             assetDispatch={assetDispatch}
             value={currency}
             disabled={isDeleted}
-          />
+          /> */}
         </div>
+
         <IsEarningCheckbox
           assetDispatch={assetDispatch}
           value={isEarning}
@@ -131,13 +167,18 @@ export function AssetEdit() {
                   ...assetState,
                   isDeleted: true,
                 };
-                void handleAssetSave(updatedState, assetId);
+                void handleAssetSave(
+                  navigate,
+                  updatedState,
+                  assetDispatch,
+                  assetId
+                );
               }}
             >
               <MdDeleteOutline size={24} />
             </Link>,
           ]}
-          bg="bg-md-light-surface dark:bg-md-dark-surface"
+          bg="!z-9 bg-md-light-surface dark:bg-md-dark-surface"
         />
       )}
     </Page>
@@ -145,13 +186,51 @@ export function AssetEdit() {
 }
 
 function handleAssetSave(
-  assetValues: RecordDraftAssetSchema,
+  navigate: NavigateFunction,
+  assetValues: ExtendedDraftAssetState,
+  assetDispatch: React.Dispatch<AssetAction>,
   assetId?: string
 ) {
   if (assetId === undefined) {
     const { name, institution } = assetValues;
     assetId = `${institution}.${name}`;
   }
+
+  let hasErrors = false;
+
+  if (assetValues.errors)
+    Object.values(assetValues.errors).forEach((errors) => {
+      if (errors?.length > 0 && !assetValues.isDeleted) {
+        hasErrors = true;
+      }
+    });
+
+  if (assetValues.name.length === 0) {
+    assetDispatch({
+      type: "set_error",
+      payload: {
+        property: "name",
+        value: ["Enter institution name"],
+      },
+    });
+    hasErrors = true;
+  }
+  if (assetValues.currency.length === 0 && !assetValues.isDeleted) {
+    assetDispatch({
+      type: "set_error",
+      payload: {
+        property: "currency",
+        value: ["Select a currency"],
+      },
+    });
+    hasErrors = true;
+  }
+
+  if (hasErrors) {
+    console.log(JSON.stringify(assetValues.errors));
+    return; // TODO warning chip
+  }
+
   // TODO compare current values with initial to define isDirty
   const recordDraft = RecordDraft.instance;
   if (!recordDraft) throw Error("recordDraft instance not exist");
@@ -167,7 +246,9 @@ function handleAssetSave(
       return recordDraft.saveAsset(assetId, { ...assetValues, isDirty: true });
     }
   }
-  return recordDraft.saveAsset(assetId, { ...assetValues, isDirty: false });
+  recordDraft.saveAsset(assetId, { ...assetValues, isDirty: false });
+
+  void navigate(-1);
 }
 
 function getInstitutionAssetsNames(institutionId: string) {
@@ -186,11 +267,12 @@ function getInstitutionAssetsNames(institutionId: string) {
 }
 
 export type AssetInputsProps<Value> = {
-  assetDispatch: React.Dispatch<AssessmentAction>;
+  assetDispatch: React.Dispatch<AssetAction>;
   value: Value;
   disabled?: boolean;
   inputKey?: string;
   autoFocus?: boolean;
+  errors?: string[];
 };
 
 /* ---------- CODE BLOCK: Description ----------
