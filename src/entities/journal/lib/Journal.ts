@@ -34,7 +34,7 @@ export class Journal {
   static instance: Journal | undefined;
   // private cipher: string | 0 = 0;
   private directory!: string;
-  private meta!: MetaSchema;
+  meta!: MetaSchema;
   private encryption: EncryptionSchema | undefined = undefined;
   // private encryptionKey: CryptoKey | null = null;
   store = journalStore;

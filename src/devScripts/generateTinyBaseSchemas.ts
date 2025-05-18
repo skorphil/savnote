@@ -13,6 +13,7 @@ import type { ValuesSchema } from "tinybase/with-schemas";
 import {
   recordDraftAssetSchema,
   recordDraftInstitutionSchema,
+  recordDraftMetaSchema,
   recordDraftQuoteSchema,
 } from "@/features/create-record/model/recordDraftSchema";
 
@@ -34,6 +35,7 @@ function generateRecordDraftSchema() {
     institutions: zObjectToTinyTable(recordDraftInstitutionSchema),
     assets: zObjectToTinyTable(recordDraftAssetSchema),
     quotes: zObjectToTinyTable(recordDraftQuoteSchema),
+    meta: zObjectToTinyTable(recordDraftMetaSchema),
   };
 
   appendConstToFile(

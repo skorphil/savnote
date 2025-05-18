@@ -15,7 +15,7 @@ import {
   validateRecordDraftAsset,
   validateRecordDraftInstitution,
 } from "../model/validateRecordDraft";
-import { validateRecord } from "@/entities/journal";
+import { Journal, validateRecord } from "@/entities/journal";
 
 /**
  * Provides various methods to work with a record draft.
@@ -61,8 +61,15 @@ export class RecordDraft {
   static resume() {
     const isSaved =
       RecordDraft.store.hasTable("assets") &&
-      RecordDraft.store.hasTable("institutions");
+      RecordDraft.store.hasTable("institutions") &&
+      RecordDraft.store.hasTable("meta");
     if (!isSaved) return null;
+
+    if (
+      Journal.instance?.meta.id !==
+      RecordDraft.store.getCell("meta", "0", "journalId")
+    )
+      return null;
     return this.instance ? this.instance : new RecordDraft();
   }
 

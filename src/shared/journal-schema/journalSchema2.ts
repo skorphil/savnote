@@ -144,6 +144,7 @@ const metaSchema2 = z.object({
   appName: z.literal("savnote"),
   version: z.literal(2),
   name: z.string(),
+  id: z.string(),
 });
 
 const journalSchema2 = z.object({

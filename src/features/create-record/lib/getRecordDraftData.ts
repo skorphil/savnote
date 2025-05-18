@@ -2,14 +2,16 @@ import { Journal } from "@/entities/journal";
 import type {
   RecordDraftAssetSchema,
   RecordDraftInstitutionSchema,
+  RecordDraftMetaSchema,
 } from "../model/recordDraftSchema";
 
 export function getRecordDraftData() {
-  if (!Journal.instance) throw Error("No Journal instance available");
+  const journal = Journal.instance;
+  if (!journal) throw Error("No Journal instance available");
   const {
     recordData: { assets, institutions },
     date,
-  } = Journal.instance.getLatestRecord();
+  } = journal.getLatestRecord();
 
   /* ---------- CODE BLOCK: Convert Journal entries to recordDraft entries ---------- */
   const recordDraftInstitutions: Record<string, RecordDraftInstitutionSchema> =
@@ -38,10 +40,15 @@ export function getRecordDraftData() {
     };
   });
 
+  const recordDraftMeta: Record<"0", RecordDraftMetaSchema> = {
+    0: { journalId: journal.meta.id },
+  };
+
   return {
     recordDraftData: {
       assets: recordDraftAssets,
       institutions: recordDraftInstitutions,
+      meta: recordDraftMeta,
     },
     recordDate: Number(date),
   };

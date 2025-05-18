@@ -28,8 +28,13 @@ function Open() {
         void navigate("/");
         return;
       }
-      const journal = await Journal.create(journalUri);
-      setJournal(journal);
+      try {
+        const journal = await Journal.create(journalUri);
+        setJournal(journal);
+      } catch {
+        void navigate("/");
+      } // handle case "journal was deleted from device, but uri saved."
+      // TODO add error chip
     }
 
     openJournal().catch((e: unknown) => throwError(e));

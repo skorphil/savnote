@@ -66,5 +66,10 @@ export const tinyBaseRecordDraftSchema = {
     "rate": {
       "type": "number"
     }
+  },
+  "meta": {
+    "journalId": {
+      "type": "string"
+    }
   }
 } as const;

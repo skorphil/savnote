@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
   {
     path: "newrecord",
     Component: New,
-    loader: journalLoader,
+    loader: () => journalLoader(),
     children: [
       {
         path: "institutions/:institutionId",
