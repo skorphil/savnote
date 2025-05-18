@@ -1,6 +1,6 @@
-import type { JournalSchema2 } from "../model/journalSchema2";
+import type { JournalSchema } from "@/shared/journal-schema";
 
-export const defaultNewJournalData: JournalSchema2 = {
+export const defaultNewJournalData: JournalSchema = {
   meta: {
     appName: "savnote",
     version: 2,

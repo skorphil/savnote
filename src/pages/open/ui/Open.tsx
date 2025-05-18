@@ -1,6 +1,6 @@
 import { Journal } from "@/entities/journal";
-import { Preferences, usePreferenceValue } from "@/entities/preferences";
-import { throwError } from "@/shared/lib/error-handling";
+import { Preferences, usePreferenceValue } from "@/entities/user-config";
+import { throwError } from "@/shared/error-handling";
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 import styles from "./Open.module.css";
@@ -23,13 +23,18 @@ function Open() {
   const journalUri = usePreferenceValue("currentJournalDirectory");
   const [journal, setJournal] = useState<undefined | Journal>(undefined);
   useEffect(() => {
-    if (!journalUri) {
-      void navigate("/");
-      return;
-    }
     async function openJournal() {
-      const journal = await Journal.open({ directory: journalUri as string });
-      setJournal(journal);
+      if (!journalUri) {
+        void navigate("/");
+        return;
+      }
+      try {
+        const journal = await Journal.create(journalUri);
+        setJournal(journal);
+      } catch {
+        void navigate("/");
+      } // handle case "journal was deleted from device, but uri saved."
+      // TODO add error chip
     }
 
     openJournal().catch((e: unknown) => throwError(e));

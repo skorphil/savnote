@@ -18,3 +18,8 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+.react-modal-sheet-container {
+    background-color: #313131 !important;
+    border-radius: 20px !important;
+  }

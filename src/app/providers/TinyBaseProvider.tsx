@@ -1,22 +1,11 @@
-import { Provider } from "tinybase/ui-react";
-
-// import { recordsStore } from "@/entities/journal";
-// import { persistentStateStore } from "@/entities/persistentState/model/persistentStateStore";
 import type { ReactElement } from "react";
+import { Provider } from "tinybase/ui-react";
 import { Inspector } from "tinybase/ui-react-inspector";
 
+/* ---------- CODE BLOCK: tinyBase stores required to add them to <Provider> ---------- */
 import { JournalStore } from "@/entities/journal";
-import { PreferencesStore } from "@/entities/preferences";
-
-// const MemoryStoreWithSchemas = UiReact as UiReact.WithSchemas<
-//   [typeof tinyBaseJournalSchema, NoValuesSchema]
-// >;
-// const PersistentStoreWithSchemas = UiReact as UiReact.WithSchemas<
-//   [typeof tinyBasePersistentStoreSchema, NoValuesSchema]
-// >;
-
-// recordsStore.setTable("institutions", { row: { country: "eu" } });
-// persistentStateStore.setTable("appState", { row: { selectedCurrency: "eur" } });
+import { PreferencesStore } from "@/entities/user-config";
+import { RecordDraftStore } from "@/features/create-record";
 
 type AppProps = {
   children: ReactElement;
@@ -25,6 +14,7 @@ export function TinyBaseProvider(props: AppProps) {
   return (
     <Provider>
       <JournalStore />
+      <RecordDraftStore />
       <PreferencesStore />
       {props.children}
       <Inspector />

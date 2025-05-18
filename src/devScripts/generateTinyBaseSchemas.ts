@@ -1,44 +1,65 @@
 import {
-  assetSchema2,
-  instiutionSchema2,
-  quoteSchema2,
-} from "@/entities/journal/model/journalSchema2";
-import { preferencesSchema1 } from "@/entities/preferences";
+  assetSchema,
+  institutionSchema,
+  quoteSchema,
+} from "@/shared/journal-schema";
+
+import { preferencesSchema1 } from "@/entities/user-config";
 import { zObjectToTinyTable } from "@/shared/lib/zod-to-tiny-base";
 import type { TablesSchema } from "tinybase/with-schemas";
 import * as fs from "fs";
 import * as path from "path";
 import type { ValuesSchema } from "tinybase/with-schemas";
+import {
+  recordDraftAssetSchema,
+  recordDraftInstitutionSchema,
+  recordDraftMetaSchema,
+  recordDraftQuoteSchema,
+} from "@/features/create-record/model/recordDraftSchema";
 
-generatePersistentStateSchema();
+generateUserConfigSchema();
 generateRecordsSchema();
+generateRecordDraftSchema();
 
-function generatePersistentStateSchema() {
+function generateUserConfigSchema() {
   const preferences: ValuesSchema = zObjectToTinyTable(preferencesSchema1);
-
-  // write appState to ts file
-  appentConstToFile(
-    "src/entities/preferences/model/tinyBasePreferencesSchema.ts",
+  appendConstToFile(
+    "src/entities/user-config/model/tinyBasePreferencesSchema.ts",
     "tinyBasePreferencesSchema",
     preferences
   );
 }
 
-function generateRecordsSchema() {
+function generateRecordDraftSchema() {
   const records: TablesSchema = {
-    institutions: zObjectToTinyTable(instiutionSchema2),
-    assets: zObjectToTinyTable(assetSchema2),
-    quotes: zObjectToTinyTable(quoteSchema2),
+    institutions: zObjectToTinyTable(recordDraftInstitutionSchema),
+    assets: zObjectToTinyTable(recordDraftAssetSchema),
+    quotes: zObjectToTinyTable(recordDraftQuoteSchema),
+    meta: zObjectToTinyTable(recordDraftMetaSchema),
   };
 
-  appentConstToFile(
+  appendConstToFile(
+    "src/features/create-record/model/tinyBaseRecordDraftSchema.ts",
+    "tinyBaseRecordDraftSchema",
+    records
+  );
+}
+
+function generateRecordsSchema() {
+  const records: TablesSchema = {
+    institutions: zObjectToTinyTable(institutionSchema),
+    assets: zObjectToTinyTable(assetSchema),
+    quotes: zObjectToTinyTable(quoteSchema),
+  };
+
+  appendConstToFile(
     "src/entities/journal/model/tinyBaseJournalSchema.ts",
     "tinyBaseJournalSchema",
     records
   );
 }
 
-function appentConstToFile(
+function appendConstToFile(
   directory: string,
   constName: string,
   tablesObject: TablesSchema | ValuesSchema
@@ -49,17 +70,12 @@ function appentConstToFile(
     `export const ${constName}\\s*=\\s*(\\{[\\s\\S]*?\\})\\s*as const;`,
     "m"
   );
-  // Find the "emptyVar" declaration
+
   const match = content.match(regex);
 
   if (match) {
-    // Parse the existing object
-    // const existingObject = eval(`(${match[1]})`);
-
-    // Merge new data
     const updatedObject = { ...tablesObject };
 
-    // Replace in content
     const updatedContent = content.replace(
       match[0],
       `export const ${constName} = ${JSON.stringify(
@@ -69,7 +85,6 @@ function appentConstToFile(
       )} as const;`
     );
 
-    // Write back the updated file
     fs.writeFileSync(filePath, updatedContent, "utf8");
     console.log(`Updated ${constName} successfully!`);
   } else {

@@ -1,4 +1,4 @@
-import { throwError } from "@/shared/lib/error-handling";
+import { throwError } from "@/shared/error-handling";
 import { invoke } from "@tauri-apps/api/core";
 
 /**

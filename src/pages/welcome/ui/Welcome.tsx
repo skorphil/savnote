@@ -1,4 +1,4 @@
-import { throwError } from "@/shared/lib/error-handling";
+import { throwError } from "@/shared/error-handling";
 import { handleJournalOpen } from "./handleJournalOpen";
 import styles from "./Welcome.module.css";
 import { Block, List, ListItem, Page } from "konsta/react";
@@ -46,7 +46,7 @@ function Welcome() {
           onClick={() => {
             const handler = async () => {
               await handleJournalOpen();
-              await navigate("/open");
+              await navigate("/");
             };
             handler().catch((e) => throwError(e));
           }}

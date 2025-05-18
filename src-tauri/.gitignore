@@ -6,4 +6,11 @@
 # will have schema files for capabilities auto-completion
 /gen/schemas
 
-/gen/android
+/gen/android/*
+!/gen/android/app/
+/gen/android/app/*
+!/gen/android/app/src/
+/gen/android/app/src/*
+!/gen/android/app/src/main/
+/gen/android/app/src/main/*
+!/gen/android/app/src/main/AndroidManifest.xml

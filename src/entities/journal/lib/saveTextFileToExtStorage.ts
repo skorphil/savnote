@@ -1,5 +1,5 @@
 import { writeTextFile } from "@tauri-apps/plugin-fs";
-import { throwError } from "../../../shared/lib/error-handling/throwError";
+import { throwError } from "@/shared/error-handling";
 
 type SaveToExternalStorageProps = {
   /**
