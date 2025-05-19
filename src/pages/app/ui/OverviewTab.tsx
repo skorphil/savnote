@@ -3,6 +3,8 @@ import { SummaryCard } from "./summary-card/SummaryCard";
 import { MdExitToApp, MdInfoOutline } from "react-icons/md";
 import { Preferences } from "@/entities/user-config";
 import { Journal } from "@/entities/journal";
+import { handleJournalExit } from "@/shared/handle-journal-exit";
+import { useNavigate } from "react-router";
 
 const preferences = new Preferences();
 
@@ -11,6 +13,7 @@ const preferences = new Preferences();
  * getting summary overview of journal data
  */
 function OverviewTab() {
+  const navigate = useNavigate();
   const counterCurrency = preferences.usePreferenceValue("selectedCurrency");
   const journal = Journal.instance;
   const recordDates = journal?.useJournalSliceIds("InstitutionsByDate");
@@ -39,10 +42,10 @@ function OverviewTab() {
           <>
             <span>{counterCurrency || "usd"}</span>
             <Link
-              // onClick={() => {
-              //   handleJournalExit();
-              //   void redirect("/");
-              // }}
+              onClick={() => {
+                handleJournalExit();
+                void navigate("/");
+              }}
               navbar
             >
               <MdExitToApp size={24} />

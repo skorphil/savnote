@@ -1,6 +1,5 @@
 import { Journal } from "@/entities/journal";
-import { Preferences } from "@/entities/user-config";
-import { RecordDraft } from "@/features/create-record";
+import { handleJournalExit } from "@/shared/handle-journal-exit";
 import { unixToHumanReadable } from "@/shared/lib/date-time-format";
 import { Link, List, ListItem, Navbar } from "konsta/react";
 import { MdExitToApp } from "react-icons/md";
@@ -11,7 +10,7 @@ import { useNavigate } from "react-router";
  *
  */
 function RecordsTab() {
-  const redirect = useNavigate();
+  const navigate = useNavigate();
   const recordDates =
     Journal.instance?.useJournalSliceIds("InstitutionsByDate");
 
@@ -23,7 +22,7 @@ function RecordsTab() {
           <Link
             onClick={() => {
               handleJournalExit();
-              void redirect("/");
+              void navigate("/");
             }}
             navbar
           >
@@ -46,9 +45,3 @@ function RecordsTab() {
 }
 
 export { RecordsTab };
-
-function handleJournalExit() {
-  Journal.delete();
-  RecordDraft.delete();
-  new Preferences().deleteValue("currentJournalDirectory");
-}

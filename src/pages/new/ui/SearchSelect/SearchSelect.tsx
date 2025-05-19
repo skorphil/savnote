@@ -35,7 +35,7 @@ export function SearchSelect(props: SearchSelectProps) {
   } = props;
   const [isOpened, setIsOpened] = useState<boolean>(false);
   return (
-    <>
+    <div className="relative z-9000">
       {isOpened && (
         <SearchDialog
           titleKey={titleKey}
@@ -65,6 +65,6 @@ export function SearchSelect(props: SearchSelectProps) {
           setIsOpened(true);
         }}
       />
-    </>
+    </div>
   );
 }

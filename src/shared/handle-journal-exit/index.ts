@@ -1,0 +1,1 @@
+export { handleJournalExit } from "./handleJournalExit";
