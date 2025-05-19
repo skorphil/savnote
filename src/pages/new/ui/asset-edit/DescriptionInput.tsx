@@ -1,6 +1,6 @@
 import { ListInput } from "konsta/react";
 import type { AssetInputsProps } from "./AssetEdit";
-import type { AssessmentAction } from "./useAssetDispatch";
+import type { AssetAction } from "./useAssetDispatch";
 import type { ChangeEvent } from "react";
 import { ReadOnlyInput } from "./ReadOnlyInput";
 
@@ -29,7 +29,7 @@ export function DescriptionInput(props: AssetInputsProps<string>) {
 }
 
 function handleChange(
-  assetDispatch: React.Dispatch<AssessmentAction>,
+  assetDispatch: React.Dispatch<AssetAction>,
   value: string
 ) {
   assetDispatch({

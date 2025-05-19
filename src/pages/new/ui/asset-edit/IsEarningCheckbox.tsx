@@ -1,6 +1,6 @@
 import { Checkbox, ListItem } from "konsta/react";
 import type { AssetInputsProps } from "./AssetEdit";
-import type { AssessmentAction } from "./useAssetDispatch";
+import type { AssetAction } from "./useAssetDispatch";
 
 export function IsEarningCheckbox(props: AssetInputsProps<boolean>) {
   const { assetDispatch, value, disabled } = props;
@@ -22,7 +22,7 @@ export function IsEarningCheckbox(props: AssetInputsProps<boolean>) {
 }
 
 function handleChange(
-  assetDispatch: React.Dispatch<AssessmentAction>,
+  assetDispatch: React.Dispatch<AssetAction>,
   currentValue: boolean
 ) {
   assetDispatch({
