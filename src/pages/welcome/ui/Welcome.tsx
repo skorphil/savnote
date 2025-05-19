@@ -54,12 +54,12 @@ function Welcome() {
           strongTitle={false}
           title="Open existing"
         />
-        <ListItem
+        {/* <ListItem
           link
           innerClassName={itemClass}
           strongTitle={false}
           title="Try sample"
-        />
+        /> */}
       </List>
     </Page>
   );

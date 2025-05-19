@@ -172,7 +172,7 @@ export function AssetEdit() {
               <Link
                 navbar
                 onClick={() => {
-                  void navigate(-1);
+                  void navigate(`/newrecord/institutions/${institutionId}`);
                   const updatedState = {
                     ...assetState,
                     isDeleted: true,
