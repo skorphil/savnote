@@ -1,6 +1,8 @@
 ### ⚠️ UNDER DEVOLOPMENT
 App is on the early stage of development. Currently not available for use. Star project if you are interested – this will motivate me to work harder. Contributions are welcome – reach out to me by opening an issue.
 
+[Small demo](https://youtu.be/abH2uFe2hh0?si=Eo_aMzNmCA1DP6pl) of a dev version. Apk available in "Releases".
+
 ---
 <img src=".github/savnote.png" alt="SavNote" />
 
