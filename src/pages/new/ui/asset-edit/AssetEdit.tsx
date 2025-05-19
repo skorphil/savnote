@@ -1,10 +1,14 @@
 import {
   RecordDraft,
-  type RecordDraftAssetSchema,
+  // type RecordDraftAssetSchema,
 } from "@/features/create-record";
 import { Button, Card, Link, List, Navbar, Page } from "konsta/react";
 import { MdClose, MdDeleteOutline } from "react-icons/md";
-import { NavigateFunction, useLoaderData, useNavigate } from "react-router";
+import {
+  type NavigateFunction,
+  useLoaderData,
+  useNavigate,
+} from "react-router";
 import { AmountInput } from "./AmountInput";
 import {
   type ExtendedDraftAssetState,
@@ -234,19 +238,19 @@ function handleAssetSave(
   // TODO compare current values with initial to define isDirty
   const recordDraft = RecordDraft.instance;
   if (!recordDraft) throw Error("recordDraft instance not exist");
-  const currentValues = recordDraft.getAssetData(assetId);
+  // const currentValues = recordDraft.getAssetData(assetId);
 
-  const keys = new Set([
-    ...Object.keys(assetValues),
-    ...(currentValues ? Object.keys(currentValues) : []),
-  ]);
+  // const keys = new Set([
+  //   ...Object.keys(assetValues),
+  //   ...(currentValues ? Object.keys(currentValues) : []),
+  // ]);
 
-  for (const key of keys as Set<keyof RecordDraftAssetSchema>) {
-    if (currentValues && assetValues[key] !== currentValues[key]) {
-      return recordDraft.saveAsset(assetId, { ...assetValues, isDirty: true });
-    }
-  }
-  recordDraft.saveAsset(assetId, { ...assetValues, isDirty: false });
+  // for (const key of keys as Set<keyof RecordDraftAssetSchema>) {
+  //   if (currentValues && assetValues[key] !== currentValues[key]) {
+  //     return recordDraft.saveAsset(assetId, { ...assetValues, isDirty: true });
+  //   }
+  // }
+  recordDraft.saveAsset(assetId, { ...assetValues, isDirty: true });
 
   void navigate(-1);
 }
