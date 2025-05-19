@@ -1,7 +1,7 @@
 import { ListInput } from "konsta/react";
 import type { AssetInputsProps } from "./AssetEdit";
 import type { ChangeEvent } from "react";
-import type { AssessmentAction } from "./useAssetDispatch";
+import type { AssetAction } from "./useAssetDispatch";
 import { ReadOnlyInput } from "./ReadOnlyInput";
 
 /**
@@ -37,7 +37,7 @@ export function CurrencyInput(props: AssetInputsProps<string>) {
 
 function handleCurrencyChange(
   value: string,
-  assetDispatch: React.Dispatch<AssessmentAction>
+  assetDispatch: React.Dispatch<AssetAction>
 ) {
   assetDispatch({
     type: "update_value",

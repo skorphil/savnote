@@ -1,6 +1,6 @@
 import { ListInput } from "konsta/react";
 import { NumericFormat } from "react-number-format";
-import type { AssessmentAction } from "./useAssetDispatch";
+import type { AssetAction } from "./useAssetDispatch";
 import type { AssetInputsProps } from "./AssetEdit";
 import { ReadOnlyInput } from "./ReadOnlyInput";
 import { useEffect, useRef } from "react";
@@ -41,7 +41,7 @@ export function AmountInput(props: AssetInputsProps<number>) {
 
 function handleAmountChange(
   value: string,
-  assetDispatch: React.Dispatch<AssessmentAction>
+  assetDispatch: React.Dispatch<AssetAction>
 ) {
   if (Number(value) < 0) return;
   // TODO validate ZOD

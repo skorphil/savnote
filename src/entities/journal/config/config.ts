@@ -5,5 +5,6 @@ export const defaultNewJournalData: JournalSchema = {
     appName: "savnote",
     version: 2,
     name: "My SavNote Journal",
+    id: crypto.randomUUID(),
   },
 };
