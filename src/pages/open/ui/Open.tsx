@@ -4,15 +4,7 @@ import { throwError } from "@/shared/error-handling";
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 import styles from "./Open.module.css";
-import {
-  Button,
-  Link,
-  List,
-  ListInput,
-  ListItem,
-  Navbar,
-  Page,
-} from "konsta/react";
+import { Button, Link, List, ListItem, Navbar, Page } from "konsta/react";
 import { MdExitToApp } from "react-icons/md";
 import { handleJournalExit } from "@/shared/handle-journal-exit";
 
@@ -78,7 +70,7 @@ function Open() {
           text={journalEncryption || "Password not set"}
         />
         <div className="mt-4">
-          {
+          {/* {
             <ListInput
               required
               outline
@@ -86,19 +78,19 @@ function Open() {
               type="password"
               autoFocus={true} // works only on manual navigation to page. not working if page is opened after rerendering
             />
-          }
+          } */}
           <NavLink to="/app">
-            <Button className="w-[calc(100%-32px)] m-4" large rounded>
+            <Button className="w-full px-4" large rounded>
               Open
             </Button>
           </NavLink>
-          {journalEncryption || (
+          {/* {journalEncryption || (
             <NavLink to="/app">
               <Button className="w-[calc(100%-32px)] m-4" large outline rounded>
                 Protect with a password
               </Button>
             </NavLink>
-          )}
+          )} */}
         </div>
       </List>
     </Page>

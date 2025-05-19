@@ -48,7 +48,7 @@ export function CreateJournal() {
         />
         {/* TODO add password input */}
         <Button
-          className="w-[calc(100%-34px)] m-4"
+          className="w-full"
           large
           rounded
           onClick={() => {
