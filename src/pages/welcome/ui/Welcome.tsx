@@ -35,7 +35,7 @@ function Welcome() {
           innerClassName={itemClass}
           link
           onClick={() => {
-            console.log(crypto.randomUUID());
+            void navigate("/create");
           }}
           strongTitle={true}
           className="hairline-b relative"
@@ -54,12 +54,12 @@ function Welcome() {
           strongTitle={false}
           title="Open existing"
         />
-        <ListItem
+        {/* <ListItem
           link
           innerClassName={itemClass}
           strongTitle={false}
           title="Try sample"
-        />
+        /> */}
       </List>
     </Page>
   );

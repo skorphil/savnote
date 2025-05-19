@@ -57,6 +57,8 @@ export class Journal {
       this.store.setTables(journalData.records);
     }
 
+    this.saveToDevice();
+
     // if (journalData.records && typeof journalData.records === "string") {
     //   this.cipher = journalData.records;
     // }
@@ -71,6 +73,17 @@ export class Journal {
   static async create(directory: string) {
     this.delete();
     const journalData = await readJournal(directory);
+    return new Journal({ directory, journalData });
+  }
+
+  /**
+   * Creates new journal and saves json to target directory.
+   * Owervrites existing journal instance
+   * @param directory Existing file directory
+   * @returns Journal instance
+   */
+  static new(directory: string, journalData: JournalSchema) {
+    this.delete();
     return new Journal({ directory, journalData });
   }
 
@@ -100,7 +113,10 @@ export class Journal {
     const journal: object = {
       meta: this.meta,
       encryption: this.encryption,
-      records: this.store.getTables() || undefined, // TODO add encryption
+      records:
+        Object.keys(this.store.getTables()).length > 0
+          ? this.store.getTables()
+          : undefined, // TODO add encryption
     };
     const stringifiedJournalData = JSON.stringify(validateJournal(journal));
     writeStringToFile(this.directory, stringifiedJournalData);

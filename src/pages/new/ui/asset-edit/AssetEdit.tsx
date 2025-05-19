@@ -1,10 +1,14 @@
 import {
   RecordDraft,
-  type RecordDraftAssetSchema,
+  // type RecordDraftAssetSchema,
 } from "@/features/create-record";
 import { Button, Card, Link, List, Navbar, Page } from "konsta/react";
 import { MdClose, MdDeleteOutline } from "react-icons/md";
-import { NavigateFunction, useLoaderData, useNavigate } from "react-router";
+import {
+  type NavigateFunction,
+  useLoaderData,
+  useNavigate,
+} from "react-router";
 import { AmountInput } from "./AmountInput";
 import {
   type ExtendedDraftAssetState,
@@ -89,20 +93,22 @@ export function AssetEdit() {
         subtitle={`${institution} / ${name}`}
         right={<div className="pr-3">{topBarCTA}</div>}
         colors={{ bgMaterial: "bg-transparent" }}
-        className="!z-15 top-0 bg-neutral-800"
+        className=" top-0 bg-neutral-800"
         transparent={false}
       />
-      <List>
+      <List className="static">
         {isDeleted && <Card>To edit asset, restore it first</Card>}
-        <NameInput
-          errors={errors?.name}
-          institutionAssetsNames={getInstitutionAssetsNames(institutionId)}
-          autoFocus={!assetId ? true : false}
-          assetDispatch={assetDispatch}
-          value={name}
-          disabled={assetId !== undefined || isDeleted}
-        />
-        <div className="flex flex-row w-full gap-0">
+        <div className="relative z-10">
+          <NameInput
+            errors={errors?.name}
+            institutionAssetsNames={getInstitutionAssetsNames(institutionId)}
+            autoFocus={!assetId ? true : false}
+            assetDispatch={assetDispatch}
+            value={name}
+            disabled={assetId !== undefined || isDeleted}
+          />
+        </div>
+        <div className="relative z-20 flex flex-row w-full gap-0">
           <AmountInput
             autoFocus={assetId ? true : false}
             // key={assetId + "amount"}
@@ -143,43 +149,48 @@ export function AssetEdit() {
             disabled={isDeleted}
           /> */}
         </div>
-
-        <IsEarningCheckbox
-          assetDispatch={assetDispatch}
-          value={isEarning}
-          disabled={isDeleted}
-        />
-        <DescriptionInput
-          assetDispatch={assetDispatch}
-          value={description}
-          disabled={isDeleted}
-        />
+        <div className="relative z-10">
+          <IsEarningCheckbox
+            assetDispatch={assetDispatch}
+            value={isEarning}
+            disabled={isDeleted}
+          />
+        </div>
+        <div className="relative z-10">
+          <DescriptionInput
+            assetDispatch={assetDispatch}
+            value={description}
+            disabled={isDeleted}
+          />
+        </div>
       </List>
 
       {isDeleted || (
-        <BottomAppBar
-          leftButtons={[
-            <Link
-              navbar
-              onClick={() => {
-                void navigate(-1);
-                const updatedState = {
-                  ...assetState,
-                  isDeleted: true,
-                };
-                void handleAssetSave(
-                  navigate,
-                  updatedState,
-                  assetDispatch,
-                  assetId
-                );
-              }}
-            >
-              <MdDeleteOutline size={24} />
-            </Link>,
-          ]}
-          bg="!z-9 bg-md-light-surface dark:bg-md-dark-surface"
-        />
+        <div className="relative z-10">
+          <BottomAppBar
+            leftButtons={[
+              <Link
+                navbar
+                onClick={() => {
+                  void navigate(`/newrecord/institutions/${institutionId}`);
+                  const updatedState = {
+                    ...assetState,
+                    isDeleted: true,
+                  };
+                  void handleAssetSave(
+                    navigate,
+                    updatedState,
+                    assetDispatch,
+                    assetId
+                  );
+                }}
+              >
+                <MdDeleteOutline size={24} />
+              </Link>,
+            ]}
+            bg="!-z-5 bg-md-light-surface dark:bg-md-dark-surface"
+          />
+        </div>
       )}
     </Page>
   );
@@ -234,19 +245,19 @@ function handleAssetSave(
   // TODO compare current values with initial to define isDirty
   const recordDraft = RecordDraft.instance;
   if (!recordDraft) throw Error("recordDraft instance not exist");
-  const currentValues = recordDraft.getAssetData(assetId);
+  // const currentValues = recordDraft.getAssetData(assetId);
 
-  const keys = new Set([
-    ...Object.keys(assetValues),
-    ...(currentValues ? Object.keys(currentValues) : []),
-  ]);
+  // const keys = new Set([
+  //   ...Object.keys(assetValues),
+  //   ...(currentValues ? Object.keys(currentValues) : []),
+  // ]);
 
-  for (const key of keys as Set<keyof RecordDraftAssetSchema>) {
-    if (currentValues && assetValues[key] !== currentValues[key]) {
-      return recordDraft.saveAsset(assetId, { ...assetValues, isDirty: true });
-    }
-  }
-  recordDraft.saveAsset(assetId, { ...assetValues, isDirty: false });
+  // for (const key of keys as Set<keyof RecordDraftAssetSchema>) {
+  //   if (currentValues && assetValues[key] !== currentValues[key]) {
+  //     return recordDraft.saveAsset(assetId, { ...assetValues, isDirty: true });
+  //   }
+  // }
+  recordDraft.saveAsset(assetId, { ...assetValues, isDirty: true });
 
   void navigate(-1);
 }

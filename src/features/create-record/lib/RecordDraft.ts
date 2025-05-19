@@ -60,9 +60,9 @@ export class RecordDraft {
    */
   static resume() {
     const isSaved =
-      RecordDraft.store.hasTable("assets") &&
-      RecordDraft.store.hasTable("institutions") &&
-      RecordDraft.store.hasTable("meta");
+      // RecordDraft.store.hasTable("assets") &&
+      // RecordDraft.store.hasTable("institutions") &&
+      RecordDraft.store.hasTable("meta"); // Might be casse when draft has no institutions (new journal) or no assets
     if (!isSaved) return null;
 
     if (

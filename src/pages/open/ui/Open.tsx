@@ -1,5 +1,5 @@
 import { Journal } from "@/entities/journal";
-import { Preferences, usePreferenceValue } from "@/entities/user-config";
+import { usePreferenceValue } from "@/entities/user-config";
 import { throwError } from "@/shared/error-handling";
 import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router";
@@ -14,6 +14,7 @@ import {
   Page,
 } from "konsta/react";
 import { MdExitToApp } from "react-icons/md";
+import { handleJournalExit } from "@/shared/handle-journal-exit";
 
 /**
  * Page for opening provided Journal
@@ -49,7 +50,13 @@ function Open() {
       <Navbar
         title={journalName}
         right={
-          <Link onClick={handleJournalExit} navbar>
+          <Link
+            onClick={() => {
+              handleJournalExit();
+              void navigate("/");
+            }}
+            navbar
+          >
             <MdExitToApp size={24} />
           </Link>
         }
@@ -99,8 +106,3 @@ function Open() {
 }
 
 export { Open };
-
-function handleJournalExit() {
-  Journal.delete();
-  new Preferences().deleteValue("currentJournalDirectory");
-}

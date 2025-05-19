@@ -8,7 +8,6 @@ import { getRecordDraftData, RecordDraft } from "@/features/create-record";
 import { InstitutionsGrid } from "./InstitutionsGrid";
 import { throwError } from "@/shared/error-handling";
 import { Journal } from "@/entities/journal";
-import { useMemo } from "react";
 
 /**
  * Checks if recordDraft data exist in persistent storage. Returns existing
@@ -35,7 +34,7 @@ function getRecordDraft() {
 export function New() {
   const { institutionId } = useParams();
   const navigate = useNavigate();
-  const recordDraft = useMemo(getRecordDraft, []);
+  const recordDraft = getRecordDraft();
 
   const institutions = recordDraft.useInstitutions();
   const date = recordDraft.previousRecordDate;

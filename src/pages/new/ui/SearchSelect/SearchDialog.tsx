@@ -104,7 +104,7 @@ function Item(props: ItemProps) {
     <ListItem
       onClick={onClick}
       title={String(title)}
-      subtitle={String(subtitle)}
+      subtitle={subtitle ? String(subtitle) : undefined}
       after={
         <>
           <Radio readOnly checked={checked} />

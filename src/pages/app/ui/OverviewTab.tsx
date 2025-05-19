@@ -1,7 +1,10 @@
-import { Navbar, Link } from "konsta/react";
+import { Navbar, Link, Block } from "konsta/react";
 import { SummaryCard } from "./summary-card/SummaryCard";
-import { MdExitToApp } from "react-icons/md";
+import { MdExitToApp, MdInfoOutline } from "react-icons/md";
 import { Preferences } from "@/entities/user-config";
+import { Journal } from "@/entities/journal";
+import { handleJournalExit } from "@/shared/handle-journal-exit";
+import { useNavigate } from "react-router";
 
 const preferences = new Preferences();
 
@@ -10,7 +13,27 @@ const preferences = new Preferences();
  * getting summary overview of journal data
  */
 function OverviewTab() {
+  const navigate = useNavigate();
   const counterCurrency = preferences.usePreferenceValue("selectedCurrency");
+  const journal = Journal.instance;
+  const recordDates = journal?.useJournalSliceIds("InstitutionsByDate");
+
+  let content = <SummaryCard />;
+  if (!recordDates || recordDates.length === 0) {
+    content = (
+      // <div className="flex flex-col justify-start items-center h-full">
+      <Block className="opacity-60 gap-2 flex items-center mt-20">
+        <span>
+          <MdInfoOutline size={24} />
+        </span>
+        <span>
+          There is no savings enries yet. Add entries to get overview of your
+          savings.
+        </span>
+      </Block>
+      // </div>
+    );
+  }
   return (
     <>
       <Navbar
@@ -19,10 +42,10 @@ function OverviewTab() {
           <>
             <span>{counterCurrency || "usd"}</span>
             <Link
-              // onClick={() => {
-              //   handleJournalExit();
-              //   void redirect("/");
-              // }}
+              onClick={() => {
+                handleJournalExit();
+                void navigate("/");
+              }}
               navbar
             >
               <MdExitToApp size={24} />
@@ -33,7 +56,8 @@ function OverviewTab() {
         className="top-0"
         transparent={false}
       />
-      <SummaryCard />
+
+      {content}
     </>
   );
 }
