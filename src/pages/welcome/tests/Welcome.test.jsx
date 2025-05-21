@@ -1,4 +1,3 @@
-// import * as React from 'react';
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 
@@ -12,7 +11,6 @@ vi.mock("../ui/handleJournalOpen", () => {
 import { handleJournalOpen } from "../ui/handleJournalOpen";
 import Welcome from "../ui/Welcome";
 import { beforeEach } from "node:test";
-import { act } from "@testing-library/react";
 
 /* ---------- CODE BLOCK: Test suits ---------- */
 describe("Welcome", () => {

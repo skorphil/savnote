@@ -36,7 +36,7 @@ export function Open() {
           <Link
             onClick={() => {
               handleJournalExit();
-              void navigate("/");
+              void navigate("/", { replace: true });
             }}
             navbar
           >

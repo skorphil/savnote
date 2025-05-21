@@ -25,9 +25,9 @@ function Welcome() {
         <p className="mt-5">
           Journal – password-protected file that safely stores your financial
           records{" "}
-          <strong className="py-[2px] px-[6px] rounded-sm bg-green-900">
+          <span className="py-[2px] px-[6px] rounded-sm bg-green-900">
             on this device
-          </strong>
+          </span>
         </p>
       </div>
 
@@ -50,7 +50,7 @@ function Welcome() {
             setError(undefined);
             const handler = async () => {
               await handleJournalOpen();
-              void navigate("/");
+              void navigate("/open", { replace: true });
             };
             handler().catch((e: Error) => setError(e.message));
           }}
