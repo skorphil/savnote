@@ -6,7 +6,6 @@ export async function handleJournalOpen() {
   try {
     const directory = await showOpenFileDialog(["application/json"]);
 
-    console.log("directory:", directory);
     if (!directory) return null;
     await readJournal(directory);
     return new Preferences().updatePreferences({

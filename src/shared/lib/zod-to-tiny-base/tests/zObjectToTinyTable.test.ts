@@ -35,7 +35,6 @@ describe("zObjectToTinyTable", () => {
     };
 
     const result = zObjectToTinyTable(correctSchema);
-    console.log(result);
     expect(result).toStrictEqual(expectedResult);
   });
 

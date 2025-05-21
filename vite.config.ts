@@ -11,6 +11,7 @@ export default defineConfig(async () => ({
     globals: true,
     environment: "jsdom", // To work with react-testing-library
     setupFiles: "./tests/setup.js",
+    // coverage: { enabled: true }, // shows coverage in vitest --ui, but slows running tests
   },
   plugins: [
     react(),

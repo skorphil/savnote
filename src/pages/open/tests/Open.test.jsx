@@ -63,7 +63,6 @@ describe("Open", () => {
     expect(journalDirectory).toBeInTheDocument();
 
     const journalNameElements = await screen.findAllByText(journal.journalName);
-    console.debug("founded names:", journalNameElements);
     expect(journalNameElements.length).toBeGreaterThan(0);
     expect(journalNameElements[0]).toBeInTheDocument();
   });

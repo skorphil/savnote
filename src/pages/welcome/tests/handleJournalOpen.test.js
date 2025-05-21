@@ -10,7 +10,6 @@ vi.mock("@/entities/journal", () => {
 
 import { readJournal, showOpenFileDialog } from "@/entities/journal";
 import { handleJournalOpen } from "../ui/handleJournalOpen";
-import { beforeEach } from "node:test";
 import { Preferences } from "@/entities/user-config";
 
 /* ---------- CODE BLOCK: Test suits ---------- */
