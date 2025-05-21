@@ -1,37 +1,39 @@
-import { throwError } from "@/shared/error-handling";
 import { handleJournalOpen } from "./handleJournalOpen";
 import styles from "./Welcome.module.css";
-import { Block, List, ListItem, Page } from "konsta/react";
+import { List, ListItem, Page } from "konsta/react";
 import { useNavigate } from "react-router";
+import { useState } from "react";
+import { MdErrorOutline } from "react-icons/md";
 
 const itemClass = "touch-ripple-white h-14 flex flex-col justify-center";
 
 function Welcome() {
   const navigate = useNavigate();
+  const [error, setError] = useState<string | undefined>(undefined);
 
   return (
     <Page className={styles.page}>
-      <Block className={styles.heroBlock}>
-        <div className="my-auto">
-          <h2 className="text-[40px] leading-[44px] font-medium">
-            Create your savings journal
-          </h2>
-          <p className="mt-5">
-            A journal is a password-protected file that safely stores your{" "}
-            <strong>records on device</strong>.
-          </p>
-          <p className="mt-2">
-            It remains accessible even if you uninstall SavNote, as long as you
-            have the password.
-          </p>
-          <p className="mt-2">
-            Regular <strong>manual backups</strong> are recommended to prevent
-            accidental data loss.
-          </p>
-        </div>
-      </Block>
+      <div className={styles.heroBlock}>
+        <img
+          className="w-[50%] mb-10 mx-auto"
+          src="journal.png"
+          alt="Illustration with a person standing next to a safe"
+        />
+        <h2 className="text-[40px] leading-[44px] font-medium">
+          Create your savings journal
+        </h2>
+        <p className="mt-5">
+          Journal – password-protected file that safely stores your financial
+          records{" "}
+          <strong className="py-[2px] px-[6px] rounded-sm bg-green-900">
+            on this device
+          </strong>
+        </p>
+      </div>
+
       <List inset className={styles.linksBlock}>
         <ListItem
+          aria-label="create-journal"
           innerClassName={itemClass}
           link
           onClick={() => {
@@ -42,34 +44,55 @@ function Welcome() {
           title="Create new"
         />
         <ListItem
+          aria-label="open-journal"
           link
           onClick={() => {
+            setError(undefined);
             const handler = async () => {
-              try {
-                await handleJournalOpen();
-              } catch (e) {
-                throwError(e);
-              }
-              await navigate("/");
+              await handleJournalOpen();
+              void navigate("/");
             };
-            handler().catch((e) => throwError(e));
+            handler().catch((e: Error) => setError(e.message));
           }}
           innerClassName={itemClass}
           strongTitle={false}
           title="Open existing"
         />
       </List>
+      {error && (
+        <div className="text-sm p-4 bg-red-950 flex flex-row items-center gap-2">
+          <MdErrorOutline />
+          {error}
+        </div>
+      )}
     </Page>
   );
 }
 
 export default Welcome;
 
-// TODO add start with simple
+// TODO add start with sample
 
 /* <ListItem
           link
           innerClassName={itemClass}
           strongTitle={false}
           title="Try sample"
-        /> */
+        />
+
+        <p className="mt-2">
+              Regular <strong>manual backups</strong> are recommended to prevent
+              accidental data loss.
+            </p>
+
+        <Block className="opacity-60 gap-2 flex items-center mt-20">
+        <span>
+          <MdInfoOutline size={24} />
+        </span>
+        <span>
+          Journal remains accessible even if you uninstall SavNote, as long as
+          you have the password.
+        </span>
+      </Block>
+
+        */

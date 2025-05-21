@@ -14,7 +14,7 @@
 .heroBlock {
     display: flex;
     flex-direction: column;
-    @apply my-auto py-4;
+    @apply my-auto py-4 px-4;
     
     /* #2C3A33; */
 }
