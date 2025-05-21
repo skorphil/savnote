@@ -10,7 +10,6 @@ vi.mock("../ui/handleJournalOpen", () => {
 
 import { handleJournalOpen } from "../ui/handleJournalOpen";
 import Welcome from "../ui/Welcome";
-import { beforeEach } from "node:test";
 
 /* ---------- CODE BLOCK: Test suits ---------- */
 describe("Welcome", () => {
