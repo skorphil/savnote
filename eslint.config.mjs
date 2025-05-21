@@ -21,6 +21,7 @@ export default tseslint.config(
       "eslint.config.mjs",
       "vite.config.ts",
       "tests/**/*",
+      "**/*.test.js",
     ],
   },
   {
