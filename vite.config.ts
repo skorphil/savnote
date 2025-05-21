@@ -7,6 +7,11 @@ const host = process.env.TAURI_DEV_HOST;
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
+  test: {
+    globals: true,
+    environment: "jsdom", // To work with react-testing-library
+    setupFiles: "./tests/setup.js",
+  },
   plugins: [
     react(),
     // basicSsl({
