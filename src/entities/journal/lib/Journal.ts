@@ -21,6 +21,7 @@ import {
 // import { createEncryptionKey } from "./encryptionUtils";
 import { readJournal } from "./readJournal";
 import { writeStringToFile } from "./writeStringToFile";
+import { redirect } from "react-router";
 
 /**
  * Represents a journal. Provides various methods to work with a journal.
@@ -98,6 +99,16 @@ export class Journal {
   static new(directory: string, journalData: JournalSchema) {
     this.delete();
     return new Journal({ directory, journalData });
+  }
+
+  /**
+   * @returns journal instanse (singletone)
+   * @param errorCallback run if there is no journal instance
+   */
+  static resume(errorCallback?: () => never) {
+    if (this.instance) return this.instance;
+    if (errorCallback) return errorCallback();
+    return redirect("/") as never;
   }
 
   /**

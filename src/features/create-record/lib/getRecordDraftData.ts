@@ -4,10 +4,10 @@ import type {
   RecordDraftInstitutionSchema,
   RecordDraftMetaSchema,
 } from "../model/recordDraftSchema";
+import { redirect } from "react-router";
 
 export function getRecordDraftData() {
-  const journal = Journal.instance;
-  if (!journal) throw Error("No Journal instance available");
+  const journal = Journal.resume(() => redirect("/") as never);
   const {
     recordData: { assets, institutions },
     date,
