@@ -1,5 +1,6 @@
 import { Journal, journalStore, journalStoreQueries } from "@/entities/journal";
 import { Preferences } from "@/entities/user-config";
+import { redirect } from "react-router";
 
 const preferences = new Preferences();
 
@@ -8,8 +9,8 @@ const preferences = new Preferences();
  */
 function useSummaryData() {
   let { selectedCurrency } = preferences.getPreferences(["selectedCurrency"]);
-  const journal = Journal.instance;
-  const recordDates = journal?.useJournalSliceIds("InstitutionsByDate");
+  const journal = Journal.resume(() => redirect("/") as never);
+  const recordDates = journal.useJournalSliceIds("InstitutionsByDate");
 
   if (selectedCurrency === undefined) selectedCurrency = "usd";
 

@@ -3,7 +3,7 @@ import { handleJournalExit } from "@/shared/handle-journal-exit";
 import { unixToHumanReadable } from "@/shared/lib/date-time-format";
 import { Link, List, ListItem, Navbar } from "konsta/react";
 import { MdExitToApp } from "react-icons/md";
-import { useNavigate } from "react-router";
+import { redirect, useNavigate } from "react-router";
 
 /**
  * New component
@@ -11,8 +11,8 @@ import { useNavigate } from "react-router";
  */
 function RecordsTab() {
   const navigate = useNavigate();
-  const recordDates =
-    Journal.instance?.useJournalSliceIds("InstitutionsByDate");
+  const journal = Journal.resume(() => redirect("/") as never);
+  const recordDates = journal.useJournalSliceIds("InstitutionsByDate");
 
   return (
     <>

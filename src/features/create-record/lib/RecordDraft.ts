@@ -16,6 +16,7 @@ import {
   validateRecordDraftInstitution,
 } from "../model/validateRecordDraft";
 import { Journal, validateRecord } from "@/entities/journal";
+import { redirect } from "react-router";
 
 /**
  * Provides various methods to work with a record draft.
@@ -60,13 +61,12 @@ export class RecordDraft {
    */
   static resume() {
     const isSaved =
-      // RecordDraft.store.hasTable("assets") &&
-      // RecordDraft.store.hasTable("institutions") &&
-      RecordDraft.store.hasTable("meta"); // Might be casse when draft has no institutions (new journal) or no assets
+      //Checking only meta because might be casse when draft has no institutions (new journal) or no assets
+      RecordDraft.store.hasTable("meta");
     if (!isSaved) return null;
 
     if (
-      Journal.instance?.meta.id !==
+      Journal.resume(() => redirect("/") as never).meta.id !==
       RecordDraft.store.getCell("meta", "0", "journalId")
     )
       return null;

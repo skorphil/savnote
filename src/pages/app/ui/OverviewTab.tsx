@@ -1,6 +1,6 @@
-import { Navbar, Link, Block } from "konsta/react";
+import { Navbar, Link } from "konsta/react";
 import { SummaryCard } from "./summary-card/SummaryCard";
-import { MdExitToApp, MdInfoOutline } from "react-icons/md";
+import { MdExitToApp } from "react-icons/md";
 import { Preferences } from "@/entities/user-config";
 import { Journal } from "@/entities/journal";
 import { handleJournalExit } from "@/shared/handle-journal-exit";
@@ -15,23 +15,25 @@ const preferences = new Preferences();
 function OverviewTab() {
   const navigate = useNavigate();
   const counterCurrency = preferences.usePreferenceValue("selectedCurrency");
-  const journal = Journal.instance;
-  const recordDates = journal?.useJournalSliceIds("InstitutionsByDate");
+  const journal = Journal.resume(() => void navigate("/") as never);
+  const recordDates = journal.useJournalSliceIds("InstitutionsByDate");
 
   let content = <SummaryCard />;
   if (!recordDates || recordDates.length === 0) {
     content = (
-      // <div className="flex flex-col justify-start items-center h-full">
-      <Block className="opacity-60 gap-2 flex items-center mt-20">
-        <span>
-          <MdInfoOutline size={24} />
+      <div className="flex flex-col justify-start items-center h-full">
+        <img
+          className="w-[50%] mt-28 mb-4 mx-auto opacity-100"
+          src="emptySafe.png"
+          alt="Illustration with a person standing next to an empty safe"
+        />
+        <span className="text-lg mx-4 mb-1 text-center">
+          No savings recorded yet
         </span>
-        <span>
-          There is no savings enries yet. Add entries to get overview of your
-          savings.
+        <span className="text-sm opacity-70">
+          Add entries to get an overview of your wealth.
         </span>
-      </Block>
-      // </div>
+      </div>
     );
   }
   return (

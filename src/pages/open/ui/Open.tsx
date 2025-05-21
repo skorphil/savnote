@@ -45,12 +45,12 @@ export function Open() {
         }
         medium
         colors={{ bgMaterial: "bg-transparent" }}
-        className="top-0"
+        className="top-0 hairline-b"
         transparent={false}
       />
       {journal && (
         <div>
-          <List strong inset className="my-1">
+          <List className="my-1">
             <ListItem
               className="break-words"
               title="Directory"

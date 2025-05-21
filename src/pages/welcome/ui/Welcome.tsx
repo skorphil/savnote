@@ -25,7 +25,7 @@ function Welcome() {
         <p className="mt-5">
           Journal – password-protected file that safely stores your financial
           records{" "}
-          <span className="py-[2px] px-[6px] rounded-sm bg-green-900">
+          <span className="py-[2px] px-[6px] rounded-sm bg-white bg-opacity-10">
             on this device
           </span>
         </p>
