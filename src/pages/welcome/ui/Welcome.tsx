@@ -45,7 +45,11 @@ function Welcome() {
           link
           onClick={() => {
             const handler = async () => {
-              await handleJournalOpen();
+              try {
+                await handleJournalOpen();
+              } catch (e) {
+                throwError(e);
+              }
               await navigate("/");
             };
             handler().catch((e) => throwError(e));
@@ -54,15 +58,18 @@ function Welcome() {
           strongTitle={false}
           title="Open existing"
         />
-        {/* <ListItem
-          link
-          innerClassName={itemClass}
-          strongTitle={false}
-          title="Try sample"
-        /> */}
       </List>
     </Page>
   );
 }
 
 export default Welcome;
+
+// TODO add start with simple
+
+/* <ListItem
+          link
+          innerClassName={itemClass}
+          strongTitle={false}
+          title="Try sample"
+        /> */

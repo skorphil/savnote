@@ -1,9 +1,9 @@
+import styles from "./Open.module.css";
 import { Journal } from "@/entities/journal";
 import { usePreferenceValue } from "@/entities/user-config";
 import { throwError } from "@/shared/error-handling";
 import { useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router";
-import styles from "./Open.module.css";
+import { useNavigate } from "react-router";
 import { Button, Link, List, ListItem, Navbar, Page } from "konsta/react";
 import { MdExitToApp } from "react-icons/md";
 import { handleJournalExit } from "@/shared/handle-journal-exit";
@@ -11,36 +11,27 @@ import { handleJournalExit } from "@/shared/handle-journal-exit";
 /**
  * Page for opening provided Journal
  */
-function Open() {
-  const navigate = useNavigate();
+export function Open() {
   const journalUri = usePreferenceValue("currentJournalDirectory");
   const [journal, setJournal] = useState<undefined | Journal>(undefined);
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function openJournal() {
       if (!journalUri) {
         void navigate("/");
         return;
       }
-      try {
-        const journal = await Journal.create(journalUri);
-        setJournal(journal);
-      } catch {
-        void navigate("/");
-      } // handle case "journal was deleted from device, but uri saved."
-      // TODO add error chip
+      const journal = await Journal.open(journalUri, () => void navigate("/"));
+      setJournal(journal);
     }
-
     openJournal().catch((e: unknown) => throwError(e));
   }, [journalUri]);
 
-  if (!journal) return <div>load</div>;
-
-  const journalName = journal.getJournalName();
-  const journalEncryption = journal.getEncryptionParameters();
   return (
     <Page className={styles.page}>
       <Navbar
-        title={journalName}
+        title={journal && journal.getJournalName()}
         right={
           <Link
             onClick={() => {
@@ -57,44 +48,54 @@ function Open() {
         className="top-0"
         transparent={false}
       />
-      <List strong inset className="my-1">
-        <ListItem
-          className="break-words"
-          title="Directory"
-          text={journal.getJournalDirectory()}
-        />
+      {journal && (
+        <div>
+          <List strong inset className="my-1">
+            <ListItem
+              className="break-words"
+              title="Directory"
+              text={journal.getJournalDirectory()}
+            />
 
-        <ListItem
-          className="hairline-b relative"
-          title="Encryption"
-          text={journalEncryption || "Password not set"}
-        />
-        <div className="mt-4">
-          {/* {
+            <ListItem
+              title="Encryption"
+              text={journal.getEncryptionParameters() || "Password not set"}
+            />
+            <div className="mt-4"></div>
+          </List>
+          <div className="px-4 pb-6">
+            <Button
+              onClick={() => void navigate("/app")}
+              className="w-full"
+              aria-label="open-button"
+              large
+              rounded
+            >
+              Open
+            </Button>
+          </div>
+        </div>
+      )}
+    </Page>
+  );
+}
+
+// TODO Password input
+/* {
             <ListInput
+            className="hairline-b relative"
               required
               outline
               label="Password"
               type="password"
               autoFocus={true} // works only on manual navigation to page. not working if page is opened after rerendering
             />
-          } */}
-          <NavLink to="/app">
-            <Button className="w-full px-4" large rounded>
-              Open
-            </Button>
-          </NavLink>
-          {/* {journalEncryption || (
+          }
+
+ {journalEncryption || (
             <NavLink to="/app">
               <Button className="w-[calc(100%-32px)] m-4" large outline rounded>
                 Protect with a password
               </Button>
             </NavLink>
-          )} */}
-        </div>
-      </List>
-    </Page>
-  );
-}
-
-export { Open };
+          )} */

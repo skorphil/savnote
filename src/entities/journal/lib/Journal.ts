@@ -68,12 +68,25 @@ export class Journal {
    * Creates journal instance from existing journal.
    * Owervrites existing journal instance
    * @param directory Existing file directory
-   * @returns Journal instance
+   * @param errorCallback Runs if error catched during reading journal. Receives error: unknown
+   * @returns Journal instance or undefined if errorCallback handles the error
    */
-  static async create(directory: string) {
+  static async open(
+    directory: string,
+    errorCallback?: (e: unknown) => void
+  ): Promise<Journal> {
     this.delete();
-    const journalData = await readJournal(directory);
-    return new Journal({ directory, journalData });
+    try {
+      const journalData = await readJournal(directory);
+      const journal = new Journal({ directory, journalData });
+      return journal;
+    } catch (e) {
+      if (errorCallback) {
+        return errorCallback(e) as never;
+      } else {
+        throw e;
+      }
+    }
   }
 
   /**

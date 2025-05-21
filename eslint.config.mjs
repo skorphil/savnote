@@ -16,7 +16,12 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ["tailwind.config.js", "eslint.config.mjs", "vite.config.ts"],
+    ignores: [
+      "tailwind.config.js",
+      "eslint.config.mjs",
+      "vite.config.ts",
+      "tests/**/*",
+    ],
   },
   {
     rules: {
