@@ -11,3 +11,5 @@ export { showSaveFileDialog } from "./ui/showSaveFileDialog";
 
 export { useJournalValue } from "./model/JournalStore";
 export { readJournal } from "./lib/readJournal";
+
+export { useJournalRecordDates } from "./ui/useJournal";

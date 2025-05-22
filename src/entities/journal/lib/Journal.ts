@@ -1,54 +1,97 @@
-import {
-  type EncryptionSchema,
-  type JournalSchema,
-  type MetaSchema,
-  type RecordsSchema,
+import type {
+  EncryptionSchema,
+  JournalSchema,
+  MetaSchema,
+  RecordsSchema,
 } from "@/shared/journal-schema";
-import { throwError } from "@/shared/error-handling";
+import type {
+  Indexes,
+  NoValuesSchema,
+  Queries,
+  Store,
+} from "tinybase/with-schemas";
+
 import {
   journalStore,
   journalStoreIndexes,
   journalStoreQueries,
-  useJournalQueries,
-  useJournalResultTable,
-  useJournalSliceIds,
 } from "../model/JournalStore";
 import {
   validateInstitution,
   validateJournal,
   validateRecord,
 } from "../model/validateJournal";
-// import { createEncryptionKey } from "./encryptionUtils";
 import { readJournal } from "./readJournal";
-import { writeStringToFile } from "./writeStringToFile";
+import { writeFileToAndroid } from "./writeFileToAndroid";
 import { redirect } from "react-router";
 
+import type { tinyBaseJournalSchema } from "../model/tinyBaseJournalSchema";
+
+type JournalConctructorProps = {
+  /**
+   * Local directoy of json journal file. Need write and read permissions.
+   */
+  directory: string;
+  journalData: JournalSchema;
+
+  // store-related functions added to constructor for testing purposes
+  store?: Store<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
+  storeIndexes?: Indexes<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
+  storeQueries?: Queries<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
+
+  deviceSaver?: DeviceSaver;
+};
+
 /**
- * Represents a journal. Provides various methods to work with a journal.
- * Initialised with .open() static method
- * Instance must be used to manage currently opened journal.
+ * journal singleton. Provides various methods to work with a journal.
+ * Used with .open() .create() .resume() static method
  * @example
- * const userJournal = Journal.open(...)
- * const data = Journal.instance?.useJournalSlices()
+ * const userJournal = Journal.resume(...)
+ * const data = userJournal.addRecord(...)
  */
 export class Journal {
+  /**
+   * Journal singleton - represents currently opened journal.
+   * Provides public API to manage the journal
+   */
   static instance: Journal | undefined;
-  // private cipher: string | 0 = 0;
+  /**
+   * Local directoy of json journal file. Need write and read permissions.
+   */
   private directory!: string;
+  /**
+   * Journal's meta data
+   */
   meta!: MetaSchema;
-  private encryption: EncryptionSchema | undefined = undefined;
+  /* ---------- CODE BLOCK: Encryption ---------- */
+  // private cipher: string | 0 = 0;
   // private encryptionKey: CryptoKey | null = null;
-  store = journalStore;
-  storeIndexes = journalStoreIndexes;
+  private encryption: EncryptionSchema | undefined = undefined;
 
-  private constructor(props: JournalConctructorProps) {
+  /* ---------- CODE BLOCK: Storage ---------- */
+  store: Store<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
+  storeIndexes: Indexes<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
+  storeQueries: Queries<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
+
+  deviceSaver: DeviceSaver;
+
+  private constructor({
+    store = journalStore,
+    storeIndexes = journalStoreIndexes,
+    storeQueries = journalStoreQueries,
+    deviceSaver = writeFileToAndroid,
+    ...props
+  }: JournalConctructorProps) {
     Journal.instance = this;
     const { directory, journalData } = props;
     if (!directory || !journalData)
       throw Error(
         "provide `directory` and `journalData` to create new Journal instance."
       );
-
+    this.store = store; // store: any, Unsafe assignment of an error typed value
+    this.storeIndexes = storeIndexes;
+    this.storeQueries = storeQueries;
+    this.deviceSaver = deviceSaver;
     this.directory = directory;
     this.meta = journalData.meta;
     this.encryption = journalData.encryption;
@@ -57,8 +100,7 @@ export class Journal {
     if (journalData.records && typeof journalData.records === "object") {
       this.store.setTables(journalData.records);
     }
-
-    this.saveToDevice();
+    // this.saveToDevice(); // need to mock because its android-related
 
     // if (journalData.records && typeof journalData.records === "string") {
     //   this.cipher = journalData.records;
@@ -66,7 +108,7 @@ export class Journal {
   }
 
   /**
-   * Creates journal instance from existing journal.
+   * Creates journal instance from existing journal JSON.
    * Owervrites existing journal instance
    * @param directory Existing file directory
    * @param errorCallback Runs if error catched during reading journal. Receives error: unknown
@@ -96,9 +138,12 @@ export class Journal {
    * @param directory Existing file directory
    * @returns Journal instance
    */
-  static new(directory: string, journalData: JournalSchema) {
+  static async create(directory: string, journalData: JournalSchema) {
     this.delete();
-    return new Journal({ directory, journalData });
+    validateJournal(journalData);
+    const journal = new Journal({ directory, journalData });
+    await journal.saveToDevice();
+    return journal;
   }
 
   /**
@@ -129,7 +174,7 @@ export class Journal {
   //   // Write plainText to PouchDb
   // }
 
-  saveToDevice() {
+  async saveToDevice() {
     // let cipher: string | null = null;
     // if (this.encryptionPassword && this.meta.encryption) {
     //   cipher = this.encrypt({ plainText = JSON.stringify(data) });
@@ -143,7 +188,7 @@ export class Journal {
           : undefined, // TODO add encryption
     };
     const stringifiedJournalData = JSON.stringify(validateJournal(journal));
-    writeStringToFile(this.directory, stringifiedJournalData);
+    await this.deviceSaver(this.directory, stringifiedJournalData);
   }
 
   // async createEncryption(baseKey: string) {
@@ -183,7 +228,7 @@ export class Journal {
 
   getLatestRecord() {
     const latestRecordDate =
-      journalStoreIndexes.getSliceIds("InstitutionsByDate")[0];
+      this.storeIndexes.getSliceIds("InstitutionsByDate")[0];
 
     /* ---------- CODE BLOCK: Get latest institutions ---------- */
     const latestInstitutionsQueryId = "latestRecordInstitutions";
@@ -197,13 +242,13 @@ export class Journal {
         where("date", Number(latestRecordDate));
       }
     );
-    const latestRecordInstitutions = journalStoreQueries.getResultTable(
+    const latestRecordInstitutions = this.storeQueries.getResultTable(
       latestInstitutionsQueryId
     );
 
     /* ---------- CODE BLOCK: Get latest assets ---------- */
     const latestAssetsQueryId = "latestRecordAssets";
-    journalStoreQueries.setQueryDefinition(
+    this.storeQueries.setQueryDefinition(
       latestAssetsQueryId,
       "assets",
       ({ select, where }) => {
@@ -218,11 +263,11 @@ export class Journal {
       }
     );
     const latestRecordAssets =
-      journalStoreQueries.getResultTable(latestAssetsQueryId);
+      this.storeQueries.getResultTable(latestAssetsQueryId);
 
     /* ---------- CODE BLOCK: Get latest quotes ---------- */
     const latestQuotesQueryId = "latestRecordQuotes";
-    journalStoreQueries.setQueryDefinition(
+    this.storeQueries.setQueryDefinition(
       latestQuotesQueryId,
       "quotes",
       ({ select, where }) => {
@@ -234,7 +279,7 @@ export class Journal {
       }
     );
     const latestRecordQuotes =
-      journalStoreQueries.getResultTable(latestQuotesQueryId);
+      this.storeQueries.getResultTable(latestQuotesQueryId);
 
     /* ---------- CODE BLOCK: Type output record ---------- */
     const latestRecord = validateRecord({
@@ -249,38 +294,30 @@ export class Journal {
     };
   }
 
-  /* ---------- CODE BLOCK: Hooks ---------- */
-  useJournalSliceIds = useJournalSliceIds;
-  useJournalQueries = useJournalQueries;
-  useJournalResultTable = useJournalResultTable;
-
   /* ---------- CODE BLOCK: Setters ---------- */
-  addRecord(recordData: RecordsSchema) {
+  async addRecord(recordData: RecordsSchema) {
     // setRow used because setTable overwrites tinyBase store.
-    try {
-      const { assets, institutions, quotes } = recordData;
-      Object.entries(assets).forEach(([assetId, assetData]) =>
-        this.store.setRow("assets", assetId, assetData)
-      );
-      Object.entries(institutions).forEach(([institutionId, institutionData]) =>
-        this.store.setRow("institutions", institutionId, institutionData)
-      );
-      Object.entries(quotes).forEach(([quoteId, quoteData]) =>
-        this.store.setRow("quotes", quoteId, quoteData)
-      );
-      this.saveToDevice();
-    } catch (e) {
-      throwError(e);
-    }
+    const { assets, institutions, quotes } = recordData;
+    Object.entries(assets).forEach(([assetId, assetData]) =>
+      this.store.setRow("assets", assetId, assetData)
+    );
+    Object.entries(institutions).forEach(([institutionId, institutionData]) =>
+      this.store.setRow("institutions", institutionId, institutionData)
+    );
+    Object.entries(quotes).forEach(([quoteId, quoteData]) =>
+      this.store.setRow("quotes", quoteId, quoteData)
+    );
+    await this.saveToDevice();
   }
 }
 
-type JournalConctructorProps = {
-  directory: string;
-  journalData: JournalSchema;
-};
+type DeviceSaver = (uri: string, content: string) => Promise<void>;
 
 /* ---------- Comments ----------
+22May2025
+Moved hooks to separate file src/entities/journal/ui/useJournal.tsx
+
+===
 - Used singletone pattern because app is managing single journal only.
 
 - Choosed singletone over `object` or `static class`

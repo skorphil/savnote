@@ -2,9 +2,9 @@ import { Journal, showSaveFileDialog } from "@/entities/journal";
 import { Preferences } from "@/entities/user-config";
 import { throwError } from "@/shared/error-handling";
 import { List, Navbar, Page, Link, ListInput, Button } from "konsta/react";
-import { ChangeEvent, useState } from "react";
+import { type ChangeEvent, useState } from "react";
 import { MdArrowBack } from "react-icons/md";
-import { NavigateFunction, useNavigate } from "react-router";
+import { type NavigateFunction, useNavigate } from "react-router";
 
 /**
  * New component
@@ -88,7 +88,7 @@ async function handleJournalCreate(props: HandleJournalCreateProps) {
     } as const,
   };
 
-  Journal.new(directory, JournalData);
+  await Journal.create(directory, JournalData);
 
   new Preferences().updatePreferences({
     currentJournalDirectory: directory,

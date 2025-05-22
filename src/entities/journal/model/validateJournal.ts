@@ -13,7 +13,8 @@ import { throwError } from "@/shared/error-handling";
 
 export function validateJournal(data: object): JournalSchema {
   try {
-    return journalSchema.parse(data);
+    const validatedJournal = journalSchema.parse(data);
+    return validatedJournal;
   } catch (e) {
     if (e instanceof ZodError) {
       throw Error(
