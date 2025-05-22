@@ -100,8 +100,9 @@ export function New() {
 async function handleRecordSave() {
   const recordDraft = RecordDraft.instance;
   if (!recordDraft) return;
-  // TODO handle Quote parsing error
+  // TODO handle Quote parsing error. Manual quotes input
   const recordData = await recordDraft.getRecordData();
-  Journal.instance?.addRecord(recordData);
+  const journal = Journal.resume();
+  await journal.addRecord(recordData);
   RecordDraft.delete();
 }

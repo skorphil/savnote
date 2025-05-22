@@ -1,9 +1,9 @@
-import { Journal } from "@/entities/journal";
+import { useJournalRecordDates } from "@/entities/journal";
 import { handleJournalExit } from "@/shared/handle-journal-exit";
 import { unixToHumanReadable } from "@/shared/lib/date-time-format";
 import { Link, List, ListItem, Navbar } from "konsta/react";
 import { MdExitToApp } from "react-icons/md";
-import { redirect, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 /**
  * New component
@@ -11,8 +11,7 @@ import { redirect, useNavigate } from "react-router";
  */
 function RecordsTab() {
   const navigate = useNavigate();
-  const journal = Journal.resume(() => redirect("/") as never);
-  const recordDates = journal.useJournalSliceIds("InstitutionsByDate");
+  const recordDates = useJournalRecordDates();
 
   return (
     <>

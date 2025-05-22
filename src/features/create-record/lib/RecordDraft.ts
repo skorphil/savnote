@@ -84,6 +84,7 @@ export class RecordDraft {
     const quotes = await this.getQuotes(date);
     const { assets, institutions } = RecordDraft.store.getTables();
     if (!assets || !institutions || !quotes)
+      // TODO handle attempt to save empty record. Need to propagate to UI state
       throw Error("RecordDraft is empty");
 
     /* ---------- CODE BLOCK: Extract assets in Journal format ---------- */
