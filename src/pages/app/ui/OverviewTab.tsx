@@ -1,6 +1,6 @@
 import { Navbar, Link } from "konsta/react";
 import { SummaryCard } from "./summary-card/SummaryCard";
-import { MdExitToApp } from "react-icons/md";
+import { MdArrowDropDown, MdExitToApp } from "react-icons/md";
 import { Preferences } from "@/entities/user-config";
 import { Journal } from "@/entities/journal";
 import { handleJournalExit } from "@/shared/handle-journal-exit";
@@ -42,7 +42,10 @@ function OverviewTab() {
         title="Overview"
         right={
           <>
-            <span>{counterCurrency || "usd"}</span>
+            <div className="flex flex-row items-center">
+              <span>{counterCurrency || "USD"}</span>
+              <MdArrowDropDown />
+            </div>
             <Link
               onClick={() => {
                 handleJournalExit();

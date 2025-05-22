@@ -31,7 +31,7 @@ export function Open() {
   return (
     <Page className={styles.page}>
       <Navbar
-        title={journal && journal.getJournalName()}
+        title={journal ? journal.getJournalName() : "Loading..."}
         right={
           <Link
             onClick={() => {

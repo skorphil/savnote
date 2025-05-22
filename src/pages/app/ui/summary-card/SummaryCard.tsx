@@ -12,19 +12,22 @@ function SummaryCard() {
   const summaryData = useSummaryData();
 
   return (
-    <Card className="block overflow-x-auto mt-8" contentWrap={false}>
-      Summary
+    <Card
+      className="block overflow-x-auto mt-2"
+      contentWrap={false}
+      header="Summary"
+    >
       <Table>
         <TableBody>
           {summaryData?.map((record, id, array) => {
             // const row = Object.values(record);
             return (
               <TableRow key={id}>
-                <TableCell className={styles.tableCell}>
+                <TableCell className={`${styles.tableCell} !px-4`}>
                   {unixToHumanReadable(Number(record.date))}
                 </TableCell>
                 <TableCell>{numeral(record.total).format("0.00a")}</TableCell>
-                <TableCell>
+                <TableCell className="!px-4">
                   {array[id + 1]?.total ? (
                     record.total - array[id + 1]?.total > 0 ? (
                       <div className="flex flex-row items-center">
