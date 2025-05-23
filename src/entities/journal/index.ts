@@ -10,6 +10,6 @@ export { showOpenFileDialog } from "./ui/showOpenFileDialog";
 export { showSaveFileDialog } from "./ui/showSaveFileDialog";
 
 export { useJournalValue } from "./model/JournalStore";
-export { readJournal } from "./lib/readJournal";
+export { readJournal } from "./lib/readAndroidFile";
 
 export { useJournalRecordDates } from "./ui/useJournal";
