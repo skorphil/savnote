@@ -21,7 +21,7 @@ import {
   validateJournal,
   validateRecord,
 } from "../model/validateJournal";
-import { readJournal } from "./readJournal";
+import { readFileFromAndroid } from "./readFileFromAndroid";
 import { writeFileToAndroid } from "./writeFileToAndroid";
 import { redirect } from "react-router";
 
@@ -38,8 +38,6 @@ type JournalConctructorProps = {
   store?: Store<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
   storeIndexes?: Indexes<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
   storeQueries?: Queries<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
-
-  deviceSaver?: DeviceSaver;
 };
 
 /**
@@ -58,11 +56,11 @@ export class Journal {
   /**
    * Local directoy of json journal file. Need write and read permissions.
    */
-  private directory!: string;
+  private directory: string;
   /**
    * Journal's meta data
    */
-  meta!: MetaSchema;
+  meta: MetaSchema;
   /* ---------- CODE BLOCK: Encryption ---------- */
   // private cipher: string | 0 = 0;
   // private encryptionKey: CryptoKey | null = null;
@@ -73,25 +71,21 @@ export class Journal {
   storeIndexes: Indexes<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
   storeQueries: Queries<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
 
-  deviceSaver: DeviceSaver;
+  static deviceSaver: DeviceSaver = writeFileToAndroid;
+  static deviceReader: DeviceReader = readFileFromAndroid;
 
   private constructor({
     store = journalStore,
     storeIndexes = journalStoreIndexes,
     storeQueries = journalStoreQueries,
-    deviceSaver = writeFileToAndroid,
     ...props
   }: JournalConctructorProps) {
     Journal.instance = this;
     const { directory, journalData } = props;
-    if (!directory || !journalData)
-      throw Error(
-        "provide `directory` and `journalData` to create new Journal instance."
-      );
-    this.store = store; // store: any, Unsafe assignment of an error typed value
+
+    this.store = store;
     this.storeIndexes = storeIndexes;
     this.storeQueries = storeQueries;
-    this.deviceSaver = deviceSaver;
     this.directory = directory;
     this.meta = journalData.meta;
     this.encryption = journalData.encryption;
@@ -119,16 +113,23 @@ export class Journal {
     errorCallback?: (e: unknown) => void
   ): Promise<Journal> {
     this.delete();
+
     try {
-      const journalData = await readJournal(directory);
-      const journal = new Journal({ directory, journalData });
+      const fileContent = await this.deviceReader(directory);
+
+      const unvalidatedJournal: unknown = JSON.parse(fileContent);
+      if (typeof unvalidatedJournal !== "object" || unvalidatedJournal === null)
+        throw new Error("Can't read a journal. Is it in SavNote format?");
+
+      const validatedJournal = validateJournal(unvalidatedJournal);
+      const journal = new Journal({ directory, journalData: validatedJournal });
       return journal;
     } catch (e) {
+      console.error(e);
       if (errorCallback) {
-        return errorCallback(e) as never;
-      } else {
-        throw e;
+        errorCallback(e) as never;
       }
+      throw e;
     }
   }
 
@@ -188,7 +189,7 @@ export class Journal {
           : undefined, // TODO add encryption
     };
     const stringifiedJournalData = JSON.stringify(validateJournal(journal));
-    await this.deviceSaver(this.directory, stringifiedJournalData);
+    await Journal.deviceSaver(this.directory, stringifiedJournalData);
   }
 
   // async createEncryption(baseKey: string) {
@@ -312,6 +313,7 @@ export class Journal {
 }
 
 type DeviceSaver = (uri: string, content: string) => Promise<void>;
+type DeviceReader = (uri: string) => Promise<string>;
 
 /* ---------- Comments ----------
 22May2025
