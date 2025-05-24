@@ -1,33 +1,30 @@
 import { defineConfig } from "vite";
 import path from "node:path";
 import react from "@vitejs/plugin-react";
-import basicSsl from "@vitejs/plugin-basic-ssl";
 
 const host = process.env.TAURI_DEV_HOST;
 
-// https://vitejs.dev/config/
 export default defineConfig(async () => ({
   test: {
-    globals: true,
+    globals: true, // To work with react-testing-library
     environment: "jsdom", // To work with react-testing-library
     setupFiles: "./tests/setup.js",
     coverage: {
       include: ["src"],
-      exclude: ["src-tauri/**", "**/index.ts"],
+      exclude: [
+        "src-tauri/**",
+        "**/index.ts",
+        "**/tests",
+        "**/_*",
+        "src/app/providers",
+        "src/app/routes",
+      ],
     },
     // coverage: { enabled: true }, // shows coverage in vitest --ui, but slows running tests
   },
-  plugins: [
-    react(),
-    // basicSsl({
-    //   name: "test",
-    //   domains: ["*.custom.com"],
-    //   certDir: "/Users/.../.devServer/cert",
-    // }),
-  ],
+  plugins: [react()],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
-  //
   // 1. prevent vite from obscuring rust errors
   clearScreen: false,
   // 2. tauri expects a fixed port, fail if that port is not available

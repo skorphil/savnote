@@ -48,8 +48,9 @@ export function SearchDialog(props: SearchDialogProps) {
     ));
 
   if (query.length === 0) {
-    itemList = data.map((item) => (
+    itemList = data.map((item, i) => (
       <Item
+        key={i}
         onClick={() => onOptionSelect(item[valueKey] as string)}
         title={item[titleKey]}
         subtitle={subtitleKey ? item[subtitleKey] : undefined}
