@@ -29,12 +29,14 @@ export function AmountInput(props: AssetInputsProps<number>) {
         const { floatValue } = values;
         return floatValue ? floatValue > 0 : false;
       }}
-      colors={disabled ? { bgMaterial: "transparent" } : {}}
+      colors={{ bgMaterial: "transparent" }}
       label={label}
       thousandSeparator={" "}
       value={value}
       customInput={ListInput}
-      onValueChange={({ value }) => handleAmountChange(value, assetDispatch)}
+      onValueChange={({ value }) => {
+        handleAmountChange(value, assetDispatch);
+      }}
     />
   );
 }

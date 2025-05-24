@@ -127,7 +127,7 @@ export class Journal {
     } catch (e) {
       console.error(e);
       if (errorCallback) {
-        errorCallback(e) as never;
+        errorCallback(e);
       }
       throw e;
     }

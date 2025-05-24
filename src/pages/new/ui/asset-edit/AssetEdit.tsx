@@ -177,7 +177,7 @@ export function AssetEdit() {
                     ...assetState,
                     isDeleted: true,
                   };
-                  void handleAssetSave(
+                  handleAssetSave(
                     navigate,
                     updatedState,
                     assetDispatch,
@@ -211,7 +211,7 @@ function handleAssetSave(
 
   if (assetValues.errors)
     Object.values(assetValues.errors).forEach((errors) => {
-      if (errors?.length > 0 && !assetValues.isDeleted) {
+      if (errors.length > 0 && !assetValues.isDeleted) {
         hasErrors = true;
       }
     });

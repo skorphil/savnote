@@ -87,7 +87,7 @@ export function InstitutionNameInput(
 
 function handleBlur(value: string, recordInstitutionsNames?: string[]) {
   const validationErrors: string[] = [];
-  if (recordInstitutionsNames && recordInstitutionsNames.includes(value))
+  if (recordInstitutionsNames?.includes(value))
     validationErrors.push(
       `This institution name already exists in current record. Choose unique name or edit existing institution.`
     );
@@ -107,7 +107,7 @@ function handleChange(
       validationErrors.push(issue.message)
     );
 
-  if (recordInstitutionsNames && recordInstitutionsNames.includes(value))
+  if (recordInstitutionsNames?.includes(value))
     validationErrors.push(
       `This institution name already exists in current record. Choose unique name or edit existing institution.`
     );

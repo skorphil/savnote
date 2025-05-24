@@ -19,7 +19,7 @@ function SummaryCard() {
     >
       <Table>
         <TableBody>
-          {summaryData?.map((record, id, array) => {
+          {summaryData.map((record, id, array) => {
             // const row = Object.values(record);
             return (
               <TableRow key={id}>

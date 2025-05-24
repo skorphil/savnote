@@ -75,7 +75,7 @@ export function SearchDialog(props: SearchDialogProps) {
             autoFocus
             outline={outline}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setQuery(e.target.value)
+              { setQuery(e.target.value); }
             }
           />
         </div>

@@ -14,7 +14,7 @@ export function IsEarningCheckbox(props: AssetInputsProps<boolean>) {
           component="div"
           name="isEarning"
           checked={value}
-          onChange={() => handleChange(assetDispatch, value)}
+          onChange={() => { handleChange(assetDispatch, value); }}
         />
       }
     />

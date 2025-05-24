@@ -47,13 +47,13 @@ export function InstitutionEdit() {
           <Link
             toolbar
             onClick={() =>
-              handleInstitutionSave({
+              { handleInstitutionSave({
                 institutionDispatch,
                 institutionValues: institutionState,
                 noCountry,
                 institutionId,
                 navigate,
-              })
+              }); }
             }
           >
             Save
@@ -78,7 +78,7 @@ export function InstitutionEdit() {
               component="div"
               name="noCountry"
               checked={noCountry}
-              onChange={() => setNoCountry((state) => !state)}
+              onChange={() => { setNoCountry((state) => !state); }}
             />
           }
         />
@@ -137,7 +137,7 @@ function handleInstitutionSave(props: HandleInstitutionSaveProps) {
     institutionId = name;
   }
 
-  if (institutionValues.country.length === 0 && noCountry === false) {
+  if (institutionValues.country.length === 0 && !noCountry) {
     institutionDispatch({
       type: "update_value",
       payload: {

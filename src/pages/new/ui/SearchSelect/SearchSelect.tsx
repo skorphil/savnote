@@ -44,7 +44,7 @@ export function SearchSelect(props: SearchSelectProps) {
           keysToSearch={keysToSearch}
           value={value}
           outline={outline}
-          onClose={() => setIsOpened(false)}
+          onClose={() => { setIsOpened(false); }}
           data={data}
           onOptionSelect={(value) => {
             setIsOpened(false);

@@ -22,7 +22,7 @@ export function DescriptionInput(props: AssetInputsProps<string>) {
       value={value}
       inputClassName="!h-20 resize-none"
       onChange={(e: ChangeEvent<HTMLInputElement>) =>
-        handleChange(assetDispatch, e.target.value)
+        { handleChange(assetDispatch, e.target.value); }
       }
     />
   );

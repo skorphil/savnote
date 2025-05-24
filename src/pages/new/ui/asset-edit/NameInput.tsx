@@ -82,7 +82,7 @@ function handleChange(
       validationErrors.push(issue.message)
     );
 
-  if (institutionAssetsNames && institutionAssetsNames.includes(value))
+  if (institutionAssetsNames?.includes(value))
     validationErrors.push(
       `This asset name already exists in the institution for this record. Choose unique name or edit existing asset.`
     );

@@ -33,7 +33,7 @@ function RecordsTab() {
         transparent={false}
       />
       <List inset className="space-y-4 mb-28 mt-0">
-        {recordDates?.map((date, id) => (
+        {recordDates.map((date, id) => (
           <ListItem key={id}>
             <span>{unixToHumanReadable(Number(date))}</span>
           </ListItem>

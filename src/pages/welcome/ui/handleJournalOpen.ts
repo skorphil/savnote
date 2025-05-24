@@ -9,9 +9,10 @@ export async function handleJournalOpen() {
     if (!directory) return null;
 
     await Journal.deviceReader(directory);
-    return new Preferences().updatePreferences({
+    new Preferences().updatePreferences({
       currentJournalDirectory: directory,
     });
+    return;
   } catch (e) {
     throwError(e);
   }
