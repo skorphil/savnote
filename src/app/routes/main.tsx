@@ -5,7 +5,12 @@ import { router } from "./router";
 import { TinyBaseProvider } from "../providers/TinyBaseProvider";
 import { KonstaUIProvider } from "../providers/KonstaUIProvider";
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+const rootElement = document.getElementById("root");
+if (!rootElement) {
+  throw new Error("Root element not found");
+}
+
+ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <KonstaUIProvider>
       <TinyBaseProvider>

@@ -12,7 +12,7 @@ export function InstitutionsGrid(props: InstitutionsGridProps) {
   const { institutionId: selectedInstitutionId } = useParams();
   const { institutions, navigate /*isInstitutionSelected*/ } = props;
   return (
-    <div className={`${styles.institutionsGrid}`}>
+    <div className={styles.institutionsGrid}>
       {Object.entries(institutions).map(([institutionId, institution]) => (
         <Card
           key={institutionId}

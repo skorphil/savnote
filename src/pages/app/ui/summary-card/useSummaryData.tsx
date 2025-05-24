@@ -16,7 +16,7 @@ function useSummaryData() {
 
   if (selectedCurrency === undefined) selectedCurrency = "usd";
 
-  const summaryData = recordDates?.map((date) => {
+  const summaryData = recordDates.map((date) => {
     journalStoreQueries.setQueryDefinition(
       date,
       "assets",

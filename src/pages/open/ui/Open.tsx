@@ -22,7 +22,9 @@ export function Open() {
         void navigate("/");
         return;
       }
-      const journal = await Journal.open(journalUri, () => void navigate("/"));
+      const journal = await Journal.open(journalUri, () => {
+        void navigate("/");
+      });
       setJournal(journal);
     }
     openJournal().catch((e: unknown) => throwError(e));
@@ -59,7 +61,7 @@ export function Open() {
 
             <ListItem
               title="Encryption"
-              text={journal.getEncryptionParameters() || "Password not set"}
+              text={journal.getEncryptionParameters() ?? "Password not set"}
             />
             <div className="mt-4"></div>
           </List>

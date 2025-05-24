@@ -31,7 +31,7 @@ export function CreateJournal() {
         <ListInput
           value={name}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setName(e.target.value)
+            { setName(e.target.value); }
           }
           outline
           label="Name"
@@ -39,7 +39,7 @@ export function CreateJournal() {
         <ListInput
           value={description}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setDescription(e.target.value)
+            { setDescription(e.target.value); }
           }
           inputClassName="!h-20 resize-none"
           type="textarea"

@@ -52,7 +52,7 @@ function Welcome() {
               await handleJournalOpen();
               void navigate("/open", { replace: true });
             };
-            handler().catch((e: Error) => setError(e.message));
+            handler().catch((e: Error) => { setError(e.message); });
           }}
           innerClassName={itemClass}
           strongTitle={false}

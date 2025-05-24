@@ -38,19 +38,19 @@ function App() {
       <Tabbar labels={true} icons={true} className="left-0 bottom-0 fixed">
         <TabbarLink
           active={activeTab === "tab-1"}
-          onClick={() => setActiveTab("tab-1")}
+          onClick={() => { setActiveTab("tab-1"); }}
           icon={<Icon material={<MdAssessment className="w-6 h-6" />} />}
           label={"Overview"}
         />
         <TabbarLink
           active={activeTab === "tab-2"}
-          onClick={() => setActiveTab("tab-2")}
+          onClick={() => { setActiveTab("tab-2"); }}
           icon={<Icon material={<MdViewList className="w-6 h-6" />} />}
           label={"Records"}
         />
         <TabbarLink
           active={activeTab === "tab-3"}
-          onClick={() => setActiveTab("tab-3")}
+          onClick={() => { setActiveTab("tab-3"); }}
           icon={<Icon material={<MdSettings className="w-6 h-6" />} />}
           label={"Preferences"}
         />

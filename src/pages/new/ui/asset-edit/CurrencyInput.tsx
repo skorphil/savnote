@@ -22,7 +22,7 @@ export function CurrencyInput(props: AssetInputsProps<string>) {
       label={label}
       value={value}
       onChange={(e: ChangeEvent<HTMLInputElement>) =>
-        handleCurrencyChange(e.target.value, assetDispatch)
+        { handleCurrencyChange(e.target.value, assetDispatch); }
       }
     >
       <option value="" disabled hidden>

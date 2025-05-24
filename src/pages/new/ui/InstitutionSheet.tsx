@@ -43,7 +43,7 @@ export function InstitutionSheet() {
               ...institutionData,
               isDeleted: false,
             };
-            void handleInstitutionSave(updatedState, institutionId);
+            handleInstitutionSave(updatedState, institutionId);
           }}
           navbar
         >
@@ -60,7 +60,7 @@ export function InstitutionSheet() {
               ...institutionData,
               isDeleted: true,
             };
-            void handleInstitutionSave(updatedState, institutionId);
+            handleInstitutionSave(updatedState, institutionId);
           }}
           navbar
         >
@@ -119,8 +119,8 @@ export function InstitutionSheet() {
                 link
                 strongTitle
                 // media={flag}
-                title={`${institutionData?.name}`}
-                text={`${institutionAssetsIds?.length} assets`}
+                title={institutionData.name}
+                text={`${institutionAssetsIds.length} assets`}
               />
             )}
           </ul>
@@ -230,7 +230,7 @@ function handleInstitutionSave(
 ) {
   if (institutionId === undefined) {
     const { name } = institutionValues;
-    institutionId = `${name}`;
+    institutionId = name;
   }
   // TODO compare current values with initial to define isDirty
   const recordDraft = RecordDraft.instance;
@@ -244,13 +244,13 @@ function handleInstitutionSave(
 
   for (const key of keys as Set<keyof RecordDraftInstitutionSchema>) {
     if (currentValues && institutionValues[key] !== currentValues[key]) {
-      return recordDraft.saveInstitution(institutionId, {
+      recordDraft.saveInstitution(institutionId, {
         ...institutionValues,
         isDirty: true,
-      });
+      }); return;
     }
   }
-  return recordDraft.saveInstitution(institutionId, {
+  recordDraft.saveInstitution(institutionId, {
     ...institutionValues,
     isDirty: false,
   });
