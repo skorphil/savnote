@@ -2,13 +2,16 @@ import { vi, describe, it, expect } from "vitest";
 
 /* ---------- CODE BLOCK: Mocking ---------- */
 vi.mock("@/entities/journal", () => {
+  const mockJournal = vi.fn();
+  mockJournal.deviceReader = vi.fn();
+
   return {
-    readJournal: vi.fn(),
+    Journal: mockJournal,
     showOpenFileDialog: vi.fn(),
   };
 });
 
-import { readJournal, showOpenFileDialog } from "@/entities/journal";
+import { showOpenFileDialog, Journal } from "@/entities/journal";
 import { handleJournalOpen } from "../ui/handleJournalOpen";
 import { Preferences } from "@/entities/user-config";
 
@@ -22,9 +25,7 @@ describe("handleJournalOpen", () => {
     const errorText = "Mock error text";
 
     vi.mocked(showOpenFileDialog).mockResolvedValue("mock/location");
-    vi.mocked(readJournal).mockImplementation(() => {
-      throw new Error(errorText);
-    });
+    vi.mocked(Journal.deviceReader).mockRejectedValue(new Error(errorText));
 
     try {
       await handleJournalOpen();
@@ -35,6 +36,7 @@ describe("handleJournalOpen", () => {
 
   it("Returns null if not path were provided by dialog", async () => {
     vi.mocked(showOpenFileDialog).mockResolvedValue(null);
+    vi.mocked(Journal.deviceReader).mockResolvedValue("mocked success");
 
     const result = await handleJournalOpen();
 
@@ -44,7 +46,7 @@ describe("handleJournalOpen", () => {
   it("Adds journal url to preferences if provided valid data", async () => {
     const uri = "mock/location";
     vi.mocked(showOpenFileDialog).mockResolvedValue(uri);
-    vi.mocked(readJournal).mockResolvedValue(true);
+    vi.mocked(Journal.deviceReader).mockResolvedValue("mocked success");
     const updatePreferencesMock = vi.fn();
     vi.spyOn(Preferences.prototype, "updatePreferences").mockImplementation(
       updatePreferencesMock

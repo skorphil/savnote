@@ -1,5 +1,5 @@
 import { throwError } from "@/shared/error-handling";
-import { showOpenFileDialog, readJournal } from "@/entities/journal";
+import { showOpenFileDialog, Journal } from "@/entities/journal";
 import { Preferences } from "@/entities/user-config";
 
 export async function handleJournalOpen() {
@@ -7,7 +7,8 @@ export async function handleJournalOpen() {
     const directory = await showOpenFileDialog(["application/json"]);
 
     if (!directory) return null;
-    await readJournal(directory);
+
+    await Journal.deviceReader(directory);
     return new Preferences().updatePreferences({
       currentJournalDirectory: directory,
     });
