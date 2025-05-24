@@ -2,27 +2,27 @@ import { tinyBaseJournalSchema } from "./tinyBaseJournalSchema";
 
 import * as UiReact from "tinybase/ui-react/with-schemas";
 import {
-  type Id,
-  type NoValuesSchema,
-  createIndexes,
-  createQueries,
-  createStore,
+	type Id,
+	type NoValuesSchema,
+	createIndexes,
+	createQueries,
+	createStore,
 } from "tinybase/with-schemas";
 
 const STORE_ID = "journal";
 type ValueIds = keyof typeof tinyBaseJournalSchema;
 type Schemas = [typeof tinyBaseJournalSchema, NoValuesSchema];
 const {
-  useCreateStore,
-  useProvideStore,
-  useValue,
-  useSliceIds,
-  useQueries,
-  useResultTable,
+	useCreateStore,
+	useProvideStore,
+	useValue,
+	useSliceIds,
+	useQueries,
+	useResultTable,
 } = UiReact as UiReact.WithSchemas<Schemas>;
 
 export const journalStore = createStore().setTablesSchema(
-  tinyBaseJournalSchema
+	tinyBaseJournalSchema,
 );
 
 export const journalStoreQueries = createQueries(journalStore);
@@ -30,35 +30,35 @@ export const journalStoreQueries = createQueries(journalStore);
 export const journalStoreIndexes = createIndexes(journalStore);
 
 journalStoreIndexes.setIndexDefinition(
-  "InstitutionsByDate",
-  "institutions",
-  "date",
-  "date",
-  (id1, id2) => (id1 > id2 ? -1 : 1)
+	"InstitutionsByDate",
+	"institutions",
+	"date",
+	"date",
+	(id1, id2) => (id1 > id2 ? -1 : 1),
 );
 
 /* ---------- CODE BLOCK: Hooks ---------- */
 
 export const useJournalValue = <ValueId extends ValueIds>(valueId: ValueId) =>
-  useValue<ValueId>(valueId, STORE_ID);
+	useValue<ValueId>(valueId, STORE_ID);
 
 export const useJournalSliceIds = (indexId: Id) => {
-  return useSliceIds(indexId, journalStoreIndexes);
+	return useSliceIds(indexId, journalStoreIndexes);
 };
 
 export const useJournalQueries = () => {
-  return useQueries(STORE_ID);
+	return useQueries(STORE_ID);
 };
 
 export const useJournalResultTable = (queryId: string) => {
-  return useResultTable(queryId, journalStoreQueries);
+	return useResultTable(queryId, journalStoreQueries);
 };
 
 /* ---------- CODE BLOCK: Register in provider ---------- */
 export const JournalStore = () => {
-  const store = useCreateStore(() => journalStore);
-  useProvideStore(STORE_ID, store);
-  return null;
+	const store = useCreateStore(() => journalStore);
+	useProvideStore(STORE_ID, store);
+	return null;
 };
 
 /* ---------- Comments ----------

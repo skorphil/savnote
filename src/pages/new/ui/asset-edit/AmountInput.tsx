@@ -1,56 +1,56 @@
 import { ListInput } from "konsta/react";
+import { useEffect, useRef } from "react";
 import { NumericFormat } from "react-number-format";
-import type { AssetAction } from "./useAssetDispatch";
 import type { AssetInputsProps } from "./AssetEdit";
 import { ReadOnlyInput } from "./ReadOnlyInput";
-import { useEffect, useRef } from "react";
+import type { AssetAction } from "./useAssetDispatch";
 
 export function AmountInput(props: AssetInputsProps<number>) {
-  const { assetDispatch, value, disabled, autoFocus } = props;
-  const label = "Amount";
-  const inputRef = useRef<{ inputEl: HTMLInputElement } | null>(null);
+	const { assetDispatch, value, disabled, autoFocus } = props;
+	const label = "Amount";
+	const inputRef = useRef<{ inputEl: HTMLInputElement } | null>(null);
 
-  useEffect(() => {
-    if (!autoFocus) return;
-    if (inputRef.current?.inputEl instanceof HTMLInputElement) {
-      const inputElement = inputRef.current.inputEl;
-      inputElement.focus();
-      inputElement.setSelectionRange(0, inputElement.value.length);
-    }
-  }, [disabled]);
+	useEffect(() => {
+		if (!autoFocus) return;
+		if (inputRef.current?.inputEl instanceof HTMLInputElement) {
+			const inputElement = inputRef.current.inputEl;
+			inputElement.focus();
+			inputElement.setSelectionRange(0, inputElement.value.length);
+		}
+	}, [autoFocus]);
 
-  if (disabled) return <ReadOnlyInput label={label} value={value} />;
+	if (disabled) return <ReadOnlyInput label={label} value={value} />;
 
-  return (
-    <NumericFormat
-      getInputRef={inputRef}
-      outline
-      isAllowed={(values) => {
-        const { floatValue } = values;
-        return floatValue ? floatValue > 0 : false;
-      }}
-      colors={{ bgMaterial: "transparent" }}
-      label={label}
-      thousandSeparator={" "}
-      value={value}
-      customInput={ListInput}
-      onValueChange={({ value }) => {
-        handleAmountChange(value, assetDispatch);
-      }}
-    />
-  );
+	return (
+		<NumericFormat
+			getInputRef={inputRef}
+			outline
+			isAllowed={(values) => {
+				const { floatValue } = values;
+				return floatValue ? floatValue > 0 : false;
+			}}
+			colors={{ bgMaterial: "transparent" }}
+			label={label}
+			thousandSeparator={" "}
+			value={value}
+			customInput={ListInput}
+			onValueChange={({ value }) => {
+				handleAmountChange(value, assetDispatch);
+			}}
+		/>
+	);
 }
 
 function handleAmountChange(
-  value: string,
-  assetDispatch: React.Dispatch<AssetAction>
+	value: string,
+	assetDispatch: React.Dispatch<AssetAction>,
 ) {
-  if (Number(value) < 0) return;
-  // TODO validate ZOD
-  assetDispatch({
-    type: "update_value",
-    payload: { property: "amount", value: Number(value) },
-  });
+	if (Number(value) < 0) return;
+	// TODO validate ZOD
+	assetDispatch({
+		type: "update_value",
+		payload: { property: "amount", value: Number(value) },
+	});
 }
 
 /* ---------- CODE BLOCK: Description ----------

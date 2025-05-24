@@ -1,41 +1,48 @@
-import type { PreferencesSchema1 } from "./preferencesSchema1";
 import { preferencesStore, usePreferenceValue } from "./PreferencesStore";
+import type { PreferencesSchema1 } from "./preferencesSchema1";
 
 /**
  * Utility class to work with app preferences
+ * @example Preferences.getInstanse()
  * @returns Singleton app config instance
  */
 export class Preferences {
-  static instance: Preferences;
-  storeId = "preferences";
-  store = preferencesStore;
+	static instance: Preferences;
+	storeId = "preferences";
+	store = preferencesStore;
 
-  constructor() {
-    if (Preferences.instance) return Preferences.instance;
-    Preferences.instance = this;
-  }
+	private constructor() {
+		Preferences.instance = this;
+	}
 
-  updatePreferences(preferences: PreferencesProps) {
-    const values = this.store.getValues();
-    const updatedValues = { ...values, ...preferences };
-    this.store.setValues(updatedValues);
-  }
+	static getInstance(): Preferences {
+		if (!Preferences.instance) {
+			Preferences.instance = new Preferences();
+		}
+		return Preferences.instance;
+	}
 
-  deleteValue(preference: keyof PreferencesProps) {
-    return this.store.delValue(preference);
-  }
+	updatePreferences(preferences: PreferencesProps) {
+		const values = this.store.getValues();
+		const updatedValues = { ...values, ...preferences };
+		this.store.setValues(updatedValues);
+	}
 
-  getPreferences(preferences: (keyof PreferencesProps)[]) {
-    const preferenceValues: PreferencesProps = {};
+	deleteValue(preference: keyof PreferencesProps) {
+		return this.store.delValue(preference);
+	}
 
-    preferences.forEach((key) => {
-      const value = this.store.getValue(key);
-      preferenceValues[key] = value;
-    });
-    return preferenceValues;
-  }
+	getPreferences(preferences: (keyof PreferencesProps)[]) {
+		const preferenceValues: PreferencesProps = {};
 
-  usePreferenceValue = usePreferenceValue;
+		for (const key of preferences) {
+			const value = this.store.getValue(key);
+			preferenceValues[key] = value;
+		}
+		return preferenceValues;
+	}
+
+	usePreferenceValue = usePreferenceValue;
 }
 
 type PreferencesProps = Partial<PreferencesSchema1>;

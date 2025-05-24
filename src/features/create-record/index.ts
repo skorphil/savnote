@@ -9,7 +9,7 @@ export { recordDraftMetaSchema } from "./model/recordDraftSchema";
 
 export type { ValueIds } from "./model/RecordDraftStore";
 export type {
-  RecordDraftMetaSchema,
-  RecordDraftAssetSchema,
-  RecordDraftInstitutionSchema,
+	RecordDraftMetaSchema,
+	RecordDraftAssetSchema,
+	RecordDraftInstitutionSchema,
 } from "./model/recordDraftSchema";

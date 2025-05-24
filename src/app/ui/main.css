@@ -3,23 +3,23 @@
 @tailwind utilities;
 
 :root {
-    color-scheme: auto;
+	color-scheme: auto;
 }
 body {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
 }
-  
+
 #root {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
 }
 
 .react-modal-sheet-container {
-    background-color: #313131 !important;
-    border-radius: 20px !important;
-  }
+	background-color: #313131 !important;
+	border-radius: 20px !important;
+}

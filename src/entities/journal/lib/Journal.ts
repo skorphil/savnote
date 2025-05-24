@@ -1,43 +1,43 @@
 import type {
-  EncryptionSchema,
-  JournalSchema,
-  MetaSchema,
-  RecordsSchema,
+	EncryptionSchema,
+	JournalSchema,
+	MetaSchema,
+	RecordsSchema,
 } from "@/shared/journal-schema";
 import type {
-  Indexes,
-  NoValuesSchema,
-  Queries,
-  Store,
+	Indexes,
+	NoValuesSchema,
+	Queries,
+	Store,
 } from "tinybase/with-schemas";
 
+import { redirect } from "react-router";
 import {
-  journalStore,
-  journalStoreIndexes,
-  journalStoreQueries,
+	journalStore,
+	journalStoreIndexes,
+	journalStoreQueries,
 } from "../model/JournalStore";
 import {
-  validateInstitution,
-  validateJournal,
-  validateRecord,
+	validateInstitution,
+	validateJournal,
+	validateRecord,
 } from "../model/validateJournal";
 import { readFileFromAndroid } from "./readFileFromAndroid";
 import { writeFileToAndroid } from "./writeFileToAndroid";
-import { redirect } from "react-router";
 
 import type { tinyBaseJournalSchema } from "../model/tinyBaseJournalSchema";
 
 type JournalConctructorProps = {
-  /**
-   * Local directoy of json journal file. Need write and read permissions.
-   */
-  directory: string;
-  journalData: JournalSchema;
+	/**
+	 * Local directoy of json journal file. Need write and read permissions.
+	 */
+	directory: string;
+	journalData: JournalSchema;
 
-  // store-related functions added to constructor for testing purposes
-  store?: Store<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
-  storeIndexes?: Indexes<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
-  storeQueries?: Queries<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
+	// store-related functions added to constructor for testing purposes
+	store?: Store<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
+	storeIndexes?: Indexes<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
+	storeQueries?: Queries<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
 };
 
 /**
@@ -48,268 +48,270 @@ type JournalConctructorProps = {
  * const data = userJournal.addRecord(...)
  */
 export class Journal {
-  /**
-   * Journal singleton - represents currently opened journal.
-   * Provides public API to manage the journal
-   */
-  static instance: Journal | undefined;
-  /**
-   * Local directoy of json journal file. Need write and read permissions.
-   */
-  private directory: string;
-  /**
-   * Journal's meta data
-   */
-  meta: MetaSchema;
-  /* ---------- CODE BLOCK: Encryption ---------- */
-  // private cipher: string | 0 = 0;
-  // private encryptionKey: CryptoKey | null = null;
-  private encryption: EncryptionSchema | undefined = undefined;
+	/**
+	 * Journal singleton - represents currently opened journal.
+	 * Provides public API to manage the journal
+	 */
+	static instance: Journal | undefined;
+	/**
+	 * Local directoy of json journal file. Need write and read permissions.
+	 */
+	private directory: string;
+	/**
+	 * Journal's meta data
+	 */
+	meta: MetaSchema;
+	/* ---------- CODE BLOCK: Encryption ---------- */
+	// private cipher: string | 0 = 0;
+	// private encryptionKey: CryptoKey | null = null;
+	private encryption: EncryptionSchema | undefined = undefined;
 
-  /* ---------- CODE BLOCK: Storage ---------- */
-  store: Store<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
-  storeIndexes: Indexes<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
-  storeQueries: Queries<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
+	/* ---------- CODE BLOCK: Storage ---------- */
+	store: Store<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
+	storeIndexes: Indexes<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
+	storeQueries: Queries<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
 
-  static deviceSaver: DeviceSaver = writeFileToAndroid;
-  static deviceReader: DeviceReader = readFileFromAndroid;
+	static deviceSaver: DeviceSaver = writeFileToAndroid;
+	static deviceReader: DeviceReader = readFileFromAndroid;
 
-  private constructor({
-    store = journalStore,
-    storeIndexes = journalStoreIndexes,
-    storeQueries = journalStoreQueries,
-    ...props
-  }: JournalConctructorProps) {
-    Journal.instance = this;
-    const { directory, journalData } = props;
+	private constructor({
+		store = journalStore,
+		storeIndexes = journalStoreIndexes,
+		storeQueries = journalStoreQueries,
+		...props
+	}: JournalConctructorProps) {
+		Journal.instance = this;
+		const { directory, journalData } = props;
 
-    this.store = store;
-    this.storeIndexes = storeIndexes;
-    this.storeQueries = storeQueries;
-    this.directory = directory;
-    this.meta = journalData.meta;
-    this.encryption = journalData.encryption;
+		this.store = store;
+		this.storeIndexes = storeIndexes;
+		this.storeQueries = storeQueries;
+		this.directory = directory;
+		this.meta = journalData.meta;
+		this.encryption = journalData.encryption;
 
-    /* ---------- CODE BLOCK: Check if provided journal is encrypted ---------- */
-    if (journalData.records && typeof journalData.records === "object") {
-      this.store.setTables(journalData.records);
-    }
-    // this.saveToDevice(); // need to mock because its android-related
+		/* ---------- CODE BLOCK: Check if provided journal is encrypted ---------- */
+		if (journalData.records && typeof journalData.records === "object") {
+			this.store.setTables(journalData.records);
+		}
+		// this.saveToDevice(); // need to mock because its android-related
 
-    // if (journalData.records && typeof journalData.records === "string") {
-    //   this.cipher = journalData.records;
-    // }
-  }
+		// if (journalData.records && typeof journalData.records === "string") {
+		//   this.cipher = journalData.records;
+		// }
+	}
 
-  /**
-   * Creates journal instance from existing journal JSON.
-   * Owervrites existing journal instance
-   * @param directory Existing file directory
-   * @param errorCallback Runs if error catched during reading journal. Receives error: unknown
-   * @returns Journal instance or undefined if errorCallback handles the error
-   */
-  static async open(
-    directory: string,
-    errorCallback?: (e: unknown) => void
-  ): Promise<Journal> {
-    this.delete();
+	/**
+	 * Creates journal instance from existing journal JSON.
+	 * Owervrites existing journal instance
+	 * @param directory Existing file directory
+	 * @param errorCallback Runs if error catched during reading journal. Receives error: unknown
+	 * @returns Journal instance or undefined if errorCallback handles the error
+	 */
+	static async open(
+		directory: string,
+		errorCallback?: (e: unknown) => void,
+	): Promise<Journal> {
+		Journal.delete();
 
-    try {
-      const fileContent = await this.deviceReader(directory);
+		try {
+			const fileContent = await Journal.deviceReader(directory);
 
-      const unvalidatedJournal: unknown = JSON.parse(fileContent);
-      if (typeof unvalidatedJournal !== "object" || unvalidatedJournal === null)
-        throw new Error("Can't read a journal. Is it in SavNote format?");
+			const unvalidatedJournal: unknown = JSON.parse(fileContent);
+			if (typeof unvalidatedJournal !== "object" || unvalidatedJournal === null)
+				throw new Error("Can't read a journal. Is it in SavNote format?");
 
-      const validatedJournal = validateJournal(unvalidatedJournal);
-      const journal = new Journal({ directory, journalData: validatedJournal });
-      return journal;
-    } catch (e) {
-      console.error(e);
-      if (errorCallback) {
-        errorCallback(e);
-      }
-      throw e;
-    }
-  }
+			const validatedJournal = validateJournal(unvalidatedJournal);
+			const journal = new Journal({ directory, journalData: validatedJournal });
+			return journal;
+		} catch (e) {
+			console.error(e);
+			if (errorCallback) {
+				errorCallback(e);
+			}
+			throw e;
+		}
+	}
 
-  /**
-   * Creates new journal and saves json to target directory.
-   * Owervrites existing journal instance
-   * @param directory Existing file directory
-   * @returns Journal instance
-   */
-  static async create(directory: string, journalData: JournalSchema) {
-    this.delete();
-    validateJournal(journalData);
-    const journal = new Journal({ directory, journalData });
-    await journal.saveToDevice();
-    return journal;
-  }
+	/**
+	 * Creates new journal and saves json to target directory.
+	 * Owervrites existing journal instance
+	 * @param directory Existing file directory
+	 * @returns Journal instance
+	 */
+	static async create(directory: string, journalData: JournalSchema) {
+		Journal.delete();
+		validateJournal(journalData);
+		const journal = new Journal({ directory, journalData });
+		await journal.saveToDevice();
+		return journal;
+	}
 
-  /**
-   * @returns journal instanse (singletone)
-   * @param errorCallback run if there is no journal instance
-   */
-  static resume(errorCallback?: () => never) {
-    if (this.instance) return this.instance;
-    if (errorCallback) return errorCallback();
-    return redirect("/") as never;
-  }
+	/**
+	 * @returns journal instanse (singletone)
+	 * @param errorCallback run if there is no journal instance
+	 */
+	static resume(errorCallback?: () => never) {
+		if (Journal.instance) return Journal.instance;
+		if (errorCallback) return errorCallback();
+		return redirect("/") as never;
+	}
 
-  /**
-   * Deletes current Journal instance:
-   * - in-memory storage of journal Data
-   * - journal instance
-   */
-  static delete() {
-    this.instance?.store.delTables();
-    this.instance = undefined;
-  }
+	/**
+	 * Deletes current Journal instance:
+	 * - in-memory storage of journal Data
+	 * - journal instance
+	 */
+	static delete() {
+		Journal.instance?.store.delTables();
+		Journal.instance = undefined;
+	}
 
-  /* ---------- CODE BLOCK: Public methods need to be moved to separate file ---------- */
+	/* ---------- CODE BLOCK: Public methods need to be moved to separate file ---------- */
 
-  // async decrypt(password: string) {
-  //   // Derive encryption password
-  //   // Decrypt cipher
-  //   // Write plainText to PouchDb
-  // }
+	// async decrypt(password: string) {
+	//   // Derive encryption password
+	//   // Decrypt cipher
+	//   // Write plainText to PouchDb
+	// }
 
-  async saveToDevice() {
-    // let cipher: string | null = null;
-    // if (this.encryptionPassword && this.meta.encryption) {
-    //   cipher = this.encrypt({ plainText = JSON.stringify(data) });
-    // }
-    const journal: object = {
-      meta: this.meta,
-      encryption: this.encryption,
-      records:
-        Object.keys(this.store.getTables()).length > 0
-          ? this.store.getTables()
-          : undefined, // TODO add encryption
-    };
-    const stringifiedJournalData = JSON.stringify(validateJournal(journal));
-    await Journal.deviceSaver(this.directory, stringifiedJournalData);
-  }
+	async saveToDevice() {
+		// let cipher: string | null = null;
+		// if (this.encryptionPassword && this.meta.encryption) {
+		//   cipher = this.encrypt({ plainText = JSON.stringify(data) });
+		// }
+		const journal: object = {
+			meta: this.meta,
+			encryption: this.encryption,
+			records:
+				Object.keys(this.store.getTables()).length > 0
+					? this.store.getTables()
+					: undefined, // TODO add encryption
+		};
+		const stringifiedJournalData = JSON.stringify(validateJournal(journal));
+		await Journal.deviceSaver(this.directory, stringifiedJournalData);
+	}
 
-  // async createEncryption(baseKey: string) {
-  //   if (this.encryptionKey)
-  //     throw Error(
-  //       "Encryption password already exist. To change encription, run .changeEncryption()"
-  //     );
-  //   const encryptionParameters = await createEncryptionKey(baseKey);
+	// async createEncryption(baseKey: string) {
+	//   if (this.encryptionKey)
+	//     throw Error(
+	//       "Encryption password already exist. To change encription, run .changeEncryption()"
+	//     );
+	//   const encryptionParameters = await createEncryptionKey(baseKey);
 
-  //   this.encryptionKey = encryptionParameters.encryptionKey;
-  //   // this.meta.encryption = encryptionParameters.encryptionMeta; // The left-hand side of an assignment expression may not be an optional property access.
-  // }
+	//   this.encryptionKey = encryptionParameters.encryptionKey;
+	//   // this.meta.encryption = encryptionParameters.encryptionMeta; // The left-hand side of an assignment expression may not be an optional property access.
+	// }
 
-  /* ---------- CODE BLOCK: Getters ---------- */
-  getEncryptionState() {
-    return {
-      encryption: this.encryption !== null,
-      decrypted: this.store.hasTable("institutions"),
-    };
-  }
-  getJournalName() {
-    return this.meta.name;
-  }
-  getJournalDirectory() {
-    return this.directory;
-  }
-  getEncryptionParameters() {
-    return this.encryption?.derivedKeyAlgorithmName || null;
-  }
+	/* ---------- CODE BLOCK: Getters ---------- */
+	getEncryptionState() {
+		return {
+			encryption: this.encryption !== null,
+			decrypted: this.store.hasTable("institutions"),
+		};
+	}
+	getJournalName() {
+		return this.meta.name;
+	}
+	getJournalDirectory() {
+		return this.directory;
+	}
+	getEncryptionParameters() {
+		return this.encryption?.derivedKeyAlgorithmName || null;
+	}
 
-  getInstitution(institutionId: string) {
-    const institutionData = validateInstitution(
-      this.store.getRow("institutions", institutionId)
-    );
-    return institutionData;
-  }
+	getInstitution(institutionId: string) {
+		const institutionData = validateInstitution(
+			this.store.getRow("institutions", institutionId),
+		);
+		return institutionData;
+	}
 
-  getLatestRecord() {
-    const latestRecordDate =
-      this.storeIndexes.getSliceIds("InstitutionsByDate")[0];
+	getLatestRecord() {
+		const latestRecordDate =
+			this.storeIndexes.getSliceIds("InstitutionsByDate")[0];
 
-    /* ---------- CODE BLOCK: Get latest institutions ---------- */
-    const latestInstitutionsQueryId = "latestRecordInstitutions";
-    journalStoreQueries.setQueryDefinition(
-      latestInstitutionsQueryId,
-      "institutions",
-      ({ select, where }) => {
-        select("country");
-        select("date");
-        select("name");
-        where("date", Number(latestRecordDate));
-      }
-    );
-    const latestRecordInstitutions = this.storeQueries.getResultTable(
-      latestInstitutionsQueryId
-    );
+		/* ---------- CODE BLOCK: Get latest institutions ---------- */
+		const latestInstitutionsQueryId = "latestRecordInstitutions";
+		journalStoreQueries.setQueryDefinition(
+			latestInstitutionsQueryId,
+			"institutions",
+			({ select, where }) => {
+				select("country");
+				select("date");
+				select("name");
+				where("date", Number(latestRecordDate));
+			},
+		);
+		const latestRecordInstitutions = this.storeQueries.getResultTable(
+			latestInstitutionsQueryId,
+		);
 
-    /* ---------- CODE BLOCK: Get latest assets ---------- */
-    const latestAssetsQueryId = "latestRecordAssets";
-    this.storeQueries.setQueryDefinition(
-      latestAssetsQueryId,
-      "assets",
-      ({ select, where }) => {
-        select("amount");
-        select("currency");
-        select("date");
-        select("description");
-        select("institution");
-        select("isEarning");
-        select("name");
-        where("date", Number(latestRecordDate));
-      }
-    );
-    const latestRecordAssets =
-      this.storeQueries.getResultTable(latestAssetsQueryId);
+		/* ---------- CODE BLOCK: Get latest assets ---------- */
+		const latestAssetsQueryId = "latestRecordAssets";
+		this.storeQueries.setQueryDefinition(
+			latestAssetsQueryId,
+			"assets",
+			({ select, where }) => {
+				select("amount");
+				select("currency");
+				select("date");
+				select("description");
+				select("institution");
+				select("isEarning");
+				select("name");
+				where("date", Number(latestRecordDate));
+			},
+		);
+		const latestRecordAssets =
+			this.storeQueries.getResultTable(latestAssetsQueryId);
 
-    /* ---------- CODE BLOCK: Get latest quotes ---------- */
-    const latestQuotesQueryId = "latestRecordQuotes";
-    this.storeQueries.setQueryDefinition(
-      latestQuotesQueryId,
-      "quotes",
-      ({ select, where }) => {
-        select("baseCurrency");
-        select("counterCurrency");
-        select("date");
-        select("rate");
-        where("date", Number(latestRecordDate));
-      }
-    );
-    const latestRecordQuotes =
-      this.storeQueries.getResultTable(latestQuotesQueryId);
+		/* ---------- CODE BLOCK: Get latest quotes ---------- */
+		const latestQuotesQueryId = "latestRecordQuotes";
+		this.storeQueries.setQueryDefinition(
+			latestQuotesQueryId,
+			"quotes",
+			({ select, where }) => {
+				select("baseCurrency");
+				select("counterCurrency");
+				select("date");
+				select("rate");
+				where("date", Number(latestRecordDate));
+			},
+		);
+		const latestRecordQuotes =
+			this.storeQueries.getResultTable(latestQuotesQueryId);
 
-    /* ---------- CODE BLOCK: Type output record ---------- */
-    const latestRecord = validateRecord({
-      institutions: latestRecordInstitutions,
-      assets: latestRecordAssets,
-      quotes: latestRecordQuotes,
-    });
+		/* ---------- CODE BLOCK: Type output record ---------- */
+		const latestRecord = validateRecord({
+			institutions: latestRecordInstitutions,
+			assets: latestRecordAssets,
+			quotes: latestRecordQuotes,
+		});
 
-    return {
-      recordData: latestRecord,
-      date: latestRecordDate,
-    };
-  }
+		return {
+			recordData: latestRecord,
+			date: latestRecordDate,
+		};
+	}
 
-  /* ---------- CODE BLOCK: Setters ---------- */
-  async addRecord(recordData: RecordsSchema) {
-    // setRow used because setTable overwrites tinyBase store.
-    const { assets, institutions, quotes } = recordData;
-    Object.entries(assets).forEach(([assetId, assetData]) =>
-      this.store.setRow("assets", assetId, assetData)
-    );
-    Object.entries(institutions).forEach(([institutionId, institutionData]) =>
-      this.store.setRow("institutions", institutionId, institutionData)
-    );
-    Object.entries(quotes).forEach(([quoteId, quoteData]) =>
-      this.store.setRow("quotes", quoteId, quoteData)
-    );
-    await this.saveToDevice();
-  }
+	/* ---------- CODE BLOCK: Setters ---------- */
+	async addRecord(recordData: RecordsSchema) {
+		// setRow used because setTable overwrites tinyBase store.
+		const { assets, institutions, quotes } = recordData;
+		for (const [assetId, assetData] of Object.entries(assets)) {
+			this.store.setRow("assets", assetId, assetData);
+		}
+		for (const [institutionId, institutionData] of Object.entries(
+			institutions,
+		)) {
+			this.store.setRow("institutions", institutionId, institutionData);
+		}
+		for (const [quoteId, quoteData] of Object.entries(quotes)) {
+			this.store.setRow("quotes", quoteId, quoteData);
+		}
+		await this.saveToDevice();
+	}
 }
 
 type DeviceSaver = (uri: string, content: string) => Promise<void>;

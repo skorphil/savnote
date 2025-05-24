@@ -1,0 +1,42 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+	"vcs": {
+		"enabled": false,
+		"clientKind": "git",
+		"useIgnoreFile": false
+	},
+	"files": {
+		"include": [
+			"./src/**/*.ts",
+			"./src/**/*.js",
+			"./src/**/*.tsx",
+			"./src/**/*.jsx"
+		],
+		"ignoreUnknown": true,
+		"ignore": ["./src/entities/journal/model/tinyBaseJournalSchema.ts"]
+	},
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab"
+	},
+	"organizeImports": {
+		"enabled": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"complexity": {
+				"noExcessiveCognitiveComplexity": "warn"
+			},
+			"a11y": {
+				"noAutofocus": "info"
+			}
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "double"
+		}
+	}
+}

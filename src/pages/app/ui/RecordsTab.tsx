@@ -10,37 +10,37 @@ import { useNavigate } from "react-router";
  *
  */
 function RecordsTab() {
-  const navigate = useNavigate();
-  const recordDates = useJournalRecordDates();
+	const navigate = useNavigate();
+	const recordDates = useJournalRecordDates();
 
-  return (
-    <>
-      <Navbar
-        title="Records"
-        right={
-          <Link
-            onClick={() => {
-              handleJournalExit();
-              void navigate("/");
-            }}
-            navbar
-          >
-            <MdExitToApp size={24} />
-          </Link>
-        }
-        colors={{ bgMaterial: "bg-transparent" }}
-        className="top-0"
-        transparent={false}
-      />
-      <List inset className="space-y-4 mb-28 mt-0">
-        {recordDates.map((date, id) => (
-          <ListItem key={id}>
-            <span>{unixToHumanReadable(Number(date))}</span>
-          </ListItem>
-        ))}
-      </List>
-    </>
-  );
+	return (
+		<>
+			<Navbar
+				title="Records"
+				right={
+					<Link
+						onClick={() => {
+							handleJournalExit();
+							void navigate("/");
+						}}
+						navbar
+					>
+						<MdExitToApp size={24} />
+					</Link>
+				}
+				colors={{ bgMaterial: "bg-transparent" }}
+				className="top-0"
+				transparent={false}
+			/>
+			<List inset className="space-y-4 mb-28 mt-0">
+				{recordDates.map((date) => (
+					<ListItem key={date}>
+						<span>{unixToHumanReadable(Number(date))}</span>
+					</ListItem>
+				))}
+			</List>
+		</>
+	);
 }
 
 export { RecordsTab };

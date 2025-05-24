@@ -1,46 +1,46 @@
 import { ListInput } from "konsta/react";
-import type { AssetInputsProps } from "./AssetEdit";
 import type { ChangeEvent } from "react";
-import type { AssetAction } from "./useAssetDispatch";
+import type { AssetInputsProps } from "./AssetEdit";
 import { ReadOnlyInput } from "./ReadOnlyInput";
+import type { AssetAction } from "./useAssetDispatch";
 
 /**
  * New component
  *
  */
 export function CurrencyInput(props: AssetInputsProps<string>) {
-  const { assetDispatch, value, disabled } = props;
-  const label = "Currency";
+	const { assetDispatch, value, disabled } = props;
+	const label = "Currency";
 
-  if (disabled) return <ReadOnlyInput label={label} value={value} />;
+	if (disabled) return <ReadOnlyInput label={label} value={value} />;
 
-  return (
-    <ListInput
-      outline
-      type="select"
-      // className="w-20"
-      label={label}
-      value={value}
-      onChange={(e: ChangeEvent<HTMLInputElement>) =>
-        { handleCurrencyChange(e.target.value, assetDispatch); }
-      }
-    >
-      <option value="" disabled hidden>
-        Select...
-      </option>
-      <option value="usd">USD</option>
-      <option value="rub">RUB</option>
-      <option value="amd">AMD</option>
-    </ListInput>
-  );
+	return (
+		<ListInput
+			outline
+			type="select"
+			// className="w-20"
+			label={label}
+			value={value}
+			onChange={(e: ChangeEvent<HTMLInputElement>) => {
+				handleCurrencyChange(e.target.value, assetDispatch);
+			}}
+		>
+			<option value="" disabled hidden>
+				Select...
+			</option>
+			<option value="usd">USD</option>
+			<option value="rub">RUB</option>
+			<option value="amd">AMD</option>
+		</ListInput>
+	);
 }
 
 function handleCurrencyChange(
-  value: string,
-  assetDispatch: React.Dispatch<AssetAction>
+	value: string,
+	assetDispatch: React.Dispatch<AssetAction>,
 ) {
-  assetDispatch({
-    type: "update_value",
-    payload: { property: "currency", value: value },
-  });
+	assetDispatch({
+		type: "update_value",
+		payload: { property: "currency", value: value },
+	});
 }

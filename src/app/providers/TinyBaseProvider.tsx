@@ -8,16 +8,16 @@ import { PreferencesStore } from "@/entities/user-config";
 import { RecordDraftStore } from "@/features/create-record";
 
 type AppProps = {
-  children: ReactElement;
+	children: ReactElement;
 };
 export function TinyBaseProvider(props: AppProps) {
-  return (
-    <Provider>
-      <JournalStore />
-      <RecordDraftStore />
-      <PreferencesStore />
-      {props.children}
-      <Inspector />
-    </Provider>
-  );
+	return (
+		<Provider>
+			<JournalStore />
+			<RecordDraftStore />
+			<PreferencesStore />
+			{props.children}
+			<Inspector />
+		</Provider>
+	);
 }
