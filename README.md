@@ -30,4 +30,4 @@ Read more about vision of SavNote in [wiki | vision](https://github.com/skorphil
 ## Contributing
 Contributions are welcomed. At the moment, best way to start is to create an issue with your suggestions and ideas.
 
-See [Contributing guide](/CONTRIBUTING.md) for more details.
+See [Contributing guide](/CONTRIBUTING.md) for more details and tech stack.
