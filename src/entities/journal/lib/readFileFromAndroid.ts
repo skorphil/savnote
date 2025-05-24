@@ -8,12 +8,12 @@ import { readTextFile } from "@tauri-apps/plugin-fs";
  * @throws error from validating readed data
  */
 export async function readFileFromAndroid(directory: string): Promise<string> {
-  let content: string;
-  try {
-    content = await readTextFile(directory);
-    return content;
-  } catch (e) {
-    console.error(e);
-    throw new Error("Can't open a file. Please submit a bug to our GitHub");
-  }
+	let content: string;
+	try {
+		content = await readTextFile(directory);
+		return content;
+	} catch (e) {
+		console.error(e);
+		throw new Error("Can't open a file. Please submit a bug to our GitHub");
+	}
 }

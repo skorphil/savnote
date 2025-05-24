@@ -8,15 +8,15 @@ import { invoke } from "@tauri-apps/api/core";
  * read/write permissions
  */
 export async function writeFileToAndroid(uri: string, contents: string) {
-  try {
-    await invoke("write_string", {
-      uri,
-      contents,
-    });
-  } catch (e) {
-    console.error(e);
-    throw Error(
-      "Can't write data on device. Please submit an issue to GitHub."
-    );
-  }
+	try {
+		await invoke("write_string", {
+			uri,
+			contents,
+		});
+	} catch (e) {
+		console.error(e);
+		throw Error(
+			"Can't write data on device. Please submit an issue to GitHub.",
+		);
+	}
 }

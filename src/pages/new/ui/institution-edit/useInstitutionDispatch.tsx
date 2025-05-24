@@ -1,44 +1,44 @@
-import { type RecordDraftInstitutionSchema } from "@/features/create-record";
+import type { RecordDraftInstitutionSchema } from "@/features/create-record";
 import { useReducer } from "react";
 
 type InstitutionFormErrors = Partial<
-  Record<
-    keyof Omit<RecordDraftInstitutionSchema, "isDeleted" | "isDirty" | "isNew">,
-    string[]
-  >
+	Record<
+		keyof Omit<RecordDraftInstitutionSchema, "isDeleted" | "isDirty" | "isNew">,
+		string[]
+	>
 >;
 
 export type ExtendedDraftInstitutionState = RecordDraftInstitutionSchema & {
-  errors?: InstitutionFormErrors;
+	errors?: InstitutionFormErrors;
 };
 
 type institutionActionTypes = "update_value";
 
 type UpdateInstitutionValuePayload<
-  T extends keyof ExtendedDraftInstitutionState
+	T extends keyof ExtendedDraftInstitutionState,
 > = {
-  property: T;
-  value: ExtendedDraftInstitutionState[T];
+	property: T;
+	value: ExtendedDraftInstitutionState[T];
 };
 
 export type InstitutionAction = {
-  type: institutionActionTypes;
-  payload: UpdateInstitutionValuePayload<keyof ExtendedDraftInstitutionState>;
+	type: institutionActionTypes;
+	payload: UpdateInstitutionValuePayload<keyof ExtendedDraftInstitutionState>;
 };
 
 function institutionReducer(
-  institutionState: ExtendedDraftInstitutionState,
-  action: InstitutionAction
+	institutionState: ExtendedDraftInstitutionState,
+	action: InstitutionAction,
 ) {
-  const payload = action.payload;
+	const payload = action.payload;
 
-  switch (action.type) {
-    case "update_value":
-      return {
-        ...institutionState,
-        [payload.property]: payload.value,
-      };
-  }
+	switch (action.type) {
+		case "update_value":
+			return {
+				...institutionState,
+				[payload.property]: payload.value,
+			};
+	}
 }
 
 /**
@@ -46,14 +46,14 @@ function institutionReducer(
  * @returns [ institutionState, institutionDispatch ]
  */
 export function useInstitutionDispatch(
-  initialState: ExtendedDraftInstitutionState
+	initialState: ExtendedDraftInstitutionState,
 ): [ExtendedDraftInstitutionState, React.Dispatch<InstitutionAction>] {
-  const [institutionState, institutionDispatch] = useReducer(
-    institutionReducer,
-    {
-      ...initialState,
-    }
-  );
+	const [institutionState, institutionDispatch] = useReducer(
+		institutionReducer,
+		{
+			...initialState,
+		},
+	);
 
-  return [institutionState, institutionDispatch];
+	return [institutionState, institutionDispatch];
 }

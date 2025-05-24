@@ -7,5 +7,5 @@ import { redirect } from "react-router";
  * - Android optimisation
  */
 export function journalLoader() {
-  if (!Journal.instance) return redirect("/");
+	if (!Journal.instance) return redirect("/");
 }

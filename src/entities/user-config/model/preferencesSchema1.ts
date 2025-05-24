@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 const preferencesSchema1 = z.object({
-  currentJournalDirectory: z.string().optional(),
-  selectedCurrency: z.string().optional(),
+	currentJournalDirectory: z.string().optional(),
+	selectedCurrency: z.string().optional(),
 });
 
 type PreferencesSchema1 = z.infer<typeof preferencesSchema1>;

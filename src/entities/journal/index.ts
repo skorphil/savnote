@@ -1,9 +1,9 @@
 export { validateJournal, validateRecord } from "./model/validateJournal";
 export {
-  JournalStore,
-  journalStore,
-  journalStoreIndexes,
-  journalStoreQueries,
+	JournalStore,
+	journalStore,
+	journalStoreIndexes,
+	journalStoreQueries,
 } from "./model/JournalStore";
 export { Journal } from "./lib/Journal";
 export { showOpenFileDialog } from "./ui/showOpenFileDialog";

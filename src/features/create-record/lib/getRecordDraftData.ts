@@ -1,55 +1,55 @@
 import { Journal } from "@/entities/journal";
-import type {
-  RecordDraftAssetSchema,
-  RecordDraftInstitutionSchema,
-  RecordDraftMetaSchema,
-} from "../model/recordDraftSchema";
 import { redirect } from "react-router";
+import type {
+	RecordDraftAssetSchema,
+	RecordDraftInstitutionSchema,
+	RecordDraftMetaSchema,
+} from "../model/recordDraftSchema";
 
 export function getRecordDraftData() {
-  const journal = Journal.resume(() => redirect("/") as never);
-  const {
-    recordData: { assets, institutions },
-    date,
-  } = journal.getLatestRecord();
+	const journal = Journal.resume(() => redirect("/") as never);
+	const {
+		recordData: { assets, institutions },
+		date,
+	} = journal.getLatestRecord();
 
-  /* ---------- CODE BLOCK: Convert Journal entries to recordDraft entries ---------- */
-  const recordDraftInstitutions: Record<string, RecordDraftInstitutionSchema> =
-    {};
-  Object.values(institutions).forEach(({ date, name, ...data }) => {
-    void date;
-    recordDraftInstitutions[name] = {
-      ...data,
-      name,
-      isDirty: false,
-      isDeleted: false,
-      isNew: false,
-    };
-  });
+	/* ---------- CODE BLOCK: Convert Journal entries to recordDraft entries ---------- */
+	const recordDraftInstitutions: Record<string, RecordDraftInstitutionSchema> =
+		{};
+	for (const { date, name, ...data } of Object.values(institutions)) {
+		void date;
+		recordDraftInstitutions[name] = {
+			...data,
+			name,
+			isDirty: false,
+			isDeleted: false,
+			isNew: false,
+		};
+	}
 
-  const recordDraftAssets: Record<string, RecordDraftAssetSchema> = {};
-  Object.values(assets).forEach(({ date, name, institution, ...data }) => {
-    void date;
-    recordDraftAssets[`${institution}.${name}`] = {
-      ...data,
-      institution,
-      name,
-      isDirty: false,
-      isDeleted: false,
-      isNew: false,
-    };
-  });
+	const recordDraftAssets: Record<string, RecordDraftAssetSchema> = {};
+	for (const { date, name, institution, ...data } of Object.values(assets)) {
+		void date;
+		recordDraftAssets[`${institution}.${name}`] = {
+			...data,
+			institution,
+			name,
+			isDirty: false,
+			isDeleted: false,
+			isNew: false,
+		};
+	}
 
-  const recordDraftMeta: Record<"0", RecordDraftMetaSchema> = {
-    0: { journalId: journal.meta.id },
-  };
+	const recordDraftMeta: Record<"0", RecordDraftMetaSchema> = {
+		0: { journalId: journal.meta.id },
+	};
 
-  return {
-    recordDraftData: {
-      assets: recordDraftAssets,
-      institutions: recordDraftInstitutions,
-      meta: recordDraftMeta,
-    },
-    recordDate: Number(date),
-  };
+	return {
+		recordDraftData: {
+			assets: recordDraftAssets,
+			institutions: recordDraftInstitutions,
+			meta: recordDraftMeta,
+		},
+		recordDate: Number(date),
+	};
 }

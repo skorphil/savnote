@@ -1,10 +1,10 @@
-import styles from "./BottomAppBar.module.css";
 import type { ReactElement } from "react";
+import styles from "./BottomAppBar.module.css";
 
 type BottomAppBarProps = {
-  leftButtons?: ReactElement[];
-  fab?: ReactElement;
-  bg?: string;
+	leftButtons?: ReactElement[];
+	fab?: ReactElement;
+	bg?: string;
 };
 
 /**
@@ -16,15 +16,15 @@ type BottomAppBarProps = {
  * @link https://m3.material.io/components/bottom-app-bar/specs
  */
 export function BottomAppBar(props: BottomAppBarProps) {
-  const { leftButtons, fab, bg } = props;
-  return (
-    <div className={`${styles.appBar} ${bg}`}>
-      <div className="flex flex-row gap-0">
-        {leftButtons?.map((button, id) => (
-          <div key={`bottom-bar-${id}`}>{button}</div>
-        ))}
-      </div>
-      {fab}
-    </div>
-  );
+	const { leftButtons, fab, bg } = props;
+	return (
+		<div className={`${styles.appBar} ${bg}`}>
+			<div className="flex flex-row gap-0">
+				{leftButtons?.map((button) => (
+					<div key={`bottom-bar-${button.key}`}>{button}</div>
+				))}
+			</div>
+			{fab}
+		</div>
+	);
 }

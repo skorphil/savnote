@@ -7,9 +7,9 @@ import { invoke } from "@tauri-apps/api/core";
  * read/write permissions
  */
 export async function showOpenFileDialog(
-  mimeTypes: string[] | null
+	mimeTypes: string[] | null,
 ): Promise<string | null> {
-  return await invoke("show_persistent_open_dialog", {
-    mimeTypes,
-  });
+	return await invoke("show_persistent_open_dialog", {
+		mimeTypes,
+	});
 }
