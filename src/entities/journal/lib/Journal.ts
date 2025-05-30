@@ -31,7 +31,6 @@ type JournalConctructorProps = {
 	 * Local directoy of json journal file. Need write and read permissions.
 	 */
 	journalData: JournalSchema;
-
 	// store-related functions added to constructor for testing purposes
 	store?: Store<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
 	storeIndexes?: Indexes<[typeof tinyBaseJournalSchema, NoValuesSchema]>;
@@ -46,11 +45,6 @@ type JournalConctructorProps = {
  * const data = userJournal.addRecord(...)
  */
 export class Journal {
-	/**
-	 * Journal singleton - represents currently opened journal.
-	 * Provides public API to manage the journal
-	 */
-	static instance: Journal | undefined;
 	/**
 	 * Journal's meta data
 	 */
@@ -74,7 +68,6 @@ export class Journal {
 		storeQueries = journalStoreQueries,
 		...props
 	}: JournalConctructorProps) {
-		Journal.instance = this;
 		const { journalData } = props;
 
 		this.store = store;
@@ -239,6 +232,10 @@ type DeviceSaver = (uri: string, content: string) => Promise<void>;
 type DeviceReader = (uri: string) => Promise<string>;
 
 /* ---------- Comments ----------
+30may2025
+Moved lifecycle methods to JournalManager
+
+===
 22May2025
 Moved hooks to separate file src/entities/journal/ui/useJournal.tsx
 

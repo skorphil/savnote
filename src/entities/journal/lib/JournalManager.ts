@@ -73,7 +73,7 @@ export const JournalManager = {
 	 * @param errorCallback run if there is no journal instance
 	 */
 	resume(errorCallback?: () => never) {
-		if (Journal.instance) return Journal.instance;
+		if (_journalInstance) return _journalInstance;
 		if (errorCallback) return errorCallback();
 		return redirect("/") as never;
 	},
@@ -85,7 +85,7 @@ export const JournalManager = {
 	 */
 	delete() {
 		_journalInstance?.store.delTables();
-		Journal.instance = undefined;
+		_journalInstance = undefined;
 	},
 
 	/* ---------- CODE BLOCK: Public methods need to be moved to separate file ---------- */
