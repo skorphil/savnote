@@ -84,18 +84,14 @@ export const JournalManager = {
 	 * - journal instance
 	 */
 	delete() {
-		_journalInstance?.store.delTables();
+		if (_journalInstance === undefined) return;
+		_journalInstance.store.delTables();
 		_journalInstance = undefined;
 	},
 
-	/* ---------- CODE BLOCK: Public methods need to be moved to separate file ---------- */
-
-	// async decrypt(password: string) {
-	//   // Derive encryption password
-	//   // Decrypt cipher
-	//   // Write plainText to PouchDb
-	// }
-
+	/**
+	 * Saves journalData to device
+	 */
 	async saveToDevice() {
 		if (!_journalUri)
 			throw Error(
@@ -103,6 +99,6 @@ export const JournalManager = {
 			);
 		const journalJson = JSON.stringify(_journalInstance?.toJournalSchema());
 
-		await Journal.deviceSaver(_journalUri, journalJson);
+		await Journal.deviceSaver(_journalUri, journalJson); // TODO refactor to new JournalStorage class
 	},
 };
