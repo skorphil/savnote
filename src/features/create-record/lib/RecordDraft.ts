@@ -1,4 +1,4 @@
-import { Journal, validateRecord } from "@/entities/journal";
+import { JournalManager, validateRecord } from "@/entities/journal";
 import type { RecordsSchema } from "@/shared/journal-schema";
 import { redirect } from "react-router";
 import {
@@ -66,7 +66,7 @@ export class RecordDraft {
 		if (!isSaved) return null;
 
 		if (
-			Journal.resume(() => redirect("/") as never).meta.id !==
+			JournalManager.resume(() => redirect("/") as never).meta.id !==
 			RecordDraft.store.getCell("meta", "0", "journalId")
 		)
 			return null;

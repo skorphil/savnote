@@ -1,4 +1,4 @@
-import { Journal, showSaveFileDialog } from "@/entities/journal";
+import { JournalManager, showSaveFileDialog } from "@/entities/journal";
 import { Preferences } from "@/entities/user-config";
 import { throwError } from "@/shared/error-handling";
 import { Button, Link, List, ListInput, Navbar, Page } from "konsta/react";
@@ -88,7 +88,7 @@ async function handleJournalCreate(props: HandleJournalCreateProps) {
 		} as const,
 	};
 
-	await Journal.create(directory, JournalData);
+	await JournalManager.create(directory, JournalData);
 
 	Preferences.getInstance().updatePreferences({
 		currentJournalDirectory: directory,

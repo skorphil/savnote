@@ -1,4 +1,4 @@
-import { Journal } from "@/entities/journal";
+import { type Journal, JournalManager } from "@/entities/journal";
 import { usePreferenceValue } from "@/entities/user-config";
 import { throwError } from "@/shared/error-handling";
 import { handleJournalExit } from "@/shared/handle-journal-exit";
@@ -22,7 +22,7 @@ export function Open() {
 				void navigate("/");
 				return;
 			}
-			const journal = await Journal.open(journalUri, () => {
+			const journal = await JournalManager.open(journalUri, () => {
 				void navigate("/");
 			});
 			setJournal(journal);
@@ -56,7 +56,7 @@ export function Open() {
 						<ListItem
 							className="break-words"
 							title="Directory"
-							text={journal.getJournalDirectory()}
+							text={JournalManager.getJournalDirectory()}
 						/>
 
 						<ListItem

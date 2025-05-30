@@ -11,7 +11,6 @@ import type {
 	Store,
 } from "tinybase/with-schemas";
 
-import { redirect } from "react-router";
 import {
 	journalStore,
 	journalStoreIndexes,
@@ -31,7 +30,6 @@ type JournalConctructorProps = {
 	/**
 	 * Local directoy of json journal file. Need write and read permissions.
 	 */
-	directory: string;
 	journalData: JournalSchema;
 
 	// store-related functions added to constructor for testing purposes
@@ -41,10 +39,10 @@ type JournalConctructorProps = {
 };
 
 /**
- * journal singleton. Provides various methods to work with a journal.
- * Used with .open() .create() .resume() static method
+ * Private class. Represents savings Journal. Used as a singletone.
+ * Created with JournalManager's .open() .create() .resume() methods
  * @example
- * const userJournal = Journal.resume(...)
+ * const userJournal = JournalManager.resume(...)
  * const data = userJournal.addRecord(...)
  */
 export class Journal {
@@ -53,10 +51,6 @@ export class Journal {
 	 * Provides public API to manage the journal
 	 */
 	static instance: Journal | undefined;
-	/**
-	 * Local directoy of json journal file. Need write and read permissions.
-	 */
-	private directory: string;
 	/**
 	 * Journal's meta data
 	 */
@@ -74,19 +68,18 @@ export class Journal {
 	static deviceSaver: DeviceSaver = writeFileToAndroid;
 	static deviceReader: DeviceReader = readFileFromAndroid;
 
-	private constructor({
+	constructor({
 		store = journalStore,
 		storeIndexes = journalStoreIndexes,
 		storeQueries = journalStoreQueries,
 		...props
 	}: JournalConctructorProps) {
 		Journal.instance = this;
-		const { directory, journalData } = props;
+		const { journalData } = props;
 
 		this.store = store;
 		this.storeIndexes = storeIndexes;
 		this.storeQueries = storeQueries;
-		this.directory = directory;
 		this.meta = journalData.meta;
 		this.encryption = journalData.encryption;
 
@@ -101,97 +94,6 @@ export class Journal {
 		// }
 	}
 
-	/**
-	 * Creates journal instance from existing journal JSON.
-	 * Owervrites existing journal instance
-	 * @param directory Existing file directory
-	 * @param errorCallback Runs if error catched during reading journal. Receives error: unknown
-	 * @returns Journal instance or undefined if errorCallback handles the error
-	 */
-	static async open(
-		directory: string,
-		errorCallback?: (e: unknown) => void,
-	): Promise<Journal> {
-		Journal.delete();
-
-		try {
-			const fileContent = await Journal.deviceReader(directory);
-
-			const unvalidatedJournal: unknown = JSON.parse(fileContent);
-			if (typeof unvalidatedJournal !== "object" || unvalidatedJournal === null)
-				throw new Error("Can't read a journal. Is it in SavNote format?");
-
-			const validatedJournal = validateJournal(unvalidatedJournal);
-			const journal = new Journal({ directory, journalData: validatedJournal });
-			return journal;
-		} catch (e) {
-			console.error(e);
-			if (errorCallback) {
-				errorCallback(e);
-			}
-			throw e;
-		}
-	}
-
-	/**
-	 * Creates new journal and saves json to target directory.
-	 * Owervrites existing journal instance
-	 * @param directory Existing file directory
-	 * @returns Journal instance
-	 */
-	static async create(directory: string, journalData: JournalSchema) {
-		Journal.delete();
-		validateJournal(journalData);
-		const journal = new Journal({ directory, journalData });
-		await journal.saveToDevice();
-		return journal;
-	}
-
-	/**
-	 * @returns journal instanse (singletone)
-	 * @param errorCallback run if there is no journal instance
-	 */
-	static resume(errorCallback?: () => never) {
-		if (Journal.instance) return Journal.instance;
-		if (errorCallback) return errorCallback();
-		return redirect("/") as never;
-	}
-
-	/**
-	 * Deletes current Journal instance:
-	 * - in-memory storage of journal Data
-	 * - journal instance
-	 */
-	static delete() {
-		Journal.instance?.store.delTables();
-		Journal.instance = undefined;
-	}
-
-	/* ---------- CODE BLOCK: Public methods need to be moved to separate file ---------- */
-
-	// async decrypt(password: string) {
-	//   // Derive encryption password
-	//   // Decrypt cipher
-	//   // Write plainText to PouchDb
-	// }
-
-	async saveToDevice() {
-		// let cipher: string | null = null;
-		// if (this.encryptionPassword && this.meta.encryption) {
-		//   cipher = this.encrypt({ plainText = JSON.stringify(data) });
-		// }
-		const journal: object = {
-			meta: this.meta,
-			encryption: this.encryption,
-			records:
-				Object.keys(this.store.getTables()).length > 0
-					? this.store.getTables()
-					: undefined, // TODO add encryption
-		};
-		const stringifiedJournalData = JSON.stringify(validateJournal(journal));
-		await Journal.deviceSaver(this.directory, stringifiedJournalData);
-	}
-
 	// async createEncryption(baseKey: string) {
 	//   if (this.encryptionKey)
 	//     throw Error(
@@ -204,6 +106,7 @@ export class Journal {
 	// }
 
 	/* ---------- CODE BLOCK: Getters ---------- */
+	// Journal methods
 	getEncryptionState() {
 		return {
 			encryption: this.encryption !== null,
@@ -213,9 +116,7 @@ export class Journal {
 	getJournalName() {
 		return this.meta.name;
 	}
-	getJournalDirectory() {
-		return this.directory;
-	}
+
 	getEncryptionParameters() {
 		return this.encryption?.derivedKeyAlgorithmName || null;
 	}
@@ -295,6 +196,26 @@ export class Journal {
 		};
 	}
 
+	/**
+	 * @returns journal object
+	 */
+	toJournalSchema(): JournalSchema {
+		// let cipher: string | null = null;
+		// if (this.encryptionPassword && this.meta.encryption) {
+		//   cipher = this.encrypt({ plainText = JSON.stringify(data) });
+		// }
+		const journal: object = {
+			meta: this.meta,
+			encryption: this.encryption,
+			records:
+				Object.keys(this.store.getTables()).length > 0
+					? this.store.getTables()
+					: undefined, // TODO add encryption
+		};
+		const validatedJournal = validateJournal(journal);
+		return validatedJournal;
+	}
+
 	/* ---------- CODE BLOCK: Setters ---------- */
 	async addRecord(recordData: RecordsSchema) {
 		// setRow used because setTable overwrites tinyBase store.
@@ -310,7 +231,7 @@ export class Journal {
 		for (const [quoteId, quoteData] of Object.entries(quotes)) {
 			this.store.setRow("quotes", quoteId, quoteData);
 		}
-		await this.saveToDevice();
+		// await this.saveToDevice(); // Need to explicitely save to device! Via JournalManager
 	}
 }
 
