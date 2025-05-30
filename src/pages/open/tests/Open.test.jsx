@@ -3,13 +3,11 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 
 /* ---------- CODE BLOCK: Mocking ---------- */
+const mockJournalDirectory = "mocked/journal/directory";
 const journalMock = {
-	journalDirectory: "mocked/journal/directory",
 	journalName: "Mocked journal name",
 	encryptionParameters: "AES-GCM",
-	getJournalDirectory: function () {
-		return this.journalDirectory;
-	},
+
 	getJournalName: function () {
 		return this.journalName;
 	},
@@ -26,13 +24,14 @@ vi.mock("@/entities/user-config", () => {
 
 vi.mock("@/entities/journal", () => {
 	return {
-		Journal: {
+		JournalManager: {
 			open: vi.fn(),
+			getJournalDirectory: () => mockJournalDirectory,
 		},
 	};
 });
 
-import { Journal } from "@/entities/journal";
+import { JournalManager } from "@/entities/journal";
 import { usePreferenceValue } from "@/entities/user-config";
 import { Open } from "../ui/Open";
 
@@ -48,7 +47,7 @@ describe("Open", () => {
 			}
 			return null;
 		});
-		vi.mocked(Journal.open).mockResolvedValue(journal);
+		vi.mocked(JournalManager.open).mockResolvedValue(journal);
 	});
 	/* ---------- CODE BLOCK: Test ---------- */
 	it("Renders journal meta when journal instance is loaded", async () => {
@@ -59,7 +58,7 @@ describe("Open", () => {
 		);
 		expect(usePreferenceValue).toHaveBeenCalledWith("currentJournalDirectory");
 
-		const journalDirectory = await screen.findByText(journal.journalDirectory);
+		const journalDirectory = await screen.findByText(mockJournalDirectory);
 		expect(journalDirectory).toBeInTheDocument();
 
 		const journalNameElements = await screen.findAllByText(journal.journalName);

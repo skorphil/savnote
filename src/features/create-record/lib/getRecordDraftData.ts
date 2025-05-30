@@ -1,4 +1,4 @@
-import { Journal } from "@/entities/journal";
+import { JournalManager } from "@/entities/journal";
 import { redirect } from "react-router";
 import type {
 	RecordDraftAssetSchema,
@@ -7,7 +7,7 @@ import type {
 } from "../model/recordDraftSchema";
 
 export function getRecordDraftData() {
-	const journal = Journal.resume(() => redirect("/") as never);
+	const journal = JournalManager.resume(() => redirect("/") as never);
 	const {
 		recordData: { assets, institutions },
 		date,

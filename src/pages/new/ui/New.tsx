@@ -5,7 +5,7 @@ import { Outlet, useNavigate, useParams } from "react-router";
 import { RecordDraft, getRecordDraftData } from "@/features/create-record";
 import { unixToHumanReadable } from "@/shared/lib/date-time-format";
 
-import { Journal } from "@/entities/journal";
+import { JournalManager } from "@/entities/journal";
 import { throwError } from "@/shared/error-handling";
 import { InstitutionsGrid } from "./InstitutionsGrid";
 
@@ -102,7 +102,8 @@ async function handleRecordSave() {
 	if (!recordDraft) return;
 	// TODO handle Quote parsing error. Manual quotes input
 	const recordData = await recordDraft.getRecordData();
-	const journal = Journal.resume();
+	const journal = JournalManager.resume();
 	await journal.addRecord(recordData);
+	JournalManager.saveToDevice();
 	RecordDraft.delete();
 }

@@ -1,8 +1,7 @@
-import { beforeEach } from "node:test";
 import { describe, expect, it, vi } from "vitest";
 import { validJournal } from "./validJournal";
 
-describe("Journal.create()", () => {
+describe("JournalManager.create()", () => {
 	afterEach(() => {
 		vi.resetModules();
 	});
@@ -12,9 +11,10 @@ describe("Journal.create()", () => {
 			invoke: vi.fn(() => Promise.resolve("mocked value")),
 		}));
 
+		const { JournalManager } = await import("../lib/JournalManager");
 		const { Journal } = await import("../lib/Journal");
 
-		const journal = await Journal.create("test/uri", validJournal);
+		const journal = await JournalManager.create("test/uri", validJournal);
 		expect(journal).toBeInstanceOf(Journal);
 		expect(journal.meta).toEqual(validJournal.meta);
 
@@ -26,12 +26,13 @@ describe("Journal.create()", () => {
 			invoke: vi.fn(() => Promise.resolve("mocked value")),
 		}));
 
-		const { Journal } = await import("../lib/Journal");
+		const { JournalManager } = await import("../lib/JournalManager");
+
 		const journalData = {
 			invalid: "journal schema",
 		};
 		try {
-			const journal = await Journal.create("test/uri", journalData);
+			const journal = await JournalManager.create("test/uri", journalData);
 		} catch (e) {
 			expect(e.message).toContain("Can't read a journal");
 		}
@@ -39,10 +40,10 @@ describe("Journal.create()", () => {
 		vi.doUnmock("@tauri-apps/api/core");
 	});
 
-	it("Must cause Journal.create to throw Error if invoke rejected", async () => {
-		const { Journal } = await import("../lib/Journal");
+	it("Must cause JournalManager.create to throw Error if invoke rejected", async () => {
+		const { JournalManager } = await import("../lib/JournalManager");
 		try {
-			const journal = await Journal.create("test/uri", validJournal);
+			const journal = await JournalManager.create("test/uri", validJournal);
 		} catch (e) {
 			expect(e.message).toContain(
 				"Can't write data on device. Please submit an issue to GitHub.",
@@ -51,16 +52,16 @@ describe("Journal.create()", () => {
 	});
 });
 
-describe("Journal.open()", () => {
+describe("JournalManager.open()", () => {
 	afterEach(() => {
 		vi.resetModules();
 	});
 
 	it("Must throw error if readJournal fails", async () => {
-		const { Journal } = await import("../lib/Journal");
+		const { JournalManager } = await import("../lib/JournalManager");
 
 		try {
-			const result = await Journal.open("test/uri");
+			const result = await JournalManager.open("test/uri");
 			console.debug("result", result);
 		} catch (e) {
 			expect(e.message).toContain("Can't open");
@@ -74,10 +75,10 @@ describe("Journal.open()", () => {
 			),
 		}));
 
-		const { Journal } = await import("../lib/Journal");
+		const { JournalManager } = await import("../lib/JournalManager");
 
 		try {
-			const result = await Journal.open("test/uri");
+			const result = await JournalManager.open("test/uri");
 			console.debug("result", result);
 		} catch (e) {
 			expect(e.message).toContain("SavNote format");
@@ -92,9 +93,10 @@ describe("Journal.open()", () => {
 			),
 		}));
 
+		const { JournalManager } = await import("../lib/JournalManager");
 		const { Journal } = await import("../lib/Journal");
 
-		const result = await Journal.open("test/uri");
+		const result = await JournalManager.open("test/uri");
 		expect(result).toBeInstanceOf(Journal);
 		vi.doUnmock("../lib/readFileFromAndroid");
 	});
