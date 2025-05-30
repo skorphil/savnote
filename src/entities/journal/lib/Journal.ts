@@ -87,6 +87,12 @@ export class Journal {
 		// }
 	}
 
+	// async decrypt(password: string) {
+	//   // Derive encryption password
+	//   // Decrypt cipher
+	//   // Write plainText to PouchDb
+	// }
+
 	// async createEncryption(baseKey: string) {
 	//   if (this.encryptionKey)
 	//     throw Error(
