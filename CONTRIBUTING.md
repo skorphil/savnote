@@ -1,4 +1,26 @@
 # Contributing
+Contributions to this project is highly welcomed and appreciated. 
+If you have any idea or question, open new issue.
+
+## How to contribute
+1. Check current issues / project: https://github.com/users/skorphil/projects/7
+2. Check project's [vision](./VISION.md)
+3. Participate in existing issues or create new, describing your idea
+
+## Where to contribute?
+The domains are not limited, however this list might help you to start:
+- Increase code quality (refactor, test coverage)
+- New feature development:
+    - Widget to overview savings (might use some calculations and charts)
+    - Rust android-specific features
+    - Rust encryption features
+    ...
+- Visual language
+    - Logo design
+    - Styling and design system
+- Community
+    - Writing about app
+...    
 
 ## Quick Start
 Install dependencies:
@@ -29,7 +51,6 @@ pnpm tauri android init
 2. it looks quite logical and follows common development approach
 3. There is a linter and other tools available to manage project structure
 
-
 ## Core tech stack:
 **React**
 I'm familliar with it and it is quite popular.
@@ -39,7 +60,8 @@ Small bundle size. Has potential to be adopted for desktop (maybe future forks)
 
 ## Core Libraries:
 **[Konsta ui](https://github.com/konstaui/konsta)**
-Despite being outdated, has largest react collection of M3 styled components. Mui, Ionic mostly have outdated M2 design components at the time of decision. Konsta looked as a good library to quickly build initial UI. 
+Despite being outdated, has largest react collection of M3 styled components. Mui, Ionic mostly have outdated M2 design components at the time of decision. Konsta looked as a good library to quickly build initial UI.
+> It has numerous issues with inputs (no ref). Might be replaced in future.
 
 **[Tinybase](https://github.com/tinyplex/tinybase)**
 Allows both in-memory and indexed-db storage and reactivity. Not very popular and illogical sometimes. 
