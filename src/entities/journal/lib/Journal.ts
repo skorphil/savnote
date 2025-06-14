@@ -38,8 +38,8 @@ type JournalConctructorProps = {
 };
 
 /**
- * Private class. Represents savings Journal. Used as a singletone.
- * Created with JournalManager's .open() .create() .resume() methods
+ * Private domain class. Represents Journal business entity. Used as a singletone.
+ * Created and accessed via JournalManager.open() .create() .resume() methods
  * @example
  * const userJournal = JournalManager.resume(...)
  * const data = userJournal.addRecord(...)
