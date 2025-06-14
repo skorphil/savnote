@@ -1,13 +1,13 @@
 ### ⚠️ UNDER DEVOLOPMENT
-App is on the early stage of development. Currently not available for use. Star project if you are interested – this will motivate me to work harder. Contributions are welcome – reach out to me by opening an issue.
+App is on the early stage of development. Currently not available for use. Star project if you are interested – this will motivate me to work harder.
 
 [Small demo](https://youtu.be/abH2uFe2hh0?si=Eo_aMzNmCA1DP6pl) of a dev version. Apk available in "Releases".
 
 ---
 <img src=".github/savnote.png" alt="SavNote" />
 
-# SavNote – Private Savings Journal
-SavNote is an open-source app for tracking your personal savings.
+# SavNote – Private Savings Notepad
+SavNote is an open-source app for logging and analyzing your savings.
 
 How it works:
 1. Record your initial savings balances in each institution (e.g., bank, broker, cryptocurrency wallet) and currency.
@@ -28,6 +28,5 @@ Read more about vision of SavNote in [wiki | vision](https://github.com/skorphil
 
 
 ## Contributing
-Contributions are welcomed. At the moment, best way to start is to create an issue with your suggestions and ideas.
-
+At the moment, best way to start is to create an issue with your suggestions and ideas.
 See [Contributing guide](/CONTRIBUTING.md) for more details and tech stack.
