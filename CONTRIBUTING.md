@@ -3,8 +3,8 @@ Contributions to this project is highly welcomed and appreciated.
 If you have any idea or question, open new issue.
 
 ## How to contribute
-1. Check current issues / project: https://github.com/users/skorphil/projects/7
-2. Check project's [vision](./VISION.md)
+1. Check current issues / [project](https://github.com/users/skorphil/projects/7)
+2. Check project's [vision](https://github.com/skorphil/savnote/wiki/SavNote-Vision)
 3. Participate in existing issues or create new, describing your idea
 
 ## Where to contribute?
@@ -20,6 +20,7 @@ The domains are not limited, however this list might help you to start:
     - Styling and design system
 - Community
     - Writing about app
+    - Fill wiki with a guides
 ...    
 
 ## Quick Start
