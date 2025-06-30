@@ -161,6 +161,7 @@ type EncryptionSchema2 = z.infer<typeof encryptionSchema2>;
 type QuotesSchema2 = z.infer<typeof quotesSchema2>;
 type AssetSchema2 = z.infer<typeof assetSchema2>;
 type InstitutionSchema2 = z.infer<typeof institutionSchema2>;
+type QuoteSchema2 = z.infer<typeof quoteSchema2>;
 
 export type {
 	JournalSchema2,
@@ -170,6 +171,7 @@ export type {
 	QuotesSchema2,
 	AssetSchema2,
 	InstitutionSchema2,
+	QuoteSchema2,
 };
 export {
 	quotesSchema2,

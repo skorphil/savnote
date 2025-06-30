@@ -15,6 +15,7 @@ import type {
 	MetaSchema2,
 	QuotesSchema2,
 	RecordsSchema2,
+	QuoteSchema2,
 } from "./journalSchema2";
 
 export {
@@ -32,6 +33,7 @@ export type {
 	MetaSchema2 as MetaSchema,
 	RecordsSchema2 as RecordsSchema,
 	QuotesSchema2 as QuotesSchema,
+	QuoteSchema2 as QuoteSchema,
 	AssetSchema2 as AssetSchema,
 	InstitutionSchema2 as InstitutionSchema,
 };
