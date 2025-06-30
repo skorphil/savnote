@@ -10,7 +10,8 @@
 			"./src/**/*.ts",
 			"./src/**/*.js",
 			"./src/**/*.tsx",
-			"./src/**/*.jsx"
+			"./src/**/*.jsx",
+            "./tests/**/*.ts"
 		],
 		"ignoreUnknown": true,
 		"ignore": ["./src/entities/journal/model/tinyBaseJournalSchema.ts"]

@@ -33,7 +33,7 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ["*", "!src/", "!src/**/*", "tests/**/*", "**/*.test.js"],
+    ignores: ["*", "!src/", "!src/**/*", "tests/**/*.js", "**/*.test.js"],
   },
   {}
 );

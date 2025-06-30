@@ -27,7 +27,8 @@
     }
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "tests/**/*.ts"
   ],
   "references": [{ "path": "./tsconfig.node.json" }],
   "tsc-alias": {

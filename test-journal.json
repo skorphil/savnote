@@ -1,0 +1,1161 @@
+{
+  "meta": {
+    "appName": "savnote",
+    "version": 2,
+    "name": "Jack's Demo Journal",
+    "id": "aafsh-gftdhj-ugksab"
+  },
+  "records": {
+    "institutions": {
+      "1733011200000.Bank of Nova Scotia (Scotiabank)": {
+        "date": 1733011200000,
+        "name": "Bank of Nova Scotia (Scotiabank)",
+        "country": "ca"
+      },
+      "1733011200000.Barclays": {
+        "date": 1733011200000,
+        "name": "Barclays",
+        "country": "gb"
+      },
+      "1733011200000.Westpac Banking Corporation (WBC)": {
+        "date": 1733011200000,
+        "name": "Westpac Banking Corporation (WBC)",
+        "country": "au"
+      },
+      "1733011200000.HSBC Holdings": {
+        "date": 1733011200000,
+        "name": "HSBC Holdings",
+        "country": "gb"
+      },
+      "1733011200000.Bank of America": {
+        "date": 1733011200000,
+        "name": "Bank of America",
+        "country": "us"
+      },
+      "1735689600000.Bank of Nova Scotia (Scotiabank)": {
+        "date": 1735689600000,
+        "name": "Bank of Nova Scotia (Scotiabank)",
+        "country": "ca"
+      },
+      "1735689600000.Barclays": {
+        "date": 1735689600000,
+        "name": "Barclays",
+        "country": "gb"
+      },
+      "1735689600000.Westpac Banking Corporation (WBC)": {
+        "date": 1735689600000,
+        "name": "Westpac Banking Corporation (WBC)",
+        "country": "au"
+      },
+      "1735689600000.HSBC Holdings": {
+        "date": 1735689600000,
+        "name": "HSBC Holdings",
+        "country": "gb"
+      },
+      "1735689600000.Bank of America": {
+        "date": 1735689600000,
+        "name": "Bank of America",
+        "country": "us"
+      },
+      "1738368000000.Bank of Nova Scotia (Scotiabank)": {
+        "date": 1738368000000,
+        "name": "Bank of Nova Scotia (Scotiabank)",
+        "country": "ca"
+      },
+      "1738368000000.Barclays": {
+        "date": 1738368000000,
+        "name": "Barclays",
+        "country": "gb"
+      },
+      "1738368000000.Westpac Banking Corporation (WBC)": {
+        "date": 1738368000000,
+        "name": "Westpac Banking Corporation (WBC)",
+        "country": "au"
+      },
+      "1738368000000.HSBC Holdings": {
+        "date": 1738368000000,
+        "name": "HSBC Holdings",
+        "country": "gb"
+      },
+      "1738368000000.Bank of America": {
+        "date": 1738368000000,
+        "name": "Bank of America",
+        "country": "us"
+      },
+      "1740787200000.Bank of Nova Scotia (Scotiabank)": {
+        "date": 1740787200000,
+        "name": "Bank of Nova Scotia (Scotiabank)",
+        "country": "ca"
+      },
+      "1740787200000.Barclays": {
+        "date": 1740787200000,
+        "name": "Barclays",
+        "country": "gb"
+      },
+      "1740787200000.Westpac Banking Corporation (WBC)": {
+        "date": 1740787200000,
+        "name": "Westpac Banking Corporation (WBC)",
+        "country": "au"
+      },
+      "1740787200000.HSBC Holdings": {
+        "date": 1740787200000,
+        "name": "HSBC Holdings",
+        "country": "gb"
+      },
+      "1740787200000.Bank of America": {
+        "date": 1740787200000,
+        "name": "Bank of America",
+        "country": "us"
+      },
+      "1743465600000.Bank of Nova Scotia (Scotiabank)": {
+        "date": 1743465600000,
+        "name": "Bank of Nova Scotia (Scotiabank)",
+        "country": "ca"
+      },
+      "1743465600000.Barclays": {
+        "date": 1743465600000,
+        "name": "Barclays",
+        "country": "gb"
+      },
+      "1743465600000.Westpac Banking Corporation (WBC)": {
+        "date": 1743465600000,
+        "name": "Westpac Banking Corporation (WBC)",
+        "country": "au"
+      },
+      "1743465600000.HSBC Holdings": {
+        "date": 1743465600000,
+        "name": "HSBC Holdings",
+        "country": "gb"
+      },
+      "1743465600000.Bank of America": {
+        "date": 1743465600000,
+        "name": "Bank of America",
+        "country": "us"
+      }
+    },
+    "assets": {
+      "1733011200000.Bank of Nova Scotia (Scotiabank).My Visa Card": {
+        "name": "My Visa Card",
+        "isEarning": true,
+        "currency": "usd",
+        "date": 1733011200000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 17000,
+        "description": ""
+      },
+      "1733011200000.Bank of Nova Scotia (Scotiabank).Credit Card (Primary)": {
+        "name": "Credit Card (Primary)",
+        "isEarning": true,
+        "currency": "usd",
+        "date": 1733011200000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 18000,
+        "description": ""
+      },
+      "1733011200000.Bank of Nova Scotia (Scotiabank).Future Home Fund": {
+        "name": "Future Home Fund",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1733011200000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 16000,
+        "description": ""
+      },
+      "1733011200000.Bank of Nova Scotia (Scotiabank).Investment Link": {
+        "name": "Investment Link",
+        "isEarning": true,
+        "currency": "eur",
+        "date": 1733011200000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 17000,
+        "description": ""
+      },
+      "1733011200000.Barclays.Investment Link": {
+        "name": "Investment Link",
+        "isEarning": false,
+        "currency": "eur",
+        "date": 1733011200000,
+        "institution": "Barclays",
+        "amount": 15000,
+        "description": ""
+      },
+      "1733011200000.Barclays.Car Maintenance Fund": {
+        "name": "Car Maintenance Fund",
+        "isEarning": true,
+        "currency": "eur",
+        "date": 1733011200000,
+        "institution": "Barclays",
+        "amount": 14000,
+        "description": ""
+      },
+      "1733011200000.Barclays.Travel Fund": {
+        "name": "Travel Fund",
+        "isEarning": false,
+        "currency": "eur",
+        "date": 1733011200000,
+        "institution": "Barclays",
+        "amount": 17000,
+        "description": ""
+      },
+      "1733011200000.Barclays.Side Hustle Income": {
+        "name": "Side Hustle Income",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1733011200000,
+        "institution": "Barclays",
+        "amount": 15000,
+        "description": ""
+      },
+      "1733011200000.Westpac Banking Corporation (WBC).Kids' College Savings": {
+        "name": "Kids' College Savings",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1733011200000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 11000,
+        "description": ""
+      },
+      "1733011200000.Westpac Banking Corporation (WBC).Investment Link": {
+        "name": "Investment Link",
+        "isEarning": false,
+        "currency": "brl",
+        "date": 1733011200000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 18000,
+        "description": ""
+      },
+      "1733011200000.Westpac Banking Corporation (WBC).My Visa Card": {
+        "name": "My Visa Card",
+        "isEarning": true,
+        "currency": "cny",
+        "date": 1733011200000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 19000,
+        "description": ""
+      },
+      "1733011200000.Westpac Banking Corporation (WBC).Main Checking": {
+        "name": "Main Checking",
+        "isEarning": true,
+        "currency": "eur",
+        "date": 1733011200000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 13000,
+        "description": ""
+      },
+      "1733011200000.HSBC Holdings.Virtual Card": {
+        "name": "Virtual Card",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1733011200000,
+        "institution": "HSBC Holdings",
+        "amount": 14000,
+        "description": ""
+      },
+      "1733011200000.HSBC Holdings.Digital Spending Card": {
+        "name": "Digital Spending Card",
+        "isEarning": true,
+        "currency": "cny",
+        "date": 1733011200000,
+        "institution": "HSBC Holdings",
+        "amount": 13000,
+        "description": ""
+      },
+      "1733011200000.HSBC Holdings.Credit Card (Primary)": {
+        "name": "Credit Card (Primary)",
+        "isEarning": false,
+        "currency": "brl",
+        "date": 1733011200000,
+        "institution": "HSBC Holdings",
+        "amount": 14000,
+        "description": ""
+      },
+      "1733011200000.HSBC Holdings.Kids' College Savings": {
+        "name": "Kids' College Savings",
+        "isEarning": true,
+        "currency": "cny",
+        "date": 1733011200000,
+        "institution": "HSBC Holdings",
+        "amount": 16000,
+        "description": ""
+      },
+      "1733011200000.Bank of America.Rent & Utilities": {
+        "name": "Rent & Utilities",
+        "isEarning": false,
+        "currency": "usd",
+        "date": 1733011200000,
+        "institution": "Bank of America",
+        "amount": 18000,
+        "description": ""
+      },
+      "1733011200000.Bank of America.Future Home Fund": {
+        "name": "Future Home Fund",
+        "isEarning": true,
+        "currency": "usd",
+        "date": 1733011200000,
+        "institution": "Bank of America",
+        "amount": 17000,
+        "description": ""
+      },
+      "1733011200000.Bank of America.Online Purchases Card": {
+        "name": "Online Purchases Card",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1733011200000,
+        "institution": "Bank of America",
+        "amount": 13000,
+        "description": ""
+      },
+      "1733011200000.Bank of America.Travel Fund": {
+        "name": "Travel Fund",
+        "isEarning": false,
+        "currency": "eur",
+        "date": 1733011200000,
+        "institution": "Bank of America",
+        "amount": 20000,
+        "description": ""
+      },
+      "1735689600000.Bank of Nova Scotia (Scotiabank).My Visa Card": {
+        "name": "My Visa Card",
+        "isEarning": true,
+        "currency": "usd",
+        "date": 1735689600000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 12000,
+        "description": ""
+      },
+      "1735689600000.Bank of Nova Scotia (Scotiabank).Credit Card (Primary)": {
+        "name": "Credit Card (Primary)",
+        "isEarning": true,
+        "currency": "usd",
+        "date": 1735689600000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 19000,
+        "description": ""
+      },
+      "1735689600000.Bank of Nova Scotia (Scotiabank).Future Home Fund": {
+        "name": "Future Home Fund",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1735689600000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 20000,
+        "description": ""
+      },
+      "1735689600000.Bank of Nova Scotia (Scotiabank).Investment Link": {
+        "name": "Investment Link",
+        "isEarning": true,
+        "currency": "eur",
+        "date": 1735689600000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 12000,
+        "description": ""
+      },
+      "1735689600000.Barclays.Investment Link": {
+        "name": "Investment Link",
+        "isEarning": false,
+        "currency": "eur",
+        "date": 1735689600000,
+        "institution": "Barclays",
+        "amount": 18000,
+        "description": ""
+      },
+      "1735689600000.Barclays.Car Maintenance Fund": {
+        "name": "Car Maintenance Fund",
+        "isEarning": true,
+        "currency": "eur",
+        "date": 1735689600000,
+        "institution": "Barclays",
+        "amount": 11000,
+        "description": ""
+      },
+      "1735689600000.Barclays.Travel Fund": {
+        "name": "Travel Fund",
+        "isEarning": false,
+        "currency": "eur",
+        "date": 1735689600000,
+        "institution": "Barclays",
+        "amount": 13000,
+        "description": ""
+      },
+      "1735689600000.Barclays.Side Hustle Income": {
+        "name": "Side Hustle Income",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1735689600000,
+        "institution": "Barclays",
+        "amount": 12000,
+        "description": ""
+      },
+      "1735689600000.Westpac Banking Corporation (WBC).Kids' College Savings": {
+        "name": "Kids' College Savings",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1735689600000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 11000,
+        "description": ""
+      },
+      "1735689600000.Westpac Banking Corporation (WBC).Investment Link": {
+        "name": "Investment Link",
+        "isEarning": false,
+        "currency": "brl",
+        "date": 1735689600000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 20000,
+        "description": ""
+      },
+      "1735689600000.Westpac Banking Corporation (WBC).My Visa Card": {
+        "name": "My Visa Card",
+        "isEarning": true,
+        "currency": "cny",
+        "date": 1735689600000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 14000,
+        "description": ""
+      },
+      "1735689600000.Westpac Banking Corporation (WBC).Main Checking": {
+        "name": "Main Checking",
+        "isEarning": true,
+        "currency": "eur",
+        "date": 1735689600000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 13000,
+        "description": ""
+      },
+      "1735689600000.HSBC Holdings.Virtual Card": {
+        "name": "Virtual Card",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1735689600000,
+        "institution": "HSBC Holdings",
+        "amount": 15000,
+        "description": ""
+      },
+      "1735689600000.HSBC Holdings.Digital Spending Card": {
+        "name": "Digital Spending Card",
+        "isEarning": true,
+        "currency": "cny",
+        "date": 1735689600000,
+        "institution": "HSBC Holdings",
+        "amount": 17000,
+        "description": ""
+      },
+      "1735689600000.HSBC Holdings.Credit Card (Primary)": {
+        "name": "Credit Card (Primary)",
+        "isEarning": false,
+        "currency": "brl",
+        "date": 1735689600000,
+        "institution": "HSBC Holdings",
+        "amount": 17000,
+        "description": ""
+      },
+      "1735689600000.HSBC Holdings.Kids' College Savings": {
+        "name": "Kids' College Savings",
+        "isEarning": true,
+        "currency": "cny",
+        "date": 1735689600000,
+        "institution": "HSBC Holdings",
+        "amount": 12000,
+        "description": ""
+      },
+      "1735689600000.Bank of America.Rent & Utilities": {
+        "name": "Rent & Utilities",
+        "isEarning": false,
+        "currency": "usd",
+        "date": 1735689600000,
+        "institution": "Bank of America",
+        "amount": 12000,
+        "description": ""
+      },
+      "1735689600000.Bank of America.Future Home Fund": {
+        "name": "Future Home Fund",
+        "isEarning": true,
+        "currency": "usd",
+        "date": 1735689600000,
+        "institution": "Bank of America",
+        "amount": 16000,
+        "description": ""
+      },
+      "1735689600000.Bank of America.Online Purchases Card": {
+        "name": "Online Purchases Card",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1735689600000,
+        "institution": "Bank of America",
+        "amount": 16000,
+        "description": ""
+      },
+      "1735689600000.Bank of America.Travel Fund": {
+        "name": "Travel Fund",
+        "isEarning": false,
+        "currency": "eur",
+        "date": 1735689600000,
+        "institution": "Bank of America",
+        "amount": 11000,
+        "description": ""
+      },
+      "1738368000000.Bank of Nova Scotia (Scotiabank).My Visa Card": {
+        "name": "My Visa Card",
+        "isEarning": true,
+        "currency": "usd",
+        "date": 1738368000000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 18000,
+        "description": ""
+      },
+      "1738368000000.Bank of Nova Scotia (Scotiabank).Credit Card (Primary)": {
+        "name": "Credit Card (Primary)",
+        "isEarning": true,
+        "currency": "usd",
+        "date": 1738368000000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 18000,
+        "description": ""
+      },
+      "1738368000000.Bank of Nova Scotia (Scotiabank).Future Home Fund": {
+        "name": "Future Home Fund",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1738368000000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 17000,
+        "description": ""
+      },
+      "1738368000000.Bank of Nova Scotia (Scotiabank).Investment Link": {
+        "name": "Investment Link",
+        "isEarning": true,
+        "currency": "eur",
+        "date": 1738368000000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 11000,
+        "description": ""
+      },
+      "1738368000000.Barclays.Investment Link": {
+        "name": "Investment Link",
+        "isEarning": false,
+        "currency": "eur",
+        "date": 1738368000000,
+        "institution": "Barclays",
+        "amount": 18000,
+        "description": ""
+      },
+      "1738368000000.Barclays.Car Maintenance Fund": {
+        "name": "Car Maintenance Fund",
+        "isEarning": true,
+        "currency": "eur",
+        "date": 1738368000000,
+        "institution": "Barclays",
+        "amount": 14000,
+        "description": ""
+      },
+      "1738368000000.Barclays.Travel Fund": {
+        "name": "Travel Fund",
+        "isEarning": false,
+        "currency": "eur",
+        "date": 1738368000000,
+        "institution": "Barclays",
+        "amount": 11000,
+        "description": ""
+      },
+      "1738368000000.Barclays.Side Hustle Income": {
+        "name": "Side Hustle Income",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1738368000000,
+        "institution": "Barclays",
+        "amount": 15000,
+        "description": ""
+      },
+      "1738368000000.Westpac Banking Corporation (WBC).Kids' College Savings": {
+        "name": "Kids' College Savings",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1738368000000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 11000,
+        "description": ""
+      },
+      "1738368000000.Westpac Banking Corporation (WBC).Investment Link": {
+        "name": "Investment Link",
+        "isEarning": false,
+        "currency": "brl",
+        "date": 1738368000000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 10000,
+        "description": ""
+      },
+      "1738368000000.Westpac Banking Corporation (WBC).My Visa Card": {
+        "name": "My Visa Card",
+        "isEarning": true,
+        "currency": "cny",
+        "date": 1738368000000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 19000,
+        "description": ""
+      },
+      "1738368000000.Westpac Banking Corporation (WBC).Main Checking": {
+        "name": "Main Checking",
+        "isEarning": true,
+        "currency": "eur",
+        "date": 1738368000000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 11000,
+        "description": ""
+      },
+      "1738368000000.HSBC Holdings.Virtual Card": {
+        "name": "Virtual Card",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1738368000000,
+        "institution": "HSBC Holdings",
+        "amount": 13000,
+        "description": ""
+      },
+      "1738368000000.HSBC Holdings.Digital Spending Card": {
+        "name": "Digital Spending Card",
+        "isEarning": true,
+        "currency": "cny",
+        "date": 1738368000000,
+        "institution": "HSBC Holdings",
+        "amount": 13000,
+        "description": ""
+      },
+      "1738368000000.HSBC Holdings.Credit Card (Primary)": {
+        "name": "Credit Card (Primary)",
+        "isEarning": false,
+        "currency": "brl",
+        "date": 1738368000000,
+        "institution": "HSBC Holdings",
+        "amount": 14000,
+        "description": ""
+      },
+      "1738368000000.HSBC Holdings.Kids' College Savings": {
+        "name": "Kids' College Savings",
+        "isEarning": true,
+        "currency": "cny",
+        "date": 1738368000000,
+        "institution": "HSBC Holdings",
+        "amount": 17000,
+        "description": ""
+      },
+      "1738368000000.Bank of America.Rent & Utilities": {
+        "name": "Rent & Utilities",
+        "isEarning": false,
+        "currency": "usd",
+        "date": 1738368000000,
+        "institution": "Bank of America",
+        "amount": 19000,
+        "description": ""
+      },
+      "1738368000000.Bank of America.Future Home Fund": {
+        "name": "Future Home Fund",
+        "isEarning": true,
+        "currency": "usd",
+        "date": 1738368000000,
+        "institution": "Bank of America",
+        "amount": 17000,
+        "description": ""
+      },
+      "1738368000000.Bank of America.Online Purchases Card": {
+        "name": "Online Purchases Card",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1738368000000,
+        "institution": "Bank of America",
+        "amount": 12000,
+        "description": ""
+      },
+      "1738368000000.Bank of America.Travel Fund": {
+        "name": "Travel Fund",
+        "isEarning": false,
+        "currency": "eur",
+        "date": 1738368000000,
+        "institution": "Bank of America",
+        "amount": 19000,
+        "description": ""
+      },
+      "1740787200000.Bank of Nova Scotia (Scotiabank).My Visa Card": {
+        "name": "My Visa Card",
+        "isEarning": true,
+        "currency": "usd",
+        "date": 1740787200000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 14000,
+        "description": ""
+      },
+      "1740787200000.Bank of Nova Scotia (Scotiabank).Credit Card (Primary)": {
+        "name": "Credit Card (Primary)",
+        "isEarning": true,
+        "currency": "usd",
+        "date": 1740787200000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 18000,
+        "description": ""
+      },
+      "1740787200000.Bank of Nova Scotia (Scotiabank).Future Home Fund": {
+        "name": "Future Home Fund",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1740787200000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 14000,
+        "description": ""
+      },
+      "1740787200000.Bank of Nova Scotia (Scotiabank).Investment Link": {
+        "name": "Investment Link",
+        "isEarning": true,
+        "currency": "eur",
+        "date": 1740787200000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 11000,
+        "description": ""
+      },
+      "1740787200000.Barclays.Investment Link": {
+        "name": "Investment Link",
+        "isEarning": false,
+        "currency": "eur",
+        "date": 1740787200000,
+        "institution": "Barclays",
+        "amount": 20000,
+        "description": ""
+      },
+      "1740787200000.Barclays.Car Maintenance Fund": {
+        "name": "Car Maintenance Fund",
+        "isEarning": true,
+        "currency": "eur",
+        "date": 1740787200000,
+        "institution": "Barclays",
+        "amount": 11000,
+        "description": ""
+      },
+      "1740787200000.Barclays.Travel Fund": {
+        "name": "Travel Fund",
+        "isEarning": false,
+        "currency": "eur",
+        "date": 1740787200000,
+        "institution": "Barclays",
+        "amount": 19000,
+        "description": ""
+      },
+      "1740787200000.Barclays.Side Hustle Income": {
+        "name": "Side Hustle Income",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1740787200000,
+        "institution": "Barclays",
+        "amount": 11000,
+        "description": ""
+      },
+      "1740787200000.Westpac Banking Corporation (WBC).Kids' College Savings": {
+        "name": "Kids' College Savings",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1740787200000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 17000,
+        "description": ""
+      },
+      "1740787200000.Westpac Banking Corporation (WBC).Investment Link": {
+        "name": "Investment Link",
+        "isEarning": false,
+        "currency": "brl",
+        "date": 1740787200000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 20000,
+        "description": ""
+      },
+      "1740787200000.Westpac Banking Corporation (WBC).My Visa Card": {
+        "name": "My Visa Card",
+        "isEarning": true,
+        "currency": "cny",
+        "date": 1740787200000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 20000,
+        "description": ""
+      },
+      "1740787200000.Westpac Banking Corporation (WBC).Main Checking": {
+        "name": "Main Checking",
+        "isEarning": true,
+        "currency": "eur",
+        "date": 1740787200000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 20000,
+        "description": ""
+      },
+      "1740787200000.HSBC Holdings.Virtual Card": {
+        "name": "Virtual Card",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1740787200000,
+        "institution": "HSBC Holdings",
+        "amount": 18000,
+        "description": ""
+      },
+      "1740787200000.HSBC Holdings.Digital Spending Card": {
+        "name": "Digital Spending Card",
+        "isEarning": true,
+        "currency": "cny",
+        "date": 1740787200000,
+        "institution": "HSBC Holdings",
+        "amount": 13000,
+        "description": ""
+      },
+      "1740787200000.HSBC Holdings.Credit Card (Primary)": {
+        "name": "Credit Card (Primary)",
+        "isEarning": false,
+        "currency": "brl",
+        "date": 1740787200000,
+        "institution": "HSBC Holdings",
+        "amount": 16000,
+        "description": ""
+      },
+      "1740787200000.HSBC Holdings.Kids' College Savings": {
+        "name": "Kids' College Savings",
+        "isEarning": true,
+        "currency": "cny",
+        "date": 1740787200000,
+        "institution": "HSBC Holdings",
+        "amount": 18000,
+        "description": ""
+      },
+      "1740787200000.Bank of America.Rent & Utilities": {
+        "name": "Rent & Utilities",
+        "isEarning": false,
+        "currency": "usd",
+        "date": 1740787200000,
+        "institution": "Bank of America",
+        "amount": 15000,
+        "description": ""
+      },
+      "1740787200000.Bank of America.Future Home Fund": {
+        "name": "Future Home Fund",
+        "isEarning": true,
+        "currency": "usd",
+        "date": 1740787200000,
+        "institution": "Bank of America",
+        "amount": 18000,
+        "description": ""
+      },
+      "1740787200000.Bank of America.Online Purchases Card": {
+        "name": "Online Purchases Card",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1740787200000,
+        "institution": "Bank of America",
+        "amount": 10000,
+        "description": ""
+      },
+      "1740787200000.Bank of America.Travel Fund": {
+        "name": "Travel Fund",
+        "isEarning": false,
+        "currency": "eur",
+        "date": 1740787200000,
+        "institution": "Bank of America",
+        "amount": 10000,
+        "description": ""
+      },
+      "1743465600000.Bank of Nova Scotia (Scotiabank).My Visa Card": {
+        "name": "My Visa Card",
+        "isEarning": true,
+        "currency": "usd",
+        "date": 1743465600000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 15000,
+        "description": ""
+      },
+      "1743465600000.Bank of Nova Scotia (Scotiabank).Credit Card (Primary)": {
+        "name": "Credit Card (Primary)",
+        "isEarning": true,
+        "currency": "usd",
+        "date": 1743465600000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 17000,
+        "description": ""
+      },
+      "1743465600000.Bank of Nova Scotia (Scotiabank).Future Home Fund": {
+        "name": "Future Home Fund",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1743465600000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 17000,
+        "description": ""
+      },
+      "1743465600000.Bank of Nova Scotia (Scotiabank).Investment Link": {
+        "name": "Investment Link",
+        "isEarning": true,
+        "currency": "eur",
+        "date": 1743465600000,
+        "institution": "Bank of Nova Scotia (Scotiabank)",
+        "amount": 16000,
+        "description": ""
+      },
+      "1743465600000.Barclays.Investment Link": {
+        "name": "Investment Link",
+        "isEarning": false,
+        "currency": "eur",
+        "date": 1743465600000,
+        "institution": "Barclays",
+        "amount": 13000,
+        "description": ""
+      },
+      "1743465600000.Barclays.Car Maintenance Fund": {
+        "name": "Car Maintenance Fund",
+        "isEarning": true,
+        "currency": "eur",
+        "date": 1743465600000,
+        "institution": "Barclays",
+        "amount": 18000,
+        "description": ""
+      },
+      "1743465600000.Barclays.Travel Fund": {
+        "name": "Travel Fund",
+        "isEarning": false,
+        "currency": "eur",
+        "date": 1743465600000,
+        "institution": "Barclays",
+        "amount": 12000,
+        "description": ""
+      },
+      "1743465600000.Barclays.Side Hustle Income": {
+        "name": "Side Hustle Income",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1743465600000,
+        "institution": "Barclays",
+        "amount": 19000,
+        "description": ""
+      },
+      "1743465600000.Westpac Banking Corporation (WBC).Kids' College Savings": {
+        "name": "Kids' College Savings",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1743465600000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 15000,
+        "description": ""
+      },
+      "1743465600000.Westpac Banking Corporation (WBC).Investment Link": {
+        "name": "Investment Link",
+        "isEarning": false,
+        "currency": "brl",
+        "date": 1743465600000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 19000,
+        "description": ""
+      },
+      "1743465600000.Westpac Banking Corporation (WBC).My Visa Card": {
+        "name": "My Visa Card",
+        "isEarning": true,
+        "currency": "cny",
+        "date": 1743465600000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 17000,
+        "description": ""
+      },
+      "1743465600000.Westpac Banking Corporation (WBC).Main Checking": {
+        "name": "Main Checking",
+        "isEarning": true,
+        "currency": "eur",
+        "date": 1743465600000,
+        "institution": "Westpac Banking Corporation (WBC)",
+        "amount": 17000,
+        "description": ""
+      },
+      "1743465600000.HSBC Holdings.Virtual Card": {
+        "name": "Virtual Card",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1743465600000,
+        "institution": "HSBC Holdings",
+        "amount": 14000,
+        "description": ""
+      },
+      "1743465600000.HSBC Holdings.Digital Spending Card": {
+        "name": "Digital Spending Card",
+        "isEarning": true,
+        "currency": "cny",
+        "date": 1743465600000,
+        "institution": "HSBC Holdings",
+        "amount": 13000,
+        "description": ""
+      },
+      "1743465600000.HSBC Holdings.Credit Card (Primary)": {
+        "name": "Credit Card (Primary)",
+        "isEarning": false,
+        "currency": "brl",
+        "date": 1743465600000,
+        "institution": "HSBC Holdings",
+        "amount": 19000,
+        "description": ""
+      },
+      "1743465600000.HSBC Holdings.Kids' College Savings": {
+        "name": "Kids' College Savings",
+        "isEarning": true,
+        "currency": "cny",
+        "date": 1743465600000,
+        "institution": "HSBC Holdings",
+        "amount": 17000,
+        "description": ""
+      },
+      "1743465600000.Bank of America.Rent & Utilities": {
+        "name": "Rent & Utilities",
+        "isEarning": false,
+        "currency": "usd",
+        "date": 1743465600000,
+        "institution": "Bank of America",
+        "amount": 11000,
+        "description": ""
+      },
+      "1743465600000.Bank of America.Future Home Fund": {
+        "name": "Future Home Fund",
+        "isEarning": true,
+        "currency": "usd",
+        "date": 1743465600000,
+        "institution": "Bank of America",
+        "amount": 10000,
+        "description": ""
+      },
+      "1743465600000.Bank of America.Online Purchases Card": {
+        "name": "Online Purchases Card",
+        "isEarning": false,
+        "currency": "cny",
+        "date": 1743465600000,
+        "institution": "Bank of America",
+        "amount": 11000,
+        "description": ""
+      },
+      "1743465600000.Bank of America.Travel Fund": {
+        "name": "Travel Fund",
+        "isEarning": false,
+        "currency": "eur",
+        "date": 1743465600000,
+        "institution": "Bank of America",
+        "amount": 19000,
+        "description": ""
+      }
+    },
+    "quotes": {
+      "1733011200000.usd.usd": {
+        "baseCurrency": "usd",
+        "counterCurrency": "usd",
+        "rate": 1,
+        "date": 1733011200000
+      },
+      "1733011200000.cny.usd": {
+        "baseCurrency": "cny",
+        "counterCurrency": "usd",
+        "rate": 0.14,
+        "date": 1733011200000
+      },
+      "1733011200000.brl.usd": {
+        "date": 1733011200000,
+        "baseCurrency": "brl",
+        "counterCurrency": "usd",
+        "rate": 0.16
+      },
+      "1733011200000.eur.usd": {
+        "date": 1733011200000,
+        "baseCurrency": "eur",
+        "counterCurrency": "usd",
+        "rate": 1.0599999999999998
+      },
+      "1735689600000.usd.usd": {
+        "baseCurrency": "usd",
+        "counterCurrency": "usd",
+        "rate": 1,
+        "date": 1735689600000
+      },
+      "1735689600000.cny.usd": {
+        "baseCurrency": "cny",
+        "counterCurrency": "usd",
+        "rate": 0.135,
+        "date": 1735689600000
+      },
+      "1735689600000.brl.usd": {
+        "date": 1735689600000,
+        "baseCurrency": "brl",
+        "counterCurrency": "usd",
+        "rate": 0.185
+      },
+      "1735689600000.eur.usd": {
+        "date": 1735689600000,
+        "baseCurrency": "eur",
+        "counterCurrency": "usd",
+        "rate": 1.135
+      },
+      "1738368000000.usd.usd": {
+        "baseCurrency": "usd",
+        "counterCurrency": "usd",
+        "rate": 1,
+        "date": 1738368000000
+      },
+      "1738368000000.cny.usd": {
+        "baseCurrency": "cny",
+        "counterCurrency": "usd",
+        "rate": 0.14,
+        "date": 1738368000000
+      },
+      "1738368000000.brl.usd": {
+        "date": 1738368000000,
+        "baseCurrency": "brl",
+        "counterCurrency": "usd",
+        "rate": 0.165
+      },
+      "1738368000000.eur.usd": {
+        "date": 1738368000000,
+        "baseCurrency": "eur",
+        "counterCurrency": "usd",
+        "rate": 1.145
+      },
+      "1740787200000.usd.usd": {
+        "baseCurrency": "usd",
+        "counterCurrency": "usd",
+        "rate": 1,
+        "date": 1740787200000
+      },
+      "1740787200000.cny.usd": {
+        "baseCurrency": "cny",
+        "counterCurrency": "usd",
+        "rate": 0.135,
+        "date": 1740787200000
+      },
+      "1740787200000.brl.usd": {
+        "date": 1740787200000,
+        "baseCurrency": "brl",
+        "counterCurrency": "usd",
+        "rate": 0.185
+      },
+      "1740787200000.eur.usd": {
+        "date": 1740787200000,
+        "baseCurrency": "eur",
+        "counterCurrency": "usd",
+        "rate": 1.085
+      },
+      "1743465600000.usd.usd": {
+        "baseCurrency": "usd",
+        "counterCurrency": "usd",
+        "rate": 1,
+        "date": 1743465600000
+      },
+      "1743465600000.cny.usd": {
+        "baseCurrency": "cny",
+        "counterCurrency": "usd",
+        "rate": 0.135,
+        "date": 1743465600000
+      },
+      "1743465600000.brl.usd": {
+        "date": 1743465600000,
+        "baseCurrency": "brl",
+        "counterCurrency": "usd",
+        "rate": 0.175
+      },
+      "1743465600000.eur.usd": {
+        "date": 1743465600000,
+        "baseCurrency": "eur",
+        "counterCurrency": "usd",
+        "rate": 1.13
+      }
+    }
+  }
+}
