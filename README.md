@@ -1,3 +1,6 @@
+Read project updates in [announcements](https://github.com/skorphil/savnote/discussions/categories/announcements)
+
+---
 ### ⚠️ UNDER DEVOLOPMENT
 App is on the early stage of development. Currently not available for use. Star project if you are interested – this will motivate me to work harder.
 
