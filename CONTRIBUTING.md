@@ -19,6 +19,7 @@ The domains are not limited, however this list might help you to start:
 - Visual language
     - Logo design
     - Styling and design system
+    - Existing task: https://github.com/skorphil/savnote/issues/40 
 - Community
     - Writing about app
     - Fill wiki with a guides
