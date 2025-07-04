@@ -10,7 +10,6 @@ SavNote is a simple app to consolidate all your savings and provide a clear unde
 How it works:
 1. Record your initial savings balances in each institution (e.g., bank, broker, cryptocurrency wallet) and currency.
 2. Update your balances at regular intervals (monthly or less often) by recording only the changes since the last update.
-By only recording the changes, you can quickly and easily update your savings records without having to re-enter all of your information each month.
 3. SavNote will store your records and provide a clear overview of your savings.
 
 
