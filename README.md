@@ -1,8 +1,6 @@
 > **⚠️ Under development**<br>
 > App is on the early stage of development. At the moment preview version with base features is available.<br>
-> [Download preview version](https://github.com/skorphil/savnote/releases/tag/0.5.0) | [Small demo on youtube](https://youtu.be/abH2uFe2hh0?si=Eo_aMzNmCA1DP6pl) 
->
-> Follow project updates in [announcements](https://github.com/skorphil/savnote/discussions/categories/announcements)
+> [Download preview version](https://github.com/skorphil/savnote/releases/tag/0.5.0) | [Small demo on youtube](https://youtu.be/abH2uFe2hh0?si=Eo_aMzNmCA1DP6pl) | [Recent updates](https://github.com/skorphil/savnote/discussions/categories/announcements)
 
 <img src=".github/savnote.png" alt="SavNote" />
 
