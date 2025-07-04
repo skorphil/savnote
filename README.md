@@ -16,7 +16,7 @@ How it works:
 ## Project Vision
 **Q:** How is it different from the other finance trackers?
 
-**A:** SavNote is a _savings notebook_, not finance tracker. It's designed to consolidate personal savings in a manner of simple notebook, without the hassle of budgeting, goals, or recording income and expences. With SavNote you can get a clear overview of all your net worth by spending no more than 10 min per month to record your savings. You can read more about vision and rationale behind SavNote in [wiki | vision](https://github.com/skorphil/savnote/wiki/SavNote-Vision).
+**A:** SavNote is a _savings notebook_, not finance tracker. It's designed to consolidate personal savings in a manner of a simple notebook, without the hassle of budgeting, goals or recording income and expences. With SavNote you can get a clear overview of all your net worth by spending no more than 10 min per month to record your savings. You can read more about vision and rationale behind SavNote in [wiki | vision](https://github.com/skorphil/savnote/wiki/SavNote-Vision).
 
 
 ## Core Values
