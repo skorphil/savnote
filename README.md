@@ -4,8 +4,8 @@
 
 <img src=".github/savnote.png" alt="SavNote" />
 
-# SavNote – Private Savings Notepad
-SavNote is an open-source app for logging and analyzing your savings.
+# SavNote – Private Savings Notebook
+SavNote is a simple app to consolidate all your savings and provide a clear understanding of your net worth.
 
 How it works:
 1. Record your initial savings balances in each institution (e.g., bank, broker, cryptocurrency wallet) and currency.
@@ -21,8 +21,10 @@ By only recording the changes, you can quickly and easily update your savings re
 * **Extensibility**: SavNote is fully open-source, empowering you to extend, customize, and modify it to fit your needs. With a cross-platform foundation, you're also free to fork and adapt it for other platforms.
 
 
-## Project Vision  
-Read more about vision of SavNote in [wiki | vision](https://github.com/skorphil/savnote/wiki/SavNote-Vision).
+## Project Vision
+**Q:** How is it different from the other finance trackers?
+
+**A:** SavNote is a _savings notebook_, not finance tracker. It's designed to consolidate personal savings in a manner of simple notebook, without the hassle of budgeting, goals, or recording income and expences. With SavNote you can get a clear overview of all your net worth by spending no more than 10 min per month to record your savings. You can read more about vision and rationale behind SavNote in [wiki | vision](https://github.com/skorphil/savnote/wiki/SavNote-Vision).
 
 
 ## Contributing
