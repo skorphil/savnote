@@ -4,7 +4,7 @@
 
 <img src=".github/savnote.png" alt="SavNote" />
 
-# SavNote – Private Savings Notebook
+# SavNote – private savings notebook
 SavNote is a simple app to consolidate all your savings and provide a clear understanding of your net worth.
 
 How it works:
