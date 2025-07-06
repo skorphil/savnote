@@ -4,9 +4,8 @@ If you have any idea or question, open new issue.
 
 ## How to contribute
 1. Check current issues / [project](https://github.com/users/skorphil/projects/7)
-2. Check project's [vision](https://github.com/skorphil/savnote/wiki/SavNote-Vision)
-3. Check project's [tech stack](https://github.com/skorphil/savnote/wiki/Project's-tech-stack)
-4. Participate in existing issues or create new, describing your idea
+2. Check [project's wiki](https://github.com/skorphil/savnote/wiki), especially [vision](https://github.com/skorphil/savnote/wiki/SavNote-Vision) and [tech stack](https://github.com/skorphil/savnote/wiki/Project's-tech-stack)
+3. Participate in existing issues or create new, describing your idea
 
 ## Where to contribute
 The domains are not limited, however this list might help you to start:
