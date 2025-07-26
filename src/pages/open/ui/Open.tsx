@@ -1,42 +1,32 @@
-import { type Journal, JournalManager } from "@/entities/journal";
-import { usePreferenceValue } from "@/entities/user-config";
-import { throwError } from "@/shared/error-handling";
 import { handleJournalExit } from "@/shared/handle-journal-exit";
 import { Button, Link, List, ListItem, Navbar, Page } from "konsta/react";
-import { useEffect, useState } from "react";
 import { MdExitToApp } from "react-icons/md";
 import { useNavigate } from "react-router";
 import styles from "./Open.module.css";
+import { useNotebookPersistendData } from "../useNotebookPersistentData";
+import { useEffect } from "react";
 
 /**
- * Page for opening provided Journal
+ * Page for displaying Journal meta and decryption form
  */
 export function Open() {
-	const journalUri = usePreferenceValue("currentJournalDirectory");
-	const [journal, setJournal] = useState<undefined | Journal>(undefined);
+	const [journal, journalUri] = useNotebookPersistendData(); // why journalUri === journaL???
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		async function openJournal() {
-			if (!journalUri) {
-				void navigate("/");
-				return;
-			}
-			const journal = await JournalManager.open(journalUri, () => {
-				void navigate("/");
-			});
-			setJournal(journal);
+		if (journal === null && journalUri === null) {
+			navigate("/");
 		}
-		openJournal().catch((e: unknown) => throwError(e));
-	}, [journalUri, navigate]);
+	}, [navigate, journal, journalUri]);
 
 	return (
 		<Page className={styles.page}>
 			<Navbar
-				title={journal ? journal.getJournalName() : "Loading..."}
+				title={journal ? journal.meta.name : "Loading..."}
 				right={
 					<Link
 						onClick={() => {
+							console.debug("exit clicked");
 							handleJournalExit();
 							void navigate("/", { replace: true });
 						}}
@@ -56,12 +46,15 @@ export function Open() {
 						<ListItem
 							className="break-words"
 							title="Directory"
-							text={JournalManager.getJournalDirectory()}
+							text={journalUri}
 						/>
 
 						<ListItem
 							title="Encryption"
-							text={journal.getEncryptionParameters() ?? "Password not set"}
+							text={
+								journal.encryption?.derivationAlgorithmName ??
+								"Password not set"
+							}
 						/>
 						<div className="mt-4" />
 					</List>
@@ -82,7 +75,7 @@ export function Open() {
 	);
 }
 
-// TODO Password input
+// Password input
 /* {
             <ListInput
             className="hairline-b relative"

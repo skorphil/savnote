@@ -80,47 +80,29 @@ export class Journal {
 		if (journalData.records && typeof journalData.records === "object") {
 			this.store.setTables(journalData.records);
 		}
-		// this.saveToDevice(); // need to mock because its android-related
-
-		// if (journalData.records && typeof journalData.records === "string") {
-		//   this.cipher = journalData.records;
-		// }
 	}
-
-	// async decrypt(password: string) {
-	//   // Derive encryption password
-	//   // Decrypt cipher
-	//   // Write plainText to PouchDb
-	// }
-
-	// async createEncryption(baseKey: string) {
-	//   if (this.encryptionKey)
-	//     throw Error(
-	//       "Encryption password already exist. To change encription, run .changeEncryption()"
-	//     );
-	//   const encryptionParameters = await createEncryptionKey(baseKey);
-
-	//   this.encryptionKey = encryptionParameters.encryptionKey;
-	//   // this.meta.encryption = encryptionParameters.encryptionMeta; // The left-hand side of an assignment expression may not be an optional property access.
-	// }
 
 	/* ---------- CODE BLOCK: Getters ---------- */
 	// Journal methods
 	getEncryptionState() {
+		// not used
 		return {
 			encryption: this.encryption !== null,
 			decrypted: this.store.hasTable("institutions"),
 		};
 	}
 	getJournalName() {
+		// used in Open.tsx
 		return this.meta.name;
 	}
 
 	getEncryptionParameters() {
+		// used in Open.tsx
 		return this.encryption?.derivedKeyAlgorithmName || null;
 	}
 
 	getInstitution(institutionId: string) {
+		// not Used
 		const institutionData = validateInstitution(
 			this.store.getRow("institutions", institutionId),
 		);
@@ -128,6 +110,7 @@ export class Journal {
 	}
 
 	getLatestRecord() {
+		// used by RecordDraft, getRecordDraftData
 		const latestRecordDate =
 			this.storeIndexes.getSliceIds("InstitutionsByDate")[0];
 
@@ -199,10 +182,7 @@ export class Journal {
 	 * @returns journal object
 	 */
 	toJournalSchema(): JournalSchema {
-		// let cipher: string | null = null;
-		// if (this.encryptionPassword && this.meta.encryption) {
-		//   cipher = this.encrypt({ plainText = JSON.stringify(data) });
-		// }
+		// used by journalManager ->> new.tsx --> handleRecordSave
 		const journal: object = {
 			meta: this.meta,
 			encryption: this.encryption,
@@ -217,6 +197,7 @@ export class Journal {
 
 	/* ---------- CODE BLOCK: Setters ---------- */
 	async addRecord(recordData: RecordsSchema) {
+		// used by journalManager ->> new.tsx --> handleRecordSave
 		// setRow used because setTable overwrites tinyBase store.
 		const { assets, institutions, quotes } = recordData;
 		for (const [assetId, assetData] of Object.entries(assets)) {
@@ -234,7 +215,7 @@ export class Journal {
 	}
 }
 
-type DeviceSaver = (uri: string, content: string) => Promise<void>;
+type DeviceSaver = (uri: string, content: string) => Promise<void>; //
 type DeviceReader = (uri: string) => Promise<string>;
 
 /* ---------- Comments ----------

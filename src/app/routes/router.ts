@@ -4,7 +4,7 @@ import { AssetEdit, InstitutionSheet, New } from "@/pages/new";
 import { assetStateLoader } from "@/pages/new/lib/assetStateLoader";
 import { institutionStateLoader } from "@/pages/new/lib/institutionStateLoader";
 import { InstitutionEdit } from "@/pages/new/ui/institution-edit/InstitutionEdit";
-import { Open } from "@/pages/open";
+import { openNotebookRoute } from "@/pages/open";
 import { Welcome, welcomeLoader } from "@/pages/welcome";
 import { createBrowserRouter } from "react-router";
 import { journalLoader } from "../loaders/journalLoader";
@@ -22,7 +22,7 @@ export const router = createBrowserRouter([
 			},
 		],
 	},
-
+	openNotebookRoute,
 	{
 		path: "create",
 		Component: CreateJournal,
@@ -50,10 +50,6 @@ export const router = createBrowserRouter([
 		path: "/",
 		Component: Welcome,
 		loader: welcomeLoader,
-	},
-	{
-		path: "open",
-		Component: Open,
 	},
 	{
 		path: "app",
