@@ -20,10 +20,10 @@ function Welcome() {
 					alt="Illustration with a person standing next to a safe"
 				/>
 				<h2 className="text-[40px] leading-[44px] font-medium">
-					Create your savings journal
+					Create your savings notebook
 				</h2>
 				<p className="mt-5">
-					Journal – password-protected file that safely stores your financial
+					Notebook – password-protected file that safely stores your financial
 					records{" "}
 					<span className="py-[2px] px-[6px] rounded-sm bg-white bg-opacity-10">
 						on this device
@@ -33,7 +33,7 @@ function Welcome() {
 
 			<List inset className={styles.linksBlock}>
 				<ListItem
-					aria-label="create-journal"
+					aria-label="create-notebook"
 					innerClassName={itemClass}
 					link
 					onClick={() => {
@@ -44,7 +44,7 @@ function Welcome() {
 					title="Create new"
 				/>
 				<ListItem
-					aria-label="open-journal"
+					aria-label="open-notebook"
 					link
 					onClick={() => {
 						setError(undefined);

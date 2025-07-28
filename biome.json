@@ -11,7 +11,9 @@
 			"./src/**/*.js",
 			"./src/**/*.tsx",
 			"./src/**/*.jsx",
-            "./tests/**/*.ts"
+            "./tests/**/*.ts",
+            "./tests/**/*.js",
+            "./test/**/*.js"
 		],
 		"ignoreUnknown": true,
 		"ignore": ["./src/entities/journal/model/tinyBaseJournalSchema.ts"]

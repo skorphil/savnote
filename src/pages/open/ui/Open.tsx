@@ -10,23 +10,23 @@ import { useEffect } from "react";
  * Page for displaying Journal meta and decryption form
  */
 export function Open() {
-	const [journal, journalUri] = useNotebookPersistendData(); // why journalUri === journaL???
+	const [notebook, filePath] = useNotebookPersistendData(); // why filePath === journaL???
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (journal === null && journalUri === null) {
+		if (notebook === null && filePath === null) {
 			navigate("/");
 		}
-	}, [navigate, journal, journalUri]);
+	}, [navigate, notebook, filePath]);
 
 	return (
 		<Page className={styles.page}>
 			<Navbar
-				title={journal ? journal.meta.name : "Loading..."}
+				title={notebook ? notebook.meta.name : "Loading..."}
 				right={
 					<Link
+						data-testid="exit-notebook-btn"
 						onClick={() => {
-							console.debug("exit clicked");
 							handleJournalExit();
 							void navigate("/", { replace: true });
 						}}
@@ -40,19 +40,19 @@ export function Open() {
 				className="top-0 hairline-b"
 				transparent={false}
 			/>
-			{journal && (
+			{notebook && (
 				<div>
 					<List className="my-1">
 						<ListItem
 							className="break-words"
 							title="Directory"
-							text={journalUri}
+							text={filePath}
 						/>
 
 						<ListItem
 							title="Encryption"
 							text={
-								journal.encryption?.derivationAlgorithmName ??
+								notebook.encryption?.derivationAlgorithmName ??
 								"Password not set"
 							}
 						/>
@@ -60,6 +60,7 @@ export function Open() {
 					</List>
 					<div className="px-4 pb-6">
 						<Button
+							data-testid="open-notebook-btn"
 							onClick={() => void navigate("/app")}
 							className="w-full"
 							aria-label="open-button"
@@ -87,7 +88,7 @@ export function Open() {
             />
           }
 
- {journalEncryption || (
+ {notebookEncryption || (
             <NavLink to="/app">
               <Button className="w-[calc(100%-32px)] m-4" large outline rounded>
                 Protect with a password

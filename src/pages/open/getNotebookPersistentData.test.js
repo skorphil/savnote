@@ -1,4 +1,4 @@
-import { getNotebookPersistentData } from "../getNotebookPersistentData";
+import { getNotebookPersistentData } from "./getNotebookPersistentData";
 
 describe("getNotebookPersistentData", () => {
 	it("should return object if correct JSON provided", async () => {

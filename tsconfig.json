@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "types": ["node"],
+    "allowJs": true,
+    "types": ["node", "@wdio/globals/types", "@wdio/mocha-framework"],
     "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
@@ -23,12 +24,15 @@
     "noFallthroughCasesInSwitch": true,
     "alwaysStrict": true,
     "paths": {
-        "@/*" : ["./src/*"]
+        "@/*" : ["./src/*"],
+        "~test/*" : ["./test/*"],
     }
   },
   "include": [
     "src/**/*",
-    "tests/**/*.ts"
+    "tests/**/*.ts",
+    "test/**/*.ts", 
+    "test/specs/**/*.js"
   ],
   "references": [{ "path": "./tsconfig.node.json" }],
   "tsc-alias": {
