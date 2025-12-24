@@ -16,8 +16,7 @@ class androidFilePicker {
     driver.pause(10000)
     await this.downloadsSection.click()
     driver.pause(15000)
-    return $(`//androidx.cardview.widget.CardView[@resource-id="com.google.android.documentsui:id/item_root"]
-`)
+    return $(`//androidx.cardview.widget.CardView`) // [@resource-id="com.google.android.documentsui:id/item_root"]
     // return $(`//android.widget.TextView[@resource-id='android:id/title' and @text='${fileName}']`)
   }
   

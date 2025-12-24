@@ -146,13 +146,10 @@ describe("Welcome page if no current notebook specified", () => {
 		// console.log("Activity on picker", await driver.getCurrentActivity());
 		await contextSwitcher.toNative(driver);
 		const widget = await androidFilePicker.getFileWidget(driver);
-
-		expect(widget).toBeDisplayed();
-		driver.pause(10000);
 		await widget.click();
-		await widget.click();
-		await widget.click(); // after click on file, file picker should close!! But it doesnt
-		driver.pause(100000);
+		await (await $("//*[contains(text(), 'Valid notebook')]")).waitForExist({
+			timeout: 10000,
+		});
 		console.log("Activity after filePicker", await driver.getCurrentActivity()); // Activity after filePicker com.android.documentsui.picker.PickActivity
 
 		// await openPage.openNotebookBtn.click();

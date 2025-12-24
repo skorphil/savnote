@@ -7,6 +7,7 @@ class OpenPage {
 	get openNotebookBtn():ChainablePromiseElement {
 		return $("[data-testid='open-notebook-btn']");
 	}
+  
 }
 
 export default new OpenPage();
