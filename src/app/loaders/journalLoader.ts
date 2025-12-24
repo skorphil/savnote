@@ -1,4 +1,4 @@
-import { JournalManager } from "@/entities/journal";
+import { Journal } from "@/entities/journal";
 import { redirect } from "react-router";
 /**
  * Checks if Journal instance exist. If not, redirects to `Open` page.
@@ -7,5 +7,5 @@ import { redirect } from "react-router";
  * - Android optimisation
  */
 export function journalLoader() {
-	if (!JournalManager.getJournal()) return redirect("/");
+  if (!Journal.instance) return redirect("/");
 }

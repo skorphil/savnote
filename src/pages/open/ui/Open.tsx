@@ -1,82 +1,86 @@
-import { handleJournalExit } from "@/shared/handle-journal-exit";
+import styles from "./Open.module.css";
+import { Journal } from "@/entities/journal";
+import { usePreferenceValue } from "@/entities/user-config";
+import { throwError } from "@/shared/error-handling";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { Button, Link, List, ListItem, Navbar, Page } from "konsta/react";
 import { MdExitToApp } from "react-icons/md";
-import { useNavigate } from "react-router";
-import styles from "./Open.module.css";
-import { useNotebookPersistendData } from "../useNotebookPersistentData";
-import { useEffect } from "react";
+import { handleJournalExit } from "@/shared/handle-journal-exit";
 
 /**
- * Page for displaying Journal meta and decryption form
+ * Page for opening provided Journal
  */
 export function Open() {
-	const [notebook, filePath] = useNotebookPersistendData(); // why filePath === journaL???
-	const navigate = useNavigate();
+  const journalUri = usePreferenceValue("currentJournalDirectory");
+  const [journal, setJournal] = useState<undefined | Journal>(undefined);
+  const navigate = useNavigate();
 
-	useEffect(() => {
-		if (notebook === null && filePath === null) {
-			navigate("/");
-		}
-	}, [navigate, notebook, filePath]);
+  useEffect(() => {
+    async function openJournal() {
+      if (!journalUri) {
+        void navigate("/");
+        return;
+      }
+      const journal = await Journal.open(journalUri, () => void navigate("/"));
+      setJournal(journal);
+    }
+    openJournal().catch((e: unknown) => throwError(e));
+  }, [journalUri]);
 
-	return (
-		<Page className={styles.page}>
-			<Navbar
-				title={notebook ? notebook.meta.name : "Loading..."}
-				right={
-					<Link
-						data-testid="exit-notebook-btn"
-						onClick={() => {
-							handleJournalExit();
-							void navigate("/", { replace: true });
-						}}
-						navbar
-					>
-						<MdExitToApp size={24} />
-					</Link>
-				}
-				medium
-				colors={{ bgMaterial: "bg-transparent" }}
-				className="top-0 hairline-b"
-				transparent={false}
-			/>
-			{notebook && (
-				<div>
-					<List className="my-1">
-						<ListItem
-							className="break-words"
-							title="Directory"
-							text={filePath}
-						/>
+  return (
+    <Page className={styles.page}>
+      <Navbar
+        title={journal ? journal.getJournalName() : "Loading..."}
+        right={
+          <Link
+            onClick={() => {
+              handleJournalExit();
+              void navigate("/", { replace: true });
+            }}
+            navbar
+          >
+            <MdExitToApp size={24} />
+          </Link>
+        }
+        medium
+        colors={{ bgMaterial: "bg-transparent" }}
+        className="top-0 hairline-b"
+        transparent={false}
+      />
+      {journal && (
+        <div>
+          <List className="my-1">
+            <ListItem
+              className="break-words"
+              title="Directory"
+              text={journal.getJournalDirectory()}
+            />
 
-						<ListItem
-							title="Encryption"
-							text={
-								notebook.encryption?.derivationAlgorithmName ??
-								"Password not set"
-							}
-						/>
-						<div className="mt-4" />
-					</List>
-					<div className="px-4 pb-6">
-						<Button
-							data-testid="open-notebook-btn"
-							onClick={() => void navigate("/app")}
-							className="w-full"
-							aria-label="open-button"
-							large
-							rounded
-						>
-							Open
-						</Button>
-					</div>
-				</div>
-			)}
-		</Page>
-	);
+            <ListItem
+              title="Encryption"
+              text={journal.getEncryptionParameters() || "Password not set"}
+            />
+            <div className="mt-4"></div>
+          </List>
+          <div className="px-4 pb-6">
+            <Button
+              onClick={() => void navigate("/app")}
+              className="w-full"
+              aria-label="open-button"
+              large
+              rounded
+            >
+              Open
+            </Button>
+          </div>
+        </div>
+      )}
+    </Page>
+  );
 }
 
-// Password input
+// TODO Password input
 /* {
             <ListInput
             className="hairline-b relative"
@@ -88,7 +92,7 @@ export function Open() {
             />
           }
 
- {notebookEncryption || (
+ {journalEncryption || (
             <NavLink to="/app">
               <Button className="w-[calc(100%-32px)] m-4" large outline rounded>
                 Protect with a password

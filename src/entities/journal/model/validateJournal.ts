@@ -1,57 +1,59 @@
-import { throwError } from "@/shared/error-handling";
+import { ZodError } from "zod";
 import type {
-	InstitutionSchema,
-	JournalSchema,
-	RecordsSchema,
+  RecordsSchema,
+  JournalSchema,
+  InstitutionSchema,
 } from "@/shared/journal-schema";
 import {
-	institutionSchema,
-	journalSchema,
-	recordsSchema,
+  journalSchema,
+  recordsSchema,
+  institutionSchema,
 } from "@/shared/journal-schema";
-import { ZodError } from "zod";
+import { throwError } from "@/shared/error-handling";
 
 export function validateJournal(data: object): JournalSchema {
-	try {
-		const validatedJournal = journalSchema.parse(data);
-		return validatedJournal;
-	} catch (e) {
-		if (e instanceof ZodError) {
-			throw Error(
-				`Can't read a journal. Is it in SavNote format? ${JSON.stringify(
-					e.errors,
-				)}`,
-			);
-		}
-		throwError(e);
-	}
+  try {
+    return journalSchema.parse(data);
+  } catch (e) {
+    if (e instanceof ZodError) {
+      throw Error(
+        `Can't read a journal. Is it in SavNote format? ${JSON.stringify(
+          e.errors
+        )}`
+      );
+    } else {
+      throwError(e);
+    }
+  }
 }
 export function validateRecord(data: object): RecordsSchema {
-	try {
-		return recordsSchema.parse(data);
-	} catch (e) {
-		if (e instanceof ZodError) {
-			throw Error(
-				`Can't read a record. Is it in SavNote format? ${JSON.stringify(
-					e.errors,
-				)}`,
-			);
-		}
-		throwError(e);
-	}
+  try {
+    return recordsSchema.parse(data);
+  } catch (e) {
+    if (e instanceof ZodError) {
+      throw Error(
+        `Can't read a record. Is it in SavNote format? ${JSON.stringify(
+          e.errors
+        )}`
+      );
+    } else {
+      throwError(e);
+    }
+  }
 }
 
 export function validateInstitution(data: object): InstitutionSchema {
-	try {
-		return institutionSchema.parse(data);
-	} catch (e) {
-		if (e instanceof ZodError) {
-			throw Error(
-				`Can't read a record. Is it in SavNote format? ${JSON.stringify(
-					e.errors,
-				)}`,
-			);
-		}
-		throwError(e);
-	}
+  try {
+    return institutionSchema.parse(data);
+  } catch (e) {
+    if (e instanceof ZodError) {
+      throw Error(
+        `Can't read a record. Is it in SavNote format? ${JSON.stringify(
+          e.errors
+        )}`
+      );
+    } else {
+      throwError(e);
+    }
+  }
 }

@@ -1,3 +1,4 @@
+import { throwError } from "@/shared/error-handling";
 import { invoke } from "@tauri-apps/api/core";
 
 /**
@@ -7,16 +8,9 @@ import { invoke } from "@tauri-apps/api/core";
  * @returns Saved file uri with persistent(between app reloads, device restarts)
  * read/write permissions
  */
-export async function writeFileToAndroid(uri: string, contents: string) {
-	try {
-		await invoke("write_string", {
-			uri,
-			contents,
-		});
-	} catch (e) {
-		console.error(e);
-		throw Error(
-			"Can't write data on device. Please submit an issue to GitHub.",
-		);
-	}
+export function writeStringToFile(uri: string, contents: string) {
+  invoke("write_string", {
+    uri,
+    contents,
+  }).catch((e) => throwError(e));
 }

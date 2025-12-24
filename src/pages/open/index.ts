@@ -1,1 +1,1 @@
-export { openNotebookRoute } from "./openNotebook.route";
+export { Open } from "./ui/Open";
