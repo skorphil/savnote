@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import path from "node:path";
 import react from "@vitejs/plugin-react";
 import basicSsl from "@vitejs/plugin-basic-ssl";
+import tailwindcss from "@tailwindcss/vite";
 
 const host = process.env.TAURI_DEV_HOST;
 
@@ -18,6 +19,7 @@ export default defineConfig(async () => ({
     // coverage: { enabled: true }, // shows coverage in vitest --ui, but slows running tests
   },
   plugins: [
+    tailwindcss(),
     react(),
     // basicSsl({
     //   name: "test",

@@ -10,8 +10,8 @@ import {
   useInstitutionDispatch,
 } from "./useInstitutionDispatch";
 import { InstitutionNameInput } from "./InstitutionNameInput";
-import { Link, List, ListItem, Navbar, Page, Toggle } from "konsta/react";
-import { MdClose } from "react-icons/md";
+import { Button, Link, List, ListItem, Navbar, Page, Toggle } from "konsta/react";
+import { MdClose, MdDone } from "react-icons/md";
 import { RecordDraft } from "@/features/create-record";
 import { countriesList } from "@/shared/countries-names/countries";
 import { useState } from "react";
@@ -37,27 +37,30 @@ export function InstitutionEdit() {
     <Page className="pb-[80px]">
       <Navbar
         left={
-          <Link navbar onClick={() => void navigate(-1)}>
+          <Link onClick={() => void navigate(-1)}>
             <MdClose size={24} />
           </Link>
         }
         title={`${institutionId ? "Edit" : "New"} institution`}
         subtitle={name}
         right={
-          <Link
-            toolbar
-            onClick={() =>
-              handleInstitutionSave({
-                institutionDispatch,
-                institutionValues: institutionState,
-                noCountry,
-                institutionId,
-                navigate,
-              })
-            }
-          >
-            Save
-          </Link>
+          <div className="pr-3">
+            <Button
+              rounded
+              onClick={() =>
+                handleInstitutionSave({
+                  institutionDispatch,
+                  institutionValues: institutionState,
+                  noCountry,
+                  institutionId,
+                  navigate,
+                })
+              }
+            >
+              <MdDone size={24} />
+              Save
+            </Button>
+          </div>
         }
         colors={{ bgMaterial: "bg-transparent" }}
         className="!z-10 top-0 bg-neutral-800"

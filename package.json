@@ -5,9 +5,9 @@
   "private": true,
   "version": "0.5.0",
   "type": "module",
-"engines": {
-  "pnpm": ">=10.0.0"
-},
+  "engines": {
+    "pnpm": ">=10.0.0"
+  },
   "description": "Android app for tracking personal savings",
   "//": [
     "'konsta' requires tailwind v3. Not working with v4"
@@ -28,21 +28,21 @@
     "fsd-check": "pnpm exec steiger ./src"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2.3.0",
-    "@tauri-apps/plugin-dialog": "~2.2.0",
-    "@tauri-apps/plugin-fs": "~2.2.0",
-    "@tauri-apps/plugin-opener": "^2.2.6",
+    "@tauri-apps/api": "^2.10.1",
+    "@tauri-apps/plugin-dialog": "~2.7.0",
+    "@tauri-apps/plugin-fs": "~2.5.0",
+    "@tauri-apps/plugin-opener": "^2.5.3",
     "events": "^3.3.0",
     "fuse.js": "^7.1.0",
-    "konsta": "^4.0.1",
+    "konsta": "^5.0.8",
     "license-downloader": "^1.3.0",
     "license-report": "^6.7.2",
-    "motion": "^12.7.4",
+    "motion": "^12.38.0",
     "numeral": "^2.0.6",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
     "react-icons": "^5.5.0",
-    "react-modal-sheet": "^4.0.1",
+    "react-modal-sheet": "^5.6.0",
     "react-number-format": "^5.4.4",
     "react-router": "^7.3.0",
     "tauri-plugin-androidpermissionprompt-api": "^0.1.1",
@@ -51,29 +51,30 @@
   },
   "devDependencies": {
     "@feature-sliced/steiger-plugin": "^0.5.5",
-    "@tauri-apps/cli": "^2.3.1",
+    "@tailwindcss/vite": "^4.2.4",
+    "@tauri-apps/cli": "^2.10.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@types/node": "^22.13.10",
     "@types/numeral": "^2.0.5",
-    "@types/react": "^18.0.9",
-    "@types/react-dom": "^18.0.4",
-    "@vitejs/plugin-basic-ssl": "^2.0.0",
-    "@vitejs/plugin-react": "^4.3.4",
-    "@vitest/coverage-v8": "3.0.9",
-    "@vitest/ui": "3.0.9",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-basic-ssl": "^2.3.0",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/coverage-v8": "4.1.5",
+    "@vitest/ui": "4.1.5",
     "autoprefixer": "^10.4.21",
     "jsdom": "^26.1.0",
-    "postcss": "^8.5.3",
     "steiger": "^0.5.6",
-    "tailwindcss": "=3.4.17",
-    "tsx": "^4.19.3",
-    "typescript": "^5.8.2",
-    "vite": "^6.2.1",
-    "vitest": "^3.0.9"
+    "tailwindcss": "^4.2.4",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.10",
+    "vitest": "^4.1.5"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
+      "esbuild",
       "leveldown"
     ]
   }

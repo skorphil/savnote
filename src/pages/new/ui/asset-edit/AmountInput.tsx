@@ -3,17 +3,33 @@ import { NumericFormat } from "react-number-format";
 import type { AssetAction } from "./useAssetDispatch";
 import type { AssetInputsProps } from "./AssetEdit";
 import { ReadOnlyInput } from "./ReadOnlyInput";
-import { useEffect, useRef } from "react";
+import {
+	type ComponentProps,
+	forwardRef,
+	useEffect,
+	useRef,
+} from "react";
+
+// Wrapper to forward ref to ListInput (a function component)
+// react-number-format expects to attach inputEl to the ref object
+const ListInputWithRef = forwardRef<
+  HTMLInputElement,
+  ComponentProps<typeof ListInput>
+>((props, ref) => {
+  // @ts-expect-error - ListInput accepts inputRef internally
+  return <ListInput {...props} inputRef={ref} />;
+});
+ListInputWithRef.displayName = "ListInputWithRef";
 
 export function AmountInput(props: AssetInputsProps<number>) {
   const { assetDispatch, value, disabled, autoFocus } = props;
   const label = "Amount";
-  const inputRef = useRef<{ inputEl: HTMLInputElement } | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!autoFocus) return;
-    if (inputRef.current?.inputEl instanceof HTMLInputElement) {
-      const inputElement = inputRef.current.inputEl;
+    if (inputRef.current instanceof HTMLInputElement) {
+      const inputElement = inputRef.current;
       inputElement.focus();
       inputElement.setSelectionRange(0, inputElement.value.length);
     }
@@ -33,7 +49,7 @@ export function AmountInput(props: AssetInputsProps<number>) {
       label={label}
       thousandSeparator={" "}
       value={value}
-      customInput={ListInput}
+      customInput={ListInputWithRef}
       onValueChange={({ value }) => handleAmountChange(value, assetDispatch)}
     />
   );

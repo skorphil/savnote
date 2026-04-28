@@ -1,3 +1,5 @@
+@reference "tailwindcss";
+
 .page {
     @apply flex flex-col justify-start;
 }
