@@ -1,0 +1,100 @@
+import { Journal } from "@/entities/journal";
+import { usePreferenceValue } from "@/entities/user-config";
+import { throwError } from "@/shared/error-handling";
+import { useEffect, useState } from "react";
+import { NavLink, useNavigate } from "react-router";
+import styles from "./Open.module.css";
+import { Button, Link, List, ListItem, Navbar, Page } from "konsta/react";
+import { MdExitToApp } from "react-icons/md";
+import { handleJournalExit } from "@/shared/handle-journal-exit";
+
+/**
+ * Page for opening provided Journal
+ */
+function Open() {
+  const navigate = useNavigate();
+  const journalUri = usePreferenceValue("currentJournalDirectory");
+  const [journal, setJournal] = useState<undefined | Journal>(undefined);
+  useEffect(() => {
+    async function openJournal() {
+      if (!journalUri) {
+        void navigate("/");
+        return;
+      }
+      try {
+        const journal = await Journal.create(journalUri);
+        setJournal(journal);
+      } catch {
+        void navigate("/");
+      } // handle case "journal was deleted from device, but uri saved."
+      // TODO add error chip
+    }
+
+    openJournal().catch((e: unknown) => throwError(e));
+  }, [journalUri]);
+
+  if (!journal) return <div>load</div>;
+
+  const journalName = journal.getJournalName();
+  const journalEncryption = journal.getEncryptionParameters();
+  return (
+    <Page className={styles.page}>
+      <Navbar
+        title={journalName}
+        right={
+          <Link
+            onClick={() => {
+              handleJournalExit();
+              void navigate("/");
+            }}
+            navbar
+          >
+            <MdExitToApp size={24} />
+          </Link>
+        }
+        medium
+        colors={{ bgMaterial: "bg-transparent" }}
+        className="top-0"
+        transparent={false}
+      />
+      <List strong inset className="my-1">
+        <ListItem
+          className="break-words"
+          title="Directory"
+          text={journal.getJournalDirectory()}
+        />
+
+        <ListItem
+          className="hairline-b relative"
+          title="Encryption"
+          text={journalEncryption || "Password not set"}
+        />
+        <div className="mt-4">
+          {/* {
+            <ListInput
+              required
+              outline
+              label="Password"
+              type="password"
+              autoFocus={true} // works only on manual navigation to page. not working if page is opened after rerendering
+            />
+          } */}
+          <NavLink to="/app">
+            <Button className="w-full px-4" large rounded>
+              Open
+            </Button>
+          </NavLink>
+          {/* {journalEncryption || (
+            <NavLink to="/app">
+              <Button className="w-[calc(100%-32px)] m-4" large outline rounded>
+                Protect with a password
+              </Button>
+            </NavLink>
+          )} */}
+        </div>
+      </List>
+    </Page>
+  );
+}
+
+export { Open };
