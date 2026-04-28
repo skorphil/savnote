@@ -23,8 +23,19 @@ dist-ssr
 *.sln
 *.sw?
 
-# tests
+# Tests
 coverage
-
 .scannerwork
+
+# Local
+*.local.*
+.codemap
+*.env
+!*.example
+
+# AI tooling
 .continue
+.kilo
+.claude
+AGENTS.md
+CLAUDE.md
