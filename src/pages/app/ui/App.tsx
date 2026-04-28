@@ -14,7 +14,7 @@ import OverviewTab from "./OverviewTab";
 import { RecordsTab } from "./RecordsTab";
 
 /**
- * New component
+ * Main app shell with tab navigation.
  */
 function App() {
 	const navigate = useNavigate();
