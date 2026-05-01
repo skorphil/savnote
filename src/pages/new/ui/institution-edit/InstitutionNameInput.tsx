@@ -1,29 +1,33 @@
 import { ListInput } from "konsta/react";
-import {
-	type ChangeEvent,
-	type ComponentProps,
-	forwardRef,
-	useEffect,
-	useRef,
-	useState,
-} from "react";
+import { type ChangeEvent, useEffect, useRef, useState } from "react";
 import { institutionSchema } from "@/shared/journal-schema";
 import { ReadOnlyInput } from "../asset-edit/ReadOnlyInput";
 import type { InstitutionInputsProps } from "./InstitutionEdit";
 import type { InstitutionAction } from "./useInstitutionDispatch";
 
+/**
+ * Zod schema for validating institution name.
+ */
 const institutionNameSchema = institutionSchema.shape.name;
+/**
+ * Label text for the input field.
+ */
 const label = "Name";
 
+/**
+ * Props for InstitutionNameInput component.
+ */
 type InstitutionNameInputProps = {
 	/**
-	 * All institutions names in current record
+	 * All institution names in current record.
+	 * Used to check for duplicates.
 	 */
 	recordInstitutionsNames: string[] | undefined;
 };
 
 /**
- * Asset name input
+ * Institution name input component with validation.
+ * Provides a text input for entering institution name with real-time and blur validation.
  */
 export function InstitutionNameInput(
 	props: InstitutionInputsProps<string> & InstitutionNameInputProps,
@@ -103,6 +107,12 @@ export function InstitutionNameInput(
 	);
 }
 
+/**
+ * Validates institution name on blur.
+ * @param value - The institution name value to validate
+ * @param recordInstitutionsNames - All institution names in the current record
+ * @returns Validation error message or undefined if valid
+ */
 function handleBlur(value: string, recordInstitutionsNames?: string[]) {
 	const validationErrors: string[] = [];
 	if (recordInstitutionsNames?.includes(value))
@@ -112,6 +122,13 @@ function handleBlur(value: string, recordInstitutionsNames?: string[]) {
 	return validationErrors.length === 0 ? undefined : validationErrors;
 }
 
+/**
+ * Validates and updates institution name on change.
+ * @param assetDispatch - Dispatch function for institution state
+ * @param value - The institution name to validate and update
+ * @param recordInstitutionsNames - All institution names in the current record
+ * @returns Validation error messages or undefined if valid
+ */
 function handleChange(
 	assetDispatch: React.Dispatch<InstitutionAction>,
 	value: string,
@@ -121,9 +138,9 @@ function handleChange(
 
 	const validatedValue = institutionNameSchema.safeParse(value);
 	if (!validatedValue.success)
-		validatedValue.error.issues.forEach((issue) =>
-			validationErrors.push(issue.message),
-		);
+		validatedValue.error.issues.forEach((issue) => {
+			validationErrors.push(issue.message);
+		});
 
 	if (recordInstitutionsNames?.includes(value))
 		validationErrors.push(
@@ -136,7 +153,3 @@ function handleChange(
 
 	return validationErrors.length === 0 ? undefined : validationErrors;
 }
-
-/* ---------- COMMENT ---------- 
-
-*/
