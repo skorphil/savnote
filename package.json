@@ -50,9 +50,9 @@
   "devDependencies": {
     "@feature-sliced/steiger-plugin": "^0.5.5",
     "@tailwindcss/vite": "^4.2.4",
-    "@tauri-apps/cli": "^2.10.1",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.3.0",
+    "@tauri-apps/cli": "^2.11.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^22.13.10",
     "@types/numeral": "^2.0.5",
     "@types/react": "^19.2.14",
