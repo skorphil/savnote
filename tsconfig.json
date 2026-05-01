@@ -28,6 +28,9 @@
   "include": [
     "src/**/*"
   ],
+  "exclude": [
+    "src/devScripts"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }],
   "tsc-alias": {
     "verbose": false,

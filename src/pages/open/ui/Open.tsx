@@ -53,7 +53,6 @@ export function Open() {
 							handleJournalExit();
 							void navigate("/", { replace: true });
 						}}
-						navbar
 					>
 						<MdExitToApp size={24} />
 					</Link>

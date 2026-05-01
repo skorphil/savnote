@@ -47,7 +47,7 @@ export function New() {
 		>
 			<Navbar
 				left={
-					<Link navbar onClick={() => void navigate(-1)}>
+					<Link onClick={() => void navigate(-1)}>
 						<MdArrowBack size={24} />
 					</Link>
 				}
@@ -74,9 +74,7 @@ export function New() {
 			/>
 
 			{date ? (
-				<BlockTitle withBlock={false}>
-					Institutions from {unixToHumanReadable(date)}
-				</BlockTitle>
+				<BlockTitle>Institutions from {unixToHumanReadable(date)}</BlockTitle>
 			) : (
 				false
 			)}

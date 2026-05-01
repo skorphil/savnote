@@ -1,4 +1,4 @@
-import { Fab, Icon, Link, Page, Tabbar, TabbarLink, ToolbarPane } from "konsta/react";
+import { Fab, Icon, Page, Tabbar, TabbarLink, ToolbarPane } from "konsta/react";
 import { useState } from "react";
 import {
 	// MdAdd,

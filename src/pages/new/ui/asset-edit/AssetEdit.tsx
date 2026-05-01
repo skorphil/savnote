@@ -98,7 +98,7 @@ export function AssetEdit() {
 		<Page className="z-1 pb-[80px]">
 			<Navbar
 				left={
-					<Link navbar onClick={() => void navigate(-1)}>
+					<Link onClick={() => void navigate(-1)}>
 						<MdClose size={24} />
 					</Link>
 				}
@@ -183,7 +183,6 @@ export function AssetEdit() {
 					<BottomAppBar
 						leftButtons={[
 							<Link
-								navbar
 								onClick={() => {
 									void navigate(`/newrecord/institutions/${institutionId}`);
 									const updatedState = {

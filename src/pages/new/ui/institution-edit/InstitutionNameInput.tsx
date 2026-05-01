@@ -7,27 +7,26 @@ import type { InstitutionAction } from "./useInstitutionDispatch";
 
 /**
  * Zod schema for validating institution name.
+ * Extracts the name shape from the institution schema.
  */
 const institutionNameSchema = institutionSchema.shape.name;
+
 /**
- * Label text for the input field.
+ * Label text displayed for the institution name input field.
  */
 const label = "Name";
 
 /**
- * Props for InstitutionNameInput component.
+ * Props for the InstitutionNameInput component.
  */
 type InstitutionNameInputProps = {
-	/**
-	 * All institution names in current record.
-	 * Used to check for duplicates.
-	 */
+	/** All institution names in the current record for duplicate validation */
 	recordInstitutionsNames: string[] | undefined;
 };
 
 /**
- * Institution name input component with validation.
- * Provides a text input for entering institution name with real-time and blur validation.
+ * Input component for editing institution name.
+ * @param props - Props including dispatch function, value, disabled state, autoFocus flag, and record institution names
  */
 export function InstitutionNameInput(
 	props: InstitutionInputsProps<string> & InstitutionNameInputProps,
@@ -55,7 +54,6 @@ export function InstitutionNameInput(
 
 	return (
 		<ListInput
-			inputRef={inputRef}
 			required
 			outline
 			autoFocus={autoFocus}
@@ -111,7 +109,7 @@ export function InstitutionNameInput(
  * Validates institution name on blur.
  * @param value - The institution name value to validate
  * @param recordInstitutionsNames - All institution names in the current record
- * @returns Validation error message or undefined if valid
+ * @returns Array of validation error messages, or undefined if valid
  */
 function handleBlur(value: string, recordInstitutionsNames?: string[]) {
 	const validationErrors: string[] = [];
@@ -124,10 +122,10 @@ function handleBlur(value: string, recordInstitutionsNames?: string[]) {
 
 /**
  * Validates and updates institution name on change.
- * @param assetDispatch - Dispatch function for institution state
+ * @param institutionDispatch - Dispatch function for institution state
  * @param value - The institution name to validate and update
  * @param recordInstitutionsNames - All institution names in the current record
- * @returns Validation error messages or undefined if valid
+ * @returns Array of validation error messages, or undefined if valid
  */
 function handleChange(
 	assetDispatch: React.Dispatch<InstitutionAction>,
