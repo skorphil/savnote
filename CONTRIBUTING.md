@@ -2,10 +2,12 @@
 Contributions to this project is highly welcomed and appreciated. 
 If you have any idea or question, open new issue.
 
+
 ## How to contribute
 1. Check current issues / [project](https://github.com/users/skorphil/projects/7)
 2. Check [project's wiki](https://github.com/skorphil/savnote/wiki), especially [vision](https://github.com/skorphil/savnote/wiki/SavNote-Vision) and [tech stack](https://github.com/skorphil/savnote/wiki/Project's-tech-stack)
 3. Participate in existing issues or create new, describing your idea
+
 
 ## Where to contribute
 The domains are not limited, however this list might help you to start:
@@ -24,12 +26,13 @@ The domains are not limited, however this list might help you to start:
     - Fill wiki with a guides
 ...    
 
+
 ## Quick Start
 Install dependencies:
 ```shell
 pnpm install
 ```
-Install `android-studio` on yor system: https://developer.android.com/studio
+Install `android-studio` on system: https://developer.android.com/studio
 Install `ndk` within `android-studio`: Settings > Languages & Frameworks > SDK Tools
 Set the `NDK_HOME`, `ANDROID_HOME` PATH variables (ANDROID_HOME can be seen in Settings > Languages & Frameworks):
 ```
@@ -44,6 +47,22 @@ Initialize Android project:
 ```shell
 pnpm tauri android init
 ```
+
+
+## Debugging on Android Device
+`adb` must be installed automatically during `android-studio` installation. Modern android support wireless debugging:
+1. Enable [wi-fi debugging](https://developer.android.com/tools/adb#connect-to-a-device-over-wi-fi) on android device
+
+```shell
+adp pair IP:PORT
+# Enter pairing code when prompted
+
+pnpm dev:android
+# Must detect device and run app there
+```
+
+2. Inspect via chrome: `chrome://inspect/#devices`
+
 
 ## Project structure
 [Feature sliced design](https://feature-sliced.github.io/documentation/docs) was chosen initially because
