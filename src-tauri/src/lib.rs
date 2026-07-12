@@ -8,7 +8,7 @@ async fn show_persistent_save_dialog(
     mime_type: Option<&str>,
 ) -> std::result::Result<Option<tauri_plugin_fs::FilePath>, String> {
     let api = app.android_fs();
-    let picker = api.file_picker();
+    let picker = api.picker();
 
     let uri = picker
         .save_file(None, default_name, mime_type, false)
@@ -28,7 +28,7 @@ async fn show_persistent_open_dialog(
     mime_types: Vec<String>,
 ) -> std::result::Result<Option<tauri_plugin_fs::FilePath>, String> {
     let api = app.android_fs();
-    let picker = api.file_picker();
+    let picker = api.picker();
 
     let uri = picker
         .pick_file(None, &mime_types.iter().map(|s| s.as_str()).collect::<Vec<_>>(), false)

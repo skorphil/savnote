@@ -82,6 +82,7 @@ while this project is full-stack. So it has it trade-offs.
 pnpm upgrade --latest --interactive
 
 # Upgrading rust dependencies
+cd src-tauri
 cargo update
 ```
 
