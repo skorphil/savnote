@@ -41,7 +41,7 @@ function useSummaryData() {
         rate === undefined
       )
         throw Error("Cant find currencies information");
-      const amountInCounterCurrency = amount * rate;
+      const amountInCounterCurrency = (amount as unknown as number) * (rate as unknown as number);
       totalInCounterCurrency += amountInCounterCurrency;
     });
     journalStoreQueries.delQueryDefinition(date);

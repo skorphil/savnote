@@ -30,7 +30,7 @@ export function InstitutionsGrid(props: InstitutionsGridProps) {
 					key={institutionId}
 					outline={institutionId === selectedInstitutionId}
 					className={`${styles.institutionCard} ${
-						institution.isDeleted && "line-through opacity-40" // fix
+						(institution as any).isDeleted && "line-through opacity-40" // fix
 					}`}
 					onClick={() =>
 						void navigate(`/newrecord/institutions/${institutionId}`, {
@@ -38,8 +38,8 @@ export function InstitutionsGrid(props: InstitutionsGridProps) {
 						})
 					}
 				>
-					<strong>{institution.name}</strong>
-					<span className="mt-auto">{institution.country}</span>
+					<strong>{String((institution as any).name)}</strong>
+					<span className="mt-auto">{String((institution as any).country)}</span>
 				</Card>
 			))}
 			<Card

@@ -55,7 +55,7 @@ export class Journal {
 
     /* ---------- CODE BLOCK: Check if provided journal is encrypted ---------- */
     if (journalData.records && typeof journalData.records === "object") {
-      this.store.setTables(journalData.records);
+      this.store.setTables(journalData.records as any);
     }
 
     this.saveToDevice();
@@ -260,13 +260,13 @@ export class Journal {
     try {
       const { assets, institutions, quotes } = recordData;
       Object.entries(assets).forEach(([assetId, assetData]) =>
-        this.store.setRow("assets", assetId, assetData)
+        this.store.setRow("assets", assetId, assetData as any)
       );
       Object.entries(institutions).forEach(([institutionId, institutionData]) =>
-        this.store.setRow("institutions", institutionId, institutionData)
+        this.store.setRow("institutions", institutionId, institutionData as any)
       );
       Object.entries(quotes).forEach(([quoteId, quoteData]) =>
-        this.store.setRow("quotes", quoteId, quoteData)
+        this.store.setRow("quotes", quoteId, quoteData as any)
       );
       this.saveToDevice();
     } catch (e) {

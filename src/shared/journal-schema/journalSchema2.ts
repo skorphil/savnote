@@ -37,8 +37,8 @@ const quoteSchema2 = z.object({
   rate: z.number(),
 });
 
-const quotesSchema2 = z.record(quoteSchema2).refine(
-  (data) => {
+const quotesSchema2 = z.record(z.string(), quoteSchema2).refine(
+  (data: Record<string, z.infer<typeof quoteSchema2>>) => {
     const uniqueKeys = new Set<string>();
     for (const key in data) {
       uniqueKeys.add(key);
@@ -51,9 +51,9 @@ const quotesSchema2 = z.record(quoteSchema2).refine(
         return false;
       }
       if (
-        data[key].date.toString() !== date ||
-        data[key].baseCurrency !== baseCurrency ||
-        data[key].counterCurrency !== counterCurrency
+        (data[key] as any).date.toString() !== date ||
+        (data[key] as any).baseCurrency !== baseCurrency ||
+        (data[key] as any).counterCurrency !== counterCurrency
       ) {
         return false;
       }
@@ -68,8 +68,8 @@ const quotesSchema2 = z.record(quoteSchema2).refine(
 );
 
 const recordsSchema2 = z.object({
-  institutions: z.record(institutionSchema2).refine(
-    (data) => {
+  institutions: z.record(z.string(), institutionSchema2).refine(
+    (data: Record<string, z.infer<typeof institutionSchema2>>) => {
       const uniqueKeys = new Set<string>();
       for (const key in data) {
         uniqueKeys.add(key);
@@ -82,8 +82,8 @@ const recordsSchema2 = z.object({
           return false;
         }
         if (
-          data[key].date.toString() !== date ||
-          data[key].name !== institutionName
+          (data[key] as any).date.toString() !== date ||
+          (data[key] as any).name !== institutionName
         ) {
           return false;
         }
@@ -96,8 +96,8 @@ const recordsSchema2 = z.object({
         "Institution key must be unique and follow `date.institutionName` pattern",
     }
   ),
-  assets: z.record(assetSchema2).refine(
-    (data) => {
+  assets: z.record(z.string(), assetSchema2).refine(
+    (data: Record<string, z.infer<typeof assetSchema2>>) => {
       const uniqueKeys = new Set<string>();
       for (const key in data) {
         uniqueKeys.add(key);
@@ -110,9 +110,9 @@ const recordsSchema2 = z.object({
           return false;
         }
         if (
-          data[key].date.toString() !== date ||
-          data[key].institution !== institutionName ||
-          data[key].name !== assetName
+          (data[key] as any).date.toString() !== date ||
+          (data[key] as any).institution !== institutionName ||
+          (data[key] as any).name !== assetName
         ) {
           return false;
         }

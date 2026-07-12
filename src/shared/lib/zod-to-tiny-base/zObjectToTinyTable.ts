@@ -1,5 +1,5 @@
 import type { CellSchema } from "tinybase/with-schemas";
-import type { ZodType as ZodSchema, ZodFirstPartySchemaTypes } from "zod";
+import type { ZodType as ZodSchema } from "zod";
 import z from "zod";
 
 export function zObjectToTinyTable(
@@ -16,25 +16,33 @@ export function zObjectToTinyTable(
 }
 
 function zodTypeString(zodSchema: ZodSchema): "string" | "number" | "boolean" {
-  const typedSchema = zodSchema as ZodFirstPartySchemaTypes;
-  switch (typedSchema._def.typeName) {
-    case z.ZodFirstPartyTypeKind.ZodString: // The case statement does not have a shared enum type with the switch predicate.
-      return "string";
-    case z.ZodFirstPartyTypeKind.ZodNumber:
-      return "number";
-    case z.ZodFirstPartyTypeKind.ZodBoolean:
-      return "boolean";
-    case z.ZodFirstPartyTypeKind.ZodOptional:
-      return zodTypeString((zodSchema as z.ZodOptional<ZodSchema>).unwrap());
-    case z.ZodFirstPartyTypeKind.ZodEffects:
-      return zodTypeString((zodSchema as z.ZodEffects<ZodSchema>).innerType());
-    case z.ZodFirstPartyTypeKind.ZodLiteral: {
-      const value = typeof typedSchema._def.value;
-      if (value === "boolean" || value === "string" || value === "number")
-        return value;
-      throw Error(`${typedSchema._def.value} not supported by tinyBase`);
-    }
-    default:
-      throw Error(`${typedSchema._def.typeName} not supported by tinyBase`);
+  const schema = zodSchema as any;
+  const typeName = schema._def?.typeName;
+
+  if (schema instanceof z.ZodString || typeName === "ZodString") {
+    return "string";
   }
+  if (schema instanceof z.ZodNumber || typeName === "ZodNumber") {
+    return "number";
+  }
+  if (schema instanceof z.ZodBoolean || typeName === "ZodBoolean") {
+    return "boolean";
+  }
+  if (schema instanceof z.ZodOptional || typeName === "ZodOptional") {
+    return zodTypeString(schema.unwrap?.() || schema._def.innerType);
+  }
+  if (schema instanceof z.ZodDefault || typeName === "ZodDefault") {
+    return zodTypeString(schema._def.innerType);
+  }
+  if (typeName === "ZodEffects") {
+    return zodTypeString(schema._def.schema || schema.innerType?.());
+  }
+  if (schema instanceof z.ZodLiteral || typeName === "ZodLiteral") {
+    const value = typeof schema._def.value;
+    if (value === "boolean" || value === "string" || value === "number")
+      return value as "string" | "number" | "boolean";
+    throw Error(`${schema._def.value} not supported by tinyBase`);
+  }
+
+  throw Error(`${typeName || "unknown"} not supported by tinyBase (constructor: ${schema.constructor?.name})`);
 }

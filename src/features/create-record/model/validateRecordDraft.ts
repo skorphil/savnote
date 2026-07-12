@@ -14,7 +14,7 @@ export function validateRecordDraftAsset(data: object): RecordDraftAssetSchema {
     if (e instanceof ZodError) {
       throw Error(
         `recordDraftAsset validation failed with zod errors:${JSON.stringify(
-          e.errors
+          e.issues
         )}`
       );
     } else {
@@ -31,7 +31,7 @@ export function validateRecordDraftInstitution(
     if (e instanceof ZodError) {
       throw Error(
         `recordDraftAsset validation failed with zod errors:${JSON.stringify(
-          e.errors
+          e.issues
         )}`
       );
     } else {

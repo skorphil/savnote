@@ -37,7 +37,7 @@ export class RecordDraft {
     previousRecordDate?: number
   ) {
     RecordDraft.instance = this;
-    if (recordDraftData) RecordDraft.store.setTables(recordDraftData);
+    if (recordDraftData) RecordDraft.store.setTables(recordDraftData as any);
     if (previousRecordDate) this.previousRecordDate = previousRecordDate;
   }
 
@@ -202,7 +202,7 @@ export class RecordDraft {
    */
   saveAsset(assetId: string, assetValues: RecordDraftAssetSchema) {
     const validatedAssetValues = validateRecordDraftAsset(assetValues);
-    RecordDraft.store.setRow("assets", assetId, validatedAssetValues);
+    RecordDraft.store.setRow("assets", assetId, validatedAssetValues as any);
   }
 
   saveInstitution(
@@ -214,7 +214,7 @@ export class RecordDraft {
     RecordDraft.store.setRow(
       "institutions",
       institutionId,
-      validatedInstitutionValues
+      validatedInstitutionValues as any
     );
   }
 

@@ -74,3 +74,19 @@ pnpm dev:android
 
 However issues are present: FSD primarily focused on frontend development, 
 while this project is full-stack. So it has it trade-offs.
+
+
+## Upgrading dependencies
+```shell
+# Upgrading front-end dependencies
+pnpm upgrade --latest --interactive
+
+# Upgrading rust dependencies
+cargo update
+```
+
+### Notes
+```shell
+# Stopping gradle daemons sometimes helps fix some issues after updating deps and tools
+./src-tauri/gen/android/gradlew --stop
+```

@@ -17,8 +17,8 @@ export function validateJournal(data: object): JournalSchema {
   } catch (e) {
     if (e instanceof ZodError) {
       throw Error(
-        `Can't read a journal. Is it in SavNote format? ${JSON.stringify(
-          e.errors
+        `Can't read a record. Is it in SavNote format? ${JSON.stringify(
+          e.issues
         )}`
       );
     } else {
@@ -33,7 +33,7 @@ export function validateRecord(data: object): RecordsSchema {
     if (e instanceof ZodError) {
       throw Error(
         `Can't read a record. Is it in SavNote format? ${JSON.stringify(
-          e.errors
+          e.issues
         )}`
       );
     } else {
@@ -49,7 +49,7 @@ export function validateInstitution(data: object): InstitutionSchema {
     if (e instanceof ZodError) {
       throw Error(
         `Can't read a record. Is it in SavNote format? ${JSON.stringify(
-          e.errors
+          e.issues
         )}`
       );
     } else {

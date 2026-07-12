@@ -29,11 +29,13 @@ export function getRecordDraftData() {
   /* ---------- CODE BLOCK: Convert Journal entries to recordDraft entries ---------- */
   const recordDraftInstitutions: Record<string, RecordDraftInstitutionSchema> =
     {};
-  Object.values(institutions).forEach(({ date, name, ...data }) => {
+  Object.values(institutions).forEach((institution: any) => {
+    const { date, name, ...data } = institution;
     void date;
     recordDraftInstitutions[name] = {
       ...data,
       name,
+      country: data.country || "",
       isDirty: false,
       isDeleted: false,
       isNew: false,
@@ -41,12 +43,17 @@ export function getRecordDraftData() {
   });
 
   const recordDraftAssets: Record<string, RecordDraftAssetSchema> = {};
-  Object.values(assets).forEach(({ date, name, institution, ...data }) => {
+  Object.values(assets).forEach((asset: any) => {
+    const { date, name, institution, ...data } = asset;
     void date;
     recordDraftAssets[`${institution}.${name}`] = {
       ...data,
       institution,
       name,
+      amount: data.amount || 0,
+      currency: data.currency || "",
+      isEarning: data.isEarning || false,
+      description: data.description || "",
       isDirty: false,
       isDeleted: false,
       isNew: false,
