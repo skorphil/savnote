@@ -38,5 +38,10 @@ coverage
 .kilo
 .claude
 .codemie
+.opencode
+
+opencode.json
+
 AGENTS.md
 CLAUDE.md
+
