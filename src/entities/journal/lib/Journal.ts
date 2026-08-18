@@ -1,27 +1,27 @@
-import {
-  type EncryptionSchema,
-  type JournalSchema,
-  type MetaSchema,
-  type RecordsSchema,
-} from "@/shared/journal-schema";
+import { redirect } from "react-router";
 import { throwError } from "@/shared/error-handling";
 import {
-  journalStore,
-  journalStoreIndexes,
-  journalStoreQueries,
-  useJournalQueries,
-  useJournalResultTable,
-  useJournalSliceIds,
+	type EncryptionSchema,
+	type JournalSchema,
+	type MetaSchema,
+	type RecordsSchema,
+} from "@/shared/journal-schema";
+import {
+	journalStore,
+	journalStoreIndexes,
+	journalStoreQueries,
+	useJournalQueries,
+	useJournalResultTable,
+	useJournalSliceIds,
 } from "../model/JournalStore";
 import {
-  validateInstitution,
-  validateJournal,
-  validateRecord,
+	validateInstitution,
+	validateJournal,
+	validateRecord,
 } from "../model/validateJournal";
 // import { createEncryptionKey } from "./encryptionUtils";
 import { readJournal } from "./readJournal";
 import { writeStringToFile } from "./writeStringToFile";
-import { redirect } from "react-router";
 
 /**
  * Represents a journal. Provides various methods to work with a journal.
@@ -32,252 +32,256 @@ import { redirect } from "react-router";
  * const data = Journal.instance?.useJournalSlices()
  */
 export class Journal {
-  static instance: Journal | undefined;
-  // private cipher: string | 0 = 0;
-  private directory!: string;
-  meta!: MetaSchema;
-  private encryption: EncryptionSchema | undefined = undefined;
-  // private encryptionKey: CryptoKey | null = null;
-  store = journalStore;
-  storeIndexes = journalStoreIndexes;
+	static instance: Journal | undefined;
+	// private cipher: string | 0 = 0;
+	private directory!: string;
+	meta!: MetaSchema;
+	private encryption: EncryptionSchema | undefined = undefined;
+	// private encryptionKey: CryptoKey | null = null;
+	store = journalStore;
+	storeIndexes = journalStoreIndexes;
 
-  private constructor(props: JournalConctructorProps) {
-    Journal.instance = this;
-    const { directory, journalData } = props;
-    if (!directory || !journalData)
-      throw Error(
-        "provide `directory` and `journalData` to create new Journal instance."
-      );
+	private constructor(props: JournalConctructorProps) {
+		Journal.instance = this;
+		const { directory, journalData } = props;
+		if (!directory || !journalData)
+			throw Error(
+				"provide `directory` and `journalData` to create new Journal instance.",
+			);
 
-    this.directory = directory;
-    this.meta = journalData.meta;
-    this.encryption = journalData.encryption;
+		this.directory = directory;
+		this.meta = journalData.meta;
+		this.encryption = journalData.encryption;
 
-    /* ---------- CODE BLOCK: Check if provided journal is encrypted ---------- */
-    if (journalData.records && typeof journalData.records === "object") {
-      this.store.setTables(journalData.records as any);
-    }
+		/* ---------- CODE BLOCK: Check if provided journal is encrypted ---------- */
+		if (journalData.records && typeof journalData.records === "object") {
+			this.store.setTables(journalData.records as any);
+		}
 
-    this.saveToDevice();
+		this.saveToDevice();
 
-    // if (journalData.records && typeof journalData.records === "string") {
-    //   this.cipher = journalData.records;
-    // }
-  }
+		// if (journalData.records && typeof journalData.records === "string") {
+		//   this.cipher = journalData.records;
+		// }
+	}
 
-  /**
-   * Creates journal instance from existing journal.
-   * Owervrites existing journal instance
-   * @param directory Existing file directory
-   * @param errorCallback Runs if error catched during reading journal. Receives error: unknown
-   * @returns Journal instance or undefined if errorCallback handles the error
-   */
-  static async open(
-    directory: string,
-    errorCallback?: (e: unknown) => void
-  ): Promise<Journal> {
-    this.delete();
-    try {
-      const journalData = await readJournal(directory);
-      const journal = new Journal({ directory, journalData });
-      return journal;
-    } catch (e) {
-      if (errorCallback) {
-        return errorCallback(e) as never;
-      } else {
-        throw e;
-      }
-    }
-  }
+	/**
+	 * Creates journal instance from existing journal.
+	 * Owervrites existing journal instance
+	 * @param directory Existing file directory
+	 * @param errorCallback Runs if error catched during reading journal. Receives error: unknown
+	 * @returns Journal instance or undefined if errorCallback handles the error
+	 */
+	static async open(
+		directory: string,
+		errorCallback?: (e: unknown) => void,
+	): Promise<Journal> {
+		this.delete();
+		try {
+			const journalData = await readJournal(directory);
+			const journal = new Journal({ directory, journalData });
+			return journal;
+		} catch (e) {
+			if (errorCallback) {
+				return errorCallback(e) as never;
+			} else {
+				throw e;
+			}
+		}
+	}
 
-  /**
-   * Creates new journal and saves json to target directory.
-   * Owervrites existing journal instance
-   * @param directory Existing file directory
-   * @returns Journal instance
-   */
-  static new(directory: string, journalData: JournalSchema) {
-    this.delete();
-    return new Journal({ directory, journalData });
-  }
+	/**
+	 * Creates new journal and saves json to target directory.
+	 * Owervrites existing journal instance
+	 * @param directory Existing file directory
+	 * @returns Journal instance
+	 */
+	static new(directory: string, journalData: JournalSchema) {
+		this.delete();
+		return new Journal({ directory, journalData });
+	}
 
-  /**
-   * @returns journal instanse (singletone)
-   * @param errorCallback run if there is no journal instance
-   */
-  static resume(errorCallback?: () => never) {
-    if (this.instance) return this.instance;
-    if (errorCallback) return errorCallback();
-    return redirect("/") as never;
-  }
+	/**
+	 * @returns journal instanse (singletone)
+	 * @param errorCallback run if there is no journal instance
+	 */
+	static resume(errorCallback?: () => never) {
+		if (this.instance) return this.instance;
+		if (errorCallback) return errorCallback();
+		return redirect("/") as never;
+	}
 
-  /**
-   * Deletes current Journal instance:
-   * - in-memory storage of journal Data
-   * - journal instance
-   */
-  static delete() {
-    this.instance?.store.delTables();
-    this.instance = undefined;
-  }
+	/**
+	 * Deletes current Journal instance:
+	 * - in-memory storage of journal Data
+	 * - journal instance
+	 */
+	static delete() {
+		this.instance?.store.delTables();
+		this.instance = undefined;
+	}
 
-  /* ---------- CODE BLOCK: Public methods need to be moved to separate file ---------- */
+	/* ---------- CODE BLOCK: Public methods need to be moved to separate file ---------- */
 
-  // async decrypt(password: string) {
-  //   // Derive encryption password
-  //   // Decrypt cipher
-  //   // Write plainText to PouchDb
-  // }
+	// async decrypt(password: string) {
+	//   // Derive encryption password
+	//   // Decrypt cipher
+	//   // Write plainText to PouchDb
+	// }
 
-  saveToDevice() {
-    // let cipher: string | null = null;
-    // if (this.encryptionPassword && this.meta.encryption) {
-    //   cipher = this.encrypt({ plainText = JSON.stringify(data) });
-    // }
-    const journal: object = {
-      meta: this.meta,
-      encryption: this.encryption,
-      records:
-        Object.keys(this.store.getTables()).length > 0
-          ? this.store.getTables()
-          : undefined, // TODO add encryption
-    };
-    const stringifiedJournalData = JSON.stringify(validateJournal(journal));
-    writeStringToFile(this.directory, stringifiedJournalData);
-  }
+	saveToDevice() {
+		// let cipher: string | null = null;
+		// if (this.encryptionPassword && this.meta.encryption) {
+		//   cipher = this.encrypt({ plainText = JSON.stringify(data) });
+		// }
+		const journal: object = {
+			meta: this.meta,
+			encryption: this.encryption,
+			records:
+				Object.keys(this.store.getTables()).length > 0
+					? this.store.getTables()
+					: undefined, // TODO add encryption
+		};
+		const stringifiedJournalData = JSON.stringify(validateJournal(journal));
+		writeStringToFile(this.directory, stringifiedJournalData);
+	}
 
-  // async createEncryption(baseKey: string) {
-  //   if (this.encryptionKey)
-  //     throw Error(
-  //       "Encryption password already exist. To change encription, run .changeEncryption()"
-  //     );
-  //   const encryptionParameters = await createEncryptionKey(baseKey);
+	// async createEncryption(baseKey: string) {
+	//   if (this.encryptionKey)
+	//     throw Error(
+	//       "Encryption password already exist. To change encription, run .changeEncryption()"
+	//     );
+	//   const encryptionParameters = await createEncryptionKey(baseKey);
 
-  //   this.encryptionKey = encryptionParameters.encryptionKey;
-  //   // this.meta.encryption = encryptionParameters.encryptionMeta; // The left-hand side of an assignment expression may not be an optional property access.
-  // }
+	//   this.encryptionKey = encryptionParameters.encryptionKey;
+	//   // this.meta.encryption = encryptionParameters.encryptionMeta; // The left-hand side of an assignment expression may not be an optional property access.
+	// }
 
-  /* ---------- CODE BLOCK: Getters ---------- */
-  getEncryptionState() {
-    return {
-      encryption: this.encryption !== null,
-      decrypted: this.store.hasTable("institutions"),
-    };
-  }
-  getJournalName() {
-    return this.meta.name;
-  }
-  getJournalDirectory() {
-    return this.directory;
-  }
-  getEncryptionParameters() {
-    return this.encryption?.derivedKeyAlgorithmName || null;
-  }
+	/* ---------- CODE BLOCK: Getters ---------- */
+	getEncryptionState() {
+		return {
+			encryption: this.encryption !== null,
+			decrypted: this.store.hasTable("institutions"),
+		};
+	}
+	getJournalName() {
+		return this.meta.name;
+	}
+	getJournalDirectory() {
+		return this.directory;
+	}
+	getEncryptionParameters() {
+		return this.encryption?.derivedKeyAlgorithmName || null;
+	}
 
-  getInstitution(institutionId: string) {
-    const institutionData = validateInstitution(
-      this.store.getRow("institutions", institutionId)
-    );
-    return institutionData;
-  }
+	getInstitution(institutionId: string) {
+		const institutionData = validateInstitution(
+			this.store.getRow("institutions", institutionId),
+		);
+		return institutionData;
+	}
 
-  getLatestRecord() {
-    const latestRecordDate =
-      journalStoreIndexes.getSliceIds("InstitutionsByDate")[0];
+	getLatestRecord() {
+		const latestRecordDate =
+			journalStoreIndexes.getSliceIds("InstitutionsByDate")[0];
 
-    /* ---------- CODE BLOCK: Get latest institutions ---------- */
-    const latestInstitutionsQueryId = "latestRecordInstitutions";
-    journalStoreQueries.setQueryDefinition(
-      latestInstitutionsQueryId,
-      "institutions",
-      ({ select, where }) => {
-        select("country");
-        select("date");
-        select("name");
-        where("date", Number(latestRecordDate));
-      }
-    );
-    const latestRecordInstitutions = journalStoreQueries.getResultTable(
-      latestInstitutionsQueryId
-    );
+		/* ---------- CODE BLOCK: Get latest institutions ---------- */
+		const latestInstitutionsQueryId = "latestRecordInstitutions";
+		journalStoreQueries.setQueryDefinition(
+			latestInstitutionsQueryId,
+			"institutions",
+			({ select, where }) => {
+				select("country");
+				select("date");
+				select("name");
+				where("date", Number(latestRecordDate));
+			},
+		);
+		const latestRecordInstitutions = journalStoreQueries.getResultTable(
+			latestInstitutionsQueryId,
+		);
 
-    /* ---------- CODE BLOCK: Get latest assets ---------- */
-    const latestAssetsQueryId = "latestRecordAssets";
-    journalStoreQueries.setQueryDefinition(
-      latestAssetsQueryId,
-      "assets",
-      ({ select, where }) => {
-        select("amount");
-        select("currency");
-        select("date");
-        select("description");
-        select("institution");
-        select("isEarning");
-        select("name");
-        where("date", Number(latestRecordDate));
-      }
-    );
-    const latestRecordAssets =
-      journalStoreQueries.getResultTable(latestAssetsQueryId);
+		/* ---------- CODE BLOCK: Get latest assets ---------- */
+		const latestAssetsQueryId = "latestRecordAssets";
+		journalStoreQueries.setQueryDefinition(
+			latestAssetsQueryId,
+			"assets",
+			({ select, where }) => {
+				select("amount");
+				select("currency");
+				select("date");
+				select("description");
+				select("institution");
+				select("isEarning");
+				select("name");
+				where("date", Number(latestRecordDate));
+			},
+		);
+		const latestRecordAssets =
+			journalStoreQueries.getResultTable(latestAssetsQueryId);
 
-    /* ---------- CODE BLOCK: Get latest quotes ---------- */
-    const latestQuotesQueryId = "latestRecordQuotes";
-    journalStoreQueries.setQueryDefinition(
-      latestQuotesQueryId,
-      "quotes",
-      ({ select, where }) => {
-        select("baseCurrency");
-        select("counterCurrency");
-        select("date");
-        select("rate");
-        where("date", Number(latestRecordDate));
-      }
-    );
-    const latestRecordQuotes =
-      journalStoreQueries.getResultTable(latestQuotesQueryId);
+		/* ---------- CODE BLOCK: Get latest quotes ---------- */
+		const latestQuotesQueryId = "latestRecordQuotes";
+		journalStoreQueries.setQueryDefinition(
+			latestQuotesQueryId,
+			"quotes",
+			({ select, where }) => {
+				select("baseCurrency");
+				select("counterCurrency");
+				select("date");
+				select("rate");
+				where("date", Number(latestRecordDate));
+			},
+		);
+		const latestRecordQuotes =
+			journalStoreQueries.getResultTable(latestQuotesQueryId);
 
-    /* ---------- CODE BLOCK: Type output record ---------- */
-    const latestRecord = validateRecord({
-      institutions: latestRecordInstitutions,
-      assets: latestRecordAssets,
-      quotes: latestRecordQuotes,
-    });
+		/* ---------- CODE BLOCK: Type output record ---------- */
+		const latestRecord = validateRecord({
+			institutions: latestRecordInstitutions,
+			assets: latestRecordAssets,
+			quotes: latestRecordQuotes,
+		});
 
-    return {
-      recordData: latestRecord,
-      date: latestRecordDate,
-    };
-  }
+		return {
+			recordData: latestRecord,
+			date: latestRecordDate,
+		};
+	}
 
-  /* ---------- CODE BLOCK: Hooks ---------- */
-  useJournalSliceIds = useJournalSliceIds;
-  useJournalQueries = useJournalQueries;
-  useJournalResultTable = useJournalResultTable;
+	/* ---------- CODE BLOCK: Hooks ---------- */
+	useJournalSliceIds = useJournalSliceIds;
+	useJournalQueries = useJournalQueries;
+	useJournalResultTable = useJournalResultTable;
 
-  /* ---------- CODE BLOCK: Setters ---------- */
-  addRecord(recordData: RecordsSchema) {
-    // setRow used because setTable overwrites tinyBase store.
-    try {
-      const { assets, institutions, quotes } = recordData;
-      Object.entries(assets).forEach(([assetId, assetData]) =>
-        this.store.setRow("assets", assetId, assetData as any)
-      );
-      Object.entries(institutions).forEach(([institutionId, institutionData]) =>
-        this.store.setRow("institutions", institutionId, institutionData as any)
-      );
-      Object.entries(quotes).forEach(([quoteId, quoteData]) =>
-        this.store.setRow("quotes", quoteId, quoteData as any)
-      );
-      this.saveToDevice();
-    } catch (e) {
-      throwError(e);
-    }
-  }
+	/* ---------- CODE BLOCK: Setters ---------- */
+	addRecord(recordData: RecordsSchema) {
+		// setRow used because setTable overwrites tinyBase store.
+		try {
+			const { assets, institutions, quotes } = recordData;
+			Object.entries(assets).forEach(([assetId, assetData]) =>
+				this.store.setRow("assets", assetId, assetData as any),
+			);
+			Object.entries(institutions).forEach(([institutionId, institutionData]) =>
+				this.store.setRow(
+					"institutions",
+					institutionId,
+					institutionData as any,
+				),
+			);
+			Object.entries(quotes).forEach(([quoteId, quoteData]) =>
+				this.store.setRow("quotes", quoteId, quoteData as any),
+			);
+			this.saveToDevice();
+		} catch (e) {
+			throwError(e);
+		}
+	}
 }
 
 type JournalConctructorProps = {
-  directory: string;
-  journalData: JournalSchema;
+	directory: string;
+	journalData: JournalSchema;
 };
 
 /* ---------- Comments ----------
