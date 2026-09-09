@@ -16,7 +16,6 @@ dist-ssr
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
@@ -33,15 +32,18 @@ coverage
 *.env
 !*.example
 
+# macOS metadata
+._*
+.__*
+.DS_Store
+
 # AI tooling
 .continue
 .kilo
 .claude
 .codemie
 .opencode
-
 opencode.json
-
 AGENTS.md
 CLAUDE.md
 
