@@ -32,8 +32,9 @@ Install dependencies:
 ```shell
 pnpm install
 ```
-Install `android-studio` on system: https://developer.android.com/studio
-Install `ndk` within `android-studio`: Settings > Languages & Frameworks > SDK Tools
+Install `cargo` https://doc.rust-lang.org/cargo/getting-started/installation.html
+Install `android-studio` on system: https://developer.android.com/studio or Android CLI https://developer.android.com/tools/agents
+Install `ndk`, `build-tools`, `platforms` within `android-studio`: Settings > Languages & Frameworks > SDK Tools or use `android sdk install "ndk/30.0.16248370" "platforms;android-35" "build-tools/36.0.0" "platform-tools"`
 Set the `NDK_HOME`, `ANDROID_HOME` PATH variables (ANDROID_HOME can be seen in Settings > Languages & Frameworks):
 ```
 export ANDROID_HOME=YOUR_PATH/Android/sdk
